@@ -13,32 +13,56 @@ const LOOP_PAUSE_MS = 2500;
 const TRANSCRIPT_MIN_HEIGHT = 360;
 const WORD_INTERVAL_MS = 150;
 
-const SCRIPT = [
-  {
-    id: "agent-greeting",
-    speaker: "agent" as const,
-    text: "Thanks for calling Pinehills — this is the virtual assistant. This call may be recorded. How can I help?",
-  },
-  {
-    id: "caller-request",
-    speaker: "caller" as const,
-    text: "Any tee times tomorrow morning for two?",
-  },
-  {
-    id: "agent-offer",
-    speaker: "agent" as const,
-    text: "I have 7:40 and 8:10 on the Jones Course. Want me to hold one?",
-  },
-  {
-    id: "caller-confirm",
-    speaker: "caller" as const,
-    text: "Grab the 7:40.",
-  },
-  {
-    id: "agent-booked",
-    speaker: "agent" as const,
-    text: "You're booked — 7:40 AM, Jones Course, two players. Confirmation is on its way.",
-  },
+interface ScriptWord {
+  id: string;
+  position: number;
+  text: string;
+}
+
+interface ScriptLine {
+  id: string;
+  speaker: "agent" | "caller";
+  text: string;
+  words: ScriptWord[];
+}
+
+const makeLine = (
+  id: string,
+  speaker: ScriptLine["speaker"],
+  text: string
+): ScriptLine => ({
+  id,
+  speaker,
+  text,
+  words: text.split(" ").map((word, index) => ({
+    id: `${id}-w${index + 1}`,
+    position: index,
+    text: word,
+  })),
+});
+
+const SCRIPT: ScriptLine[] = [
+  makeLine(
+    "agent-greeting",
+    "agent",
+    "Thanks for calling Pinehills — this is the virtual assistant. This call may be recorded. How can I help?"
+  ),
+  makeLine(
+    "caller-request",
+    "caller",
+    "Any tee times tomorrow morning for two?"
+  ),
+  makeLine(
+    "agent-offer",
+    "agent",
+    "I have 7:40 and 8:10 on the Jones Course. Want me to hold one?"
+  ),
+  makeLine("caller-confirm", "caller", "Grab the 7:40."),
+  makeLine(
+    "agent-booked",
+    "agent",
+    "You're booked — 7:40 AM, Jones Course, two players. Confirmation is on its way."
+  ),
 ];
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
@@ -61,33 +85,30 @@ const subscribeReducedMotion = (onStoreChange: () => void) => {
 interface KaraokeLineProps {
   isActive: boolean;
   spokenCount: number;
-  text: string;
+  words: ScriptWord[];
 }
 
-const KaraokeLine = ({ isActive, spokenCount, text }: KaraokeLineProps) => {
-  const words = text.split(" ");
-  const spoken = words.slice(0, spokenCount).join(" ");
-  const remaining = words.slice(spokenCount).join(" ");
-
-  return (
-    <span>
-      <span className="opacity-100">{spoken}</span>
-      {remaining.length > 0 ? (
-        <>
-          {spoken.length > 0 ? " " : ""}
-          <span
-            className={cn(
-              "transition-opacity duration-150",
-              isActive ? "opacity-25" : "opacity-100"
-            )}
-          >
-            {remaining}
-          </span>
-        </>
-      ) : null}
-    </span>
-  );
-};
+// Each word keeps its own persistent span so the reveal only changes opacity
+// and the text never reflows (no layout shift while the transcript animates).
+const KaraokeLine = ({ isActive, spokenCount, words }: KaraokeLineProps) => (
+  <span>
+    {words.map((word) => (
+      <span key={word.id}>
+        <span
+          className={cn(
+            "transition-opacity duration-150",
+            isActive && word.position >= spokenCount
+              ? "opacity-60"
+              : "opacity-100"
+          )}
+        >
+          {word.text}
+        </span>
+        {word.position < words.length - 1 ? " " : null}
+      </span>
+    ))}
+  </span>
+);
 
 const TranscriptCard = () => {
   const prefersReducedMotion = useSyncExternalStore(
@@ -206,14 +227,13 @@ const TranscriptCard = () => {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col justify-end gap-3 overflow-hidden">
+      <div className="flex flex-1 flex-col gap-3 overflow-hidden">
         {visibleLines.map((line) => {
           const isAgent = line.speaker === "agent";
           const isActive = prefersReducedMotion
             ? false
             : line.id === SCRIPT[lineIndex]?.id;
-          const words = line.text.split(" ");
-          const lineSpokenCount = isActive ? spokenCount : words.length;
+          const lineSpokenCount = isActive ? spokenCount : line.words.length;
 
           return (
             <div
@@ -228,7 +248,7 @@ const TranscriptCard = () => {
               <KaraokeLine
                 isActive={isActive}
                 spokenCount={lineSpokenCount}
-                text={line.text}
+                words={line.words}
               />
             </div>
           );

@@ -52,7 +52,7 @@ const TranscriptBubble = ({ line }: TranscriptBubbleProps) => {
           : "self-end bg-muted text-foreground"
       )}
     >
-      <span className="mb-1 block text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+      <span className="mb-1 block text-[10px] font-medium tracking-wide text-foreground/70 uppercase">
         {isAgent ? "Agent" : "Caller"}
       </span>
       {line.text}

@@ -15,7 +15,7 @@ const handoffTranscript: HandoffLine[] = [
 export const HumanHandoff = () => (
   <Section>
     <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-      Talk to a person always works
+      &ldquo;Talk to a person&rdquo; always works
     </h2>
     <p className="mt-4 max-w-prose text-muted-foreground">
       Callers who ask for a person get transferred immediately — no pushback, no

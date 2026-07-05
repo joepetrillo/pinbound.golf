@@ -33,7 +33,7 @@ const productLinks: readonly FooterLink[] = [
 ];
 
 const Logo = () => (
-  <Link className="flex items-center gap-2.5" href="#">
+  <Link className="flex items-center gap-2.5" href="/">
     <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-4" />
     </span>

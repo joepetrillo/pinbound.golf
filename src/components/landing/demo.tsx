@@ -78,7 +78,7 @@ const sampleCalls: SampleCall[] = [
     duration: "0:52",
     id: "policy",
     transcript:
-      "Caller: Can I cancel tonight's tee time? Agent: Cancellations need two hours' notice — that slot is inside the window, so I can't release it by phone.",
+      "Caller: Can I cancel tomorrow's 8:00 tee time? Agent: Cancellations need 24 hours' notice — that one is inside the window, so I can't release it without a charge. Want me to transfer you to the shop?",
     waveform: makeWaveform(
       "policy",
       [6, 10, 8, 14, 12, 7, 15, 9, 11, 16, 5, 13, 10, 8, 14, 6, 12, 9, 15, 7]
@@ -162,8 +162,8 @@ const TalkWidget = ({ micState, onStart, onStop }: TalkWidgetProps) => {
           Mic unavailable — listen to a recorded call instead
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Browser permissions blocked live voice. Sample calls below are the
-          same agent on real scenarios.
+          Browser permissions blocked live voice. The sample calls below show
+          the same agent handling common calls.
         </p>
       </output>
     );
@@ -177,7 +177,7 @@ const TalkWidget = ({ micState, onStart, onStop }: TalkWidgetProps) => {
         {!listening && (
           <span
             aria-hidden="true"
-            className="absolute inset-0 animate-ping rounded-full bg-primary/20"
+            className="absolute inset-0 rounded-full bg-primary/20 motion-safe:animate-ping"
           />
         )}
         <button

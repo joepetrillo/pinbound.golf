@@ -2,7 +2,7 @@
 
 import { RiRestartLine } from "@remixicon/react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,23 @@ const SCRIPT = [
   },
 ];
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+const getReducedMotionMedia = () => window.matchMedia(REDUCED_MOTION_QUERY);
+
+const getReducedMotionServerSnapshot = () => false;
+
+const getReducedMotionSnapshot = () => getReducedMotionMedia().matches;
+
+const subscribeReducedMotion = (onStoreChange: () => void) => {
+  const media = getReducedMotionMedia();
+  media.addEventListener("change", onStoreChange);
+
+  return () => {
+    media.removeEventListener("change", onStoreChange);
+  };
+};
+
 interface KaraokeLineProps {
   isActive: boolean;
   spokenCount: number;
@@ -73,15 +90,13 @@ const KaraokeLine = ({ isActive, spokenCount, text }: KaraokeLineProps) => {
 };
 
 const TranscriptCard = () => {
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot
+  );
   const [isVisible, setIsVisible] = useState(true);
   const [lineIndex, setLineIndex] = useState(0);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
-
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  });
   const [resetKey, setResetKey] = useState(0);
   const [spokenCount, setSpokenCount] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -93,20 +108,6 @@ const TranscriptCard = () => {
     setSpokenCount(0);
     setResetKey((key) => key + 1);
   };
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    const updateMotionPreference = () => {
-      setPrefersReducedMotion(media.matches);
-    };
-
-    media.addEventListener("change", updateMotionPreference);
-
-    return () => {
-      media.removeEventListener("change", updateMotionPreference);
-    };
-  }, []);
 
   useEffect(() => {
     const element = cardRef.current;
@@ -188,7 +189,7 @@ const TranscriptCard = () => {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground">
           <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75" />
+            <span className="absolute inline-flex size-full rounded-full bg-primary opacity-75 motion-safe:animate-ping" />
             <span className="relative inline-flex size-2 rounded-full bg-primary" />
           </span>
           Incoming call · 9:12 AM

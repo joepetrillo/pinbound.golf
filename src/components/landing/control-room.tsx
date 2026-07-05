@@ -94,8 +94,8 @@ const rules: RuleRow[] = [
 ];
 
 const vipList: VipEntry[] = [
-  { id: "vip-1", name: "Robert Chen", number: "(555) 224-0193" },
-  { id: "vip-2", name: "Diane Marsh", number: "(555) 338-7721" },
+  { id: "vip-1", name: "Robert Chen", number: "(555) 610-2284" },
+  { id: "vip-2", name: "Diane Marsh", number: "(555) 447-9038" },
 ];
 
 export const ControlRoom = () => {

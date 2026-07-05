@@ -1,37 +1,31 @@
-import { SiteHeader } from "@/components/landing/site-header";
-import { Hero } from "@/components/landing/hero";
-import { Problem } from "@/components/landing/problem";
-import { HowItWorks } from "@/components/landing/how-it-works";
-import { LiveDemo } from "@/components/landing/live-demo";
-import { YourRules } from "@/components/landing/your-rules";
-import { HumanQuestion } from "@/components/landing/human-question";
 import { ControlRoom } from "@/components/landing/control-room";
-import { Integrations } from "@/components/landing/integrations";
-import { FoundingCourses } from "@/components/landing/founding-courses";
-import { Pricing } from "@/components/landing/pricing";
+import { Demo } from "@/components/landing/demo";
 import { Faq } from "@/components/landing/faq";
-import { FinalCta } from "@/components/landing/final-cta";
+import { FoundingProgram } from "@/components/landing/founding-program";
+import { Hero } from "@/components/landing/hero";
+import { HumanHandoff } from "@/components/landing/human-handoff";
+import { PolicyFidelity } from "@/components/landing/policy-fidelity";
+import { Pricing } from "@/components/landing/pricing";
+import { Problem } from "@/components/landing/problem";
 import { SiteFooter } from "@/components/landing/site-footer";
+import { SiteHeader } from "@/components/landing/site-header";
 
-export default function Home() {
-  return (
-    <>
-      <SiteHeader />
-      <main className="flex-1">
-        <Hero />
-        <Problem />
-        <HowItWorks />
-        <LiveDemo />
-        <YourRules />
-        <HumanQuestion />
-        <ControlRoom />
-        <Integrations />
-        <FoundingCourses />
-        <Pricing />
-        <Faq />
-        <FinalCta />
-      </main>
-      <SiteFooter />
-    </>
-  );
-}
+const Page = () => (
+  <>
+    <SiteHeader />
+    <main className="flex-1">
+      <Hero />
+      <Problem />
+      <Demo />
+      <PolicyFidelity />
+      <ControlRoom />
+      <HumanHandoff />
+      <Pricing />
+      <FoundingProgram />
+      <Faq />
+    </main>
+    <SiteFooter />
+  </>
+);
+
+export default Page;

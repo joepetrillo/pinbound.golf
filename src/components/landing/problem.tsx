@@ -1,69 +1,67 @@
-import { RiPhoneLine } from "@remixicon/react"
+import { RiPhoneLine } from "@remixicon/react";
+
+import { Section } from "@/components/section";
 
 const missedCalls = [
-  { time: "Yesterday 8:42 PM", number: "(555) 284-0193" },
-  { time: "Yesterday 7:15 PM", number: "(555) 901-4472" },
-  { time: "Yesterday 6:03 PM", number: "(555) 338-7721" },
-]
+  {
+    id: "missed-1",
+    number: "(555) 284-0193",
+    time: "Sat 8:14 AM",
+  },
+  {
+    id: "missed-2",
+    number: "(555) 901-4472",
+    time: "Sat 8:22 AM",
+  },
+  {
+    id: "missed-3",
+    number: "(555) 338-7721",
+    time: "Sat 8:31 AM",
+  },
+];
 
-export function Problem() {
-  return (
-    <section className="py-20 md:py-28">
-      <div className="mx-auto max-w-5xl px-5">
-        <p className="text-xs tracking-widest text-muted-foreground uppercase">
-          The 6 PM problem
+export const Problem = () => (
+  <Section>
+    <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+      <div className="space-y-4">
+        <p className="text-2xl font-semibold tracking-tight text-balance md:text-3xl">
+          Saturday morning: line at the counter, two staff checking in golfers,
+          phone ringing out. That caller books somewhere else.
         </p>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-          Your phone rings more than your staff can answer.
-        </h2>
-
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
-          <div className="rounded-xl bg-muted/40 p-6">
-            <p className="text-4xl font-extrabold text-emerald-700">81%</p>
-            <p className="mt-3 text-muted-foreground">
-              of after-hours calls to golf courses go unanswered or hit
-              voicemail.
-            </p>
-          </div>
-          <div className="rounded-xl bg-muted/40 p-6">
-            <p className="text-lg font-bold">Peak hours</p>
-            <p className="mt-3 text-muted-foreground">
-              Callers wait on hold while your team checks in the morning wave.
-            </p>
-          </div>
-          <div className="rounded-xl bg-muted/40 p-6">
-            <p className="text-lg font-bold">Every ring-out</p>
-            <p className="mt-3 text-muted-foreground">
-              is a booking made somewhere else — or a golfer who won&apos;t call
-              back.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-10 overflow-hidden rounded-2xl bg-zinc-950 p-5 shadow-lg">
-          <p className="mb-4 text-xs font-medium tracking-wide text-zinc-500 uppercase">
-            Missed calls
-          </p>
-          <div className="flex flex-col gap-2">
-            {missedCalls.map((call) => (
-              <div
-                key={call.time}
-                className="flex items-center gap-3 rounded-lg bg-zinc-900/80 px-4 py-3"
-              >
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-red-500/15">
-                  <RiPhoneLine className="size-4 text-red-400" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-zinc-100">
-                    Missed call · {call.time}
-                  </p>
-                  <p className="truncate text-xs text-zinc-500">{call.number}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <p className="max-w-prose text-muted-foreground">
+          Industry audits find about 81% of after-hours calls to golf courses go
+          unanswered or hit voicemail.
+        </p>
       </div>
-    </section>
-  )
-}
+
+      <div className="rounded-xl border bg-muted/50 p-4">
+        <p className="mb-3 text-xs font-medium text-muted-foreground">
+          Missed calls
+        </p>
+        <ul className="flex flex-col gap-2">
+          {missedCalls.map((call) => (
+            <li
+              className="flex items-center gap-3 rounded-lg border bg-background px-4 py-3"
+              key={call.id}
+            >
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted">
+                <RiPhoneLine
+                  aria-hidden="true"
+                  className="size-4 text-muted-foreground"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">
+                  Missed call · {call.time}
+                </p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {call.number}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </Section>
+);

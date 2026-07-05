@@ -1,5 +1,6 @@
 "use client";
 
+import { Section } from "@/components/section";
 import {
   Accordion,
   AccordionContent,
@@ -10,68 +11,58 @@ import {
 const faqItems = [
   {
     answer:
-      "Listen above. Natural voice, natural pacing — and it always discloses it\u2019s an assistant.",
-    question: "Does it sound like a robot?",
-    value: "robot",
+      "It never confirms a time the tee sheet didn't return. And it starts in shadow mode, so you see every call before it touches your main line.",
+    id: "booking-wrong",
+    question: "What if it books something wrong?",
   },
   {
     answer:
-      "Your rules are enforced server-side and verified with test calls before go-live. It never confirms what the tee sheet didn\u2019t return.",
-    question: "What if it books something it shouldn\u2019t?",
-    value: "wrong-booking",
+      'Instantly, always. Saying "talk to a person" transfers immediately, and VIP numbers ring straight through.',
+    id: "human-handoff",
+    question: "Can callers still reach a person?",
   },
   {
     answer:
-      "It says so honestly, takes a message, and offers a callback — it never guesses availability.",
-    question: "What if our tee sheet system goes down?",
-    value: "tee-sheet-down",
+      "Works with the major tee sheet platforms today — more coming. Tell us yours.",
+    id: "tee-sheet",
+    question: "Does it work with my tee sheet?",
   },
   {
     answer:
-      "Recording disclosure is built into the greeting and configured for your state\u2019s rules.",
-    question: "What about call recording laws?",
-    value: "recording-laws",
+      "Hibernate or annual options so you're not paying for a quiet shoulder season.",
+    id: "off-season",
+    question: "What about the off-season?",
+  },
+  {
+    answer: "No. It answers as your course's virtual assistant, every time.",
+    id: "pretend-human",
+    question: "Does it pretend to be human?",
   },
   {
     answer:
-      "Completely. You choose when it answers (after-hours, overflow, or the full line), what it can book, and you can pause it or change any rule from your dashboard at any time.",
-    question: "Can I control what it\u2019s allowed to do?",
-    value: "control",
-  },
-  {
-    answer:
-      "Days, not months — and we start in shadow mode (after-hours only) so there\u2019s zero risk to your line.",
-    question: "How long does it take to go live?",
-    value: "go-live",
-  },
-  {
-    answer: "No. Flat monthly price. Your bookings are yours.",
-    question: "Do you take a cut of bookings?",
-    value: "booking-cut",
+      "You do — pause it, edit rules, and set the autonomy dial from the control room.",
+    id: "who-controls",
+    question: "Who controls it?",
   },
 ];
 
-export function Faq() {
-  return (
-    <section id="faq" className="py-20 md:py-28">
-      <div className="mx-auto max-w-5xl px-5">
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-          Questions GMs actually ask.
-        </h2>
+export const Faq = () => (
+  <Section id="faq">
+    <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+      Questions GMs ask
+    </h2>
 
-        <Accordion className="mt-10 max-w-3xl">
-          {faqItems.map((item) => (
-            <AccordionItem key={item.value} value={item.value}>
-              <AccordionTrigger className="text-base">
-                {item.question}
-              </AccordionTrigger>
-              <AccordionContent>
-                <p className="text-muted-foreground">{item.answer}</p>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
-    </section>
-  );
-}
+    <Accordion className="mt-10 max-w-3xl">
+      {faqItems.map((item) => (
+        <AccordionItem key={item.id} value={item.id}>
+          <AccordionTrigger className="text-base">
+            {item.question}
+          </AccordionTrigger>
+          <AccordionContent>
+            <p className="text-muted-foreground">{item.answer}</p>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  </Section>
+);

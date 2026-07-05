@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { ThemeProvider } from "@/components/theme-provider";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,23 +16,49 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const title = "Pinbound — golf course phone answering that follows your rules";
+const description =
+  "Pinbound answers every call to your pro shop, books tee times against your tee sheet, and enforces your booking policies. Callers can always reach a person. Built for golf course GMs.";
+
 export const metadata: Metadata = {
-  description:
-    "Pinbound is your pro shop's AI phone agent — on the line 24/7, trained on your rates, policies, and tee sheet, and handing off to your team the moment a caller needs a person.",
-  title: "Pinbound — Your pro shop's phone, answered perfectly, 24/7",
+  description,
+  metadataBase: new URL(SITE_URL),
+  openGraph: {
+    description,
+    siteName: SITE_NAME,
+    title,
+    type: "website",
+    url: SITE_URL,
+  },
+  title,
+  twitter: {
+    card: "summary_large_image",
+    description,
+    title,
+  },
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
-  return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
-    </html>
-  );
-}
+}>) => (
+  <html
+    className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+    lang="en"
+    suppressHydrationWarning
+  >
+    <body className="flex min-h-full flex-col">
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        disableTransitionOnChange
+        enableSystem
+      >
+        {children}
+      </ThemeProvider>
+    </body>
+  </html>
+);
+
+export default RootLayout;

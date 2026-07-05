@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
   RiRestartLine,
   RiVolumeMuteLine,
   RiVolumeUpLine,
 } from "@remixicon/react";
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -94,7 +94,7 @@ function TranscriptCard() {
 
   useEffect(() => {
     const currentLine = SCRIPT[lineIndex];
-    if (!currentLine) return;
+    if (!currentLine) {return;}
 
     const words = currentLine.text.split(" ");
 
@@ -116,7 +116,7 @@ function TranscriptCard() {
       return () => clearTimeout(timeout);
     }
 
-    if (pauseRef.current) return;
+    if (pauseRef.current) {return;}
 
     const timeout = setTimeout(() => {
       setSpokenCount((c) => c + 1);
@@ -236,15 +236,19 @@ export function Hero() {
             </h1>
             <p className="mt-6 max-w-prose text-lg text-muted-foreground">
               Pinbound is your pro shop&apos;s AI phone agent — on the line
-              24/7, trained on your rates, policies, and tee sheet, and
-              handing off to your team the moment a caller needs a person. You
-              control exactly what it&apos;s allowed to do.
+              24/7, trained on your rates, policies, and tee sheet, and handing
+              off to your team the moment a caller needs a person. You control
+              exactly what it&apos;s allowed to do.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button render={<Link href="#demo" />} size="lg">
                 Hear It Answer a Call
               </Button>
-              <Button render={<Link href="#pricing" />} variant="outline" size="lg">
+              <Button
+                render={<Link href="#pricing" />}
+                variant="outline"
+                size="lg"
+              >
                 Get a Free Pilot
               </Button>
             </div>

@@ -1,6 +1,6 @@
-import { RiPhoneLine } from "@remixicon/react"
+import { RiPhoneLine } from "@remixicon/react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export function FinalCta() {
   return (
@@ -27,9 +27,9 @@ export function FinalCta() {
                       key={index}
                       className="w-1 rounded-full bg-emerald-500/70"
                       style={{
-                        height: `${height * 3}px`,
-                        animation: `pulse 1.${index % 3 + 2}s ease-in-out infinite`,
+                        animation: `pulse 1.${(index % 3) + 2}s ease-in-out infinite`,
                         animationDelay: `${index * 0.1}s`,
+                        height: `${height * 3}px`,
                       }}
                     />
                   ))}
@@ -70,5 +70,5 @@ export function FinalCta() {
         </div>
       </div>
     </section>
-  )
+  );
 }

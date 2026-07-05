@@ -2,35 +2,27 @@ import {
   RiStarLine,
   RiUserVoiceLine,
   RiVerifiedBadgeLine,
-} from "@remixicon/react"
+} from "@remixicon/react";
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 
 const features = [
   {
+    description: <>&ldquo;Talk to a person&rdquo; is never argued with.</>,
     icon: RiUserVoiceLine,
     title: "Instant handoff",
-    description: (
-      <>
-        &ldquo;Talk to a person&rdquo; is never argued with.
-      </>
-    ),
   },
   {
+    description: "Your members-of-note ring through to staff, always.",
     icon: RiStarLine,
     title: "VIP list",
-    description: "Your members-of-note ring through to staff, always.",
   },
   {
+    description: <>Always discloses it&apos;s an AI assistant. Trust first.</>,
     icon: RiVerifiedBadgeLine,
     title: "Honest identity",
-    description: (
-      <>
-        Always discloses it&apos;s an AI assistant. Trust first.
-      </>
-    ),
   },
-]
+];
 
 export function HumanQuestion() {
   return (
@@ -49,10 +41,7 @@ export function HumanQuestion() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {features.map(({ icon: Icon, title, description }) => (
-            <Card
-              key={title}
-              className="rounded-xl shadow-sm ring-border"
-            >
+            <Card key={title} className="rounded-xl shadow-sm ring-border">
               <CardContent className="p-6">
                 <div className="mb-4 flex size-10 items-center justify-center rounded-lg bg-emerald-50">
                   <Icon className="size-5 text-emerald-700" />
@@ -67,5 +56,5 @@ export function HumanQuestion() {
         </div>
       </div>
     </section>
-  )
+  );
 }

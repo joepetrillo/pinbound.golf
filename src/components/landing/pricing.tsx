@@ -1,7 +1,7 @@
-import { RiCheckLine, RiSnowflakeLine } from "@remixicon/react"
+import { RiCheckLine, RiSnowflakeLine } from "@remixicon/react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,51 +9,50 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 const plans = [
   {
-    name: "Clubhouse",
-    price: "$199",
-    priceSuffix: "/mo",
+    buttonVariant: "outline" as const,
     description: "For courses with lighter call volume.",
+    featured: false,
     features: [
       "24/7 answering",
       "Tee sheet booking",
       "Generous minutes included",
     ],
-    featured: false,
-    buttonVariant: "outline" as const,
+    name: "Clubhouse",
+    price: "$199",
+    priceSuffix: "/mo",
   },
   {
-    name: "Championship",
-    price: "$299",
-    priceSuffix: "/mo",
-    description:
-      "For busy phones — full routing, VIP list, weekly reporting.",
+    buttonVariant: "default" as const,
+    description: "For busy phones — full routing, VIP list, weekly reporting.",
+    featured: true,
     features: [
       "Everything in Clubhouse",
       "Department routing + VIP list",
       "Weekly ROI report",
     ],
-    featured: true,
-    buttonVariant: "default" as const,
+    name: "Championship",
+    price: "$299",
+    priceSuffix: "/mo",
   },
   {
-    name: "Signature",
-    price: "$399+",
-    priceSuffix: "/mo",
+    buttonVariant: "outline" as const,
     description:
       "For complex operations — member tiers, multiple booking rules, high call volume.",
+    featured: false,
     features: [
       "Everything in Championship",
       "Multi-course booking",
       "Member/public rate logic",
     ],
-    featured: false,
-    buttonVariant: "outline" as const,
+    name: "Signature",
+    price: "$399+",
+    priceSuffix: "/mo",
   },
-]
+];
 
 export function Pricing() {
   return (
@@ -131,5 +130,5 @@ export function Pricing() {
         </div>
       </div>
     </section>
-  )
+  );
 }

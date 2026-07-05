@@ -2,28 +2,28 @@ import {
   RiCalendarCheckLine,
   RiPhoneLine,
   RiUserSharedLine,
-} from "@remixicon/react"
+} from "@remixicon/react";
 
 const steps = [
   {
-    step: "Step 1",
-    icon: RiPhoneLine,
-    title: "Answers instantly",
     body: "Every call, every hour, in a natural voice — no menus, no hold music.",
+    icon: RiPhoneLine,
+    step: "Step 1",
+    title: "Answers instantly",
   },
   {
-    step: "Step 2",
-    icon: RiCalendarCheckLine,
-    title: "Resolves against your tee sheet",
     body: "Books, cancels, and modifies real reservations. Answers rates, hours, and policy questions from your own info.",
+    icon: RiCalendarCheckLine,
+    step: "Step 2",
+    title: "Resolves against your tee sheet",
   },
   {
-    step: "Step 3",
-    icon: RiUserSharedLine,
-    title: "Routes what needs a person",
     body: "\u201CTalk to someone\u201D always works — instant transfer during hours, a structured message after.",
+    icon: RiUserSharedLine,
+    step: "Step 3",
+    title: "Routes what needs a person",
   },
-]
+];
 
 export function HowItWorks() {
   return (
@@ -35,10 +35,7 @@ export function HowItWorks() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {steps.map(({ step, icon: Icon, title, body }) => (
-            <div
-              key={step}
-              className="rounded-xl border bg-card p-6 shadow-sm"
-            >
+            <div key={step} className="rounded-xl border bg-card p-6 shadow-sm">
               <div className="flex size-11 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
                 <Icon className="size-5" />
               </div>
@@ -52,5 +49,5 @@ export function HowItWorks() {
         </div>
       </div>
     </section>
-  )
+  );
 }

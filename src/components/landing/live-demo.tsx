@@ -1,36 +1,43 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { RiMicLine, RiPlayCircleLine } from "@remixicon/react"
-import { cn } from "@/lib/utils"
+import { RiMicLine, RiPlayCircleLine } from "@remixicon/react";
+import { useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 const sampleCalls = [
   {
-    id: "same-day",
-    duration: "0:42",
     caption: "Same-day booking",
-    heights: [4, 8, 12, 16, 10, 14, 7, 11, 15, 9, 13, 6, 10, 14, 8, 12, 5, 15, 11, 7],
+    duration: "0:42",
+    heights: [
+      4, 8, 12, 16, 10, 14, 7, 11, 15, 9, 13, 6, 10, 14, 8, 12, 5, 15, 11, 7,
+    ],
+    id: "same-day",
   },
   {
-    id: "policy",
-    duration: "1:08",
     caption: "Enforcing an online-only policy",
-    heights: [6, 10, 8, 14, 12, 7, 15, 9, 11, 16, 5, 13, 10, 8, 14, 6, 12, 9, 15, 7],
+    duration: "1:08",
+    heights: [
+      6, 10, 8, 14, 12, 7, 15, 9, 11, 16, 5, 13, 10, 8, 14, 6, 12, 9, 15, 7,
+    ],
+    id: "policy",
   },
   {
-    id: "after-hours",
-    duration: "0:55",
     caption: "After-hours cancellation",
-    heights: [5, 9, 13, 7, 15, 11, 8, 14, 10, 6, 16, 12, 9, 13, 7, 11, 15, 8, 10, 6],
+    duration: "0:55",
+    heights: [
+      5, 9, 13, 7, 15, 11, 8, 14, 10, 6, 16, 12, 9, 13, 7, 11, 15, 8, 10, 6,
+    ],
+    id: "after-hours",
   },
-]
+];
 
 function Waveform({
   heights,
   active,
 }: {
-  heights: number[]
-  active?: boolean
+  heights: number[];
+  active?: boolean;
 }) {
   return (
     <div className="flex h-5 flex-1 items-center justify-center gap-px">
@@ -45,7 +52,7 @@ function Waveform({
         />
       ))}
     </div>
-  )
+  );
 }
 
 function SampleCallCard({
@@ -55,11 +62,11 @@ function SampleCallCard({
   playing,
   onToggle,
 }: {
-  duration: string
-  caption: string
-  heights: number[]
-  playing: boolean
-  onToggle: () => void
+  duration: string;
+  caption: string;
+  heights: number[];
+  playing: boolean;
+  onToggle: () => void;
 }) {
   return (
     <button
@@ -84,12 +91,12 @@ function SampleCallCard({
       </div>
       <p className="text-sm font-medium">{caption}</p>
     </button>
-  )
+  );
 }
 
 export function LiveDemo() {
-  const [listening, setListening] = useState(false)
-  const [playingId, setPlayingId] = useState<string | null>(null)
+  const [listening, setListening] = useState(false);
+  const [playingId, setPlayingId] = useState<string | null>(null);
 
   return (
     <section id="demo" className="py-20 md:py-28">
@@ -148,5 +155,5 @@ export function LiveDemo() {
         </div>
       </div>
     </section>
-  )
+  );
 }

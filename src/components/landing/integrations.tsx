@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const vendors = [
   { name: "EZLinks", status: "live" as const },
@@ -9,7 +9,7 @@ const vendors = [
   { name: "Lightspeed Golf", status: "coming" as const },
   { name: "Club Prophet", status: "coming" as const },
   { name: "Club Caddie", status: "coming" as const },
-]
+];
 
 export function Integrations() {
   return (
@@ -63,5 +63,5 @@ export function Integrations() {
         </Card>
       </div>
     </section>
-  )
+  );
 }

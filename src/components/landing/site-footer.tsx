@@ -1,26 +1,26 @@
-import Link from "next/link";
 import { RiFlagLine } from "@remixicon/react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const productLinks = [
-  { label: "How It Works", href: "#how" },
-  { label: "Live Demo", href: "#demo" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Integrations", href: "#integrations" },
+  { href: "#how", label: "How It Works" },
+  { href: "#demo", label: "Live Demo" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#integrations", label: "Integrations" },
 ] as const;
 
 const companyLinks = [
-  { label: "About", href: "#" },
-  { label: "Contact", href: "#" },
-  { label: "Founding Course Program", href: "#" },
+  { href: "#", label: "About" },
+  { href: "#", label: "Contact" },
+  { href: "#", label: "Founding Course Program" },
 ] as const;
 
 const legalLinks = [
-  { label: "Privacy Policy", href: "#" },
-  { label: "Terms of Service", href: "#" },
-  { label: "Recording & AI Disclosure", href: "#" },
+  { href: "#", label: "Privacy Policy" },
+  { href: "#", label: "Terms of Service" },
+  { href: "#", label: "Recording & AI Disclosure" },
 ] as const;
 
 function FooterLogo() {
@@ -71,9 +71,7 @@ export function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <FooterLogo />
-            <p className="mt-4 text-sm text-zinc-400">
-              Every call, answered.
-            </p>
+            <p className="mt-4 text-sm text-zinc-400">Every call, answered.</p>
             <form className="mt-6 flex gap-2" action="#">
               <Input
                 type="email"

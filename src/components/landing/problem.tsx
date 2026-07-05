@@ -1,10 +1,10 @@
-import { RiPhoneLine } from "@remixicon/react"
+import { RiPhoneLine } from "@remixicon/react";
 
 const missedCalls = [
-  { time: "Yesterday 8:42 PM", number: "(555) 284-0193" },
-  { time: "Yesterday 7:15 PM", number: "(555) 901-4472" },
-  { time: "Yesterday 6:03 PM", number: "(555) 338-7721" },
-]
+  { number: "(555) 284-0193", time: "Yesterday 8:42 PM" },
+  { number: "(555) 901-4472", time: "Yesterday 7:15 PM" },
+  { number: "(555) 338-7721", time: "Yesterday 6:03 PM" },
+];
 
 export function Problem() {
   return (
@@ -57,7 +57,9 @@ export function Problem() {
                   <p className="truncate text-sm font-medium text-zinc-100">
                     Missed call · {call.time}
                   </p>
-                  <p className="truncate text-xs text-zinc-500">{call.number}</p>
+                  <p className="truncate text-xs text-zinc-500">
+                    {call.number}
+                  </p>
                 </div>
               </div>
             ))}
@@ -65,5 +67,5 @@ export function Problem() {
         </div>
       </div>
     </section>
-  )
+  );
 }

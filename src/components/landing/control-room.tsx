@@ -1,6 +1,5 @@
-"use client"
+"use client";
 
-import { useState } from "react"
 import {
   RiEditLine,
   RiFlagLine,
@@ -9,54 +8,55 @@ import {
   RiPlayLine,
   RiStarLine,
   RiSunLine,
-} from "@remixicon/react"
+} from "@remixicon/react";
+import { useState } from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const recentCalls = [
   {
-    time: "9:14 PM",
+    label: "4 players — Jones Course",
     outcome: "Booked",
     outcomeClass: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-    label: "4 players — Jones Course",
+    time: "9:14 PM",
   },
   {
-    time: "8:52 PM",
+    label: "Rates & dress code",
     outcome: "Answered",
     outcomeClass: "bg-blue-50 text-blue-700 ring-blue-200",
-    label: "Rates & dress code",
+    time: "8:52 PM",
   },
   {
-    time: "7:31 PM",
+    label: "Outing inquiry → staff",
     outcome: "Transferred",
     outcomeClass: "bg-amber-50 text-amber-700 ring-amber-200",
-    label: "Outing inquiry → staff",
+    time: "7:31 PM",
   },
   {
-    time: "6:08 PM",
+    label: "2 players — North 9",
     outcome: "Booked",
     outcomeClass: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-    label: "2 players — North 9",
+    time: "6:08 PM",
   },
   {
-    time: "5:45 PM",
+    label: "Cancellation processed",
     outcome: "Answered",
     outcomeClass: "bg-muted text-muted-foreground ring-border",
-    label: "Cancellation processed",
+    time: "5:45 PM",
   },
-]
+];
 
 const weekStats = [
-  { value: "41", label: "After-hours answered" },
-  { value: "87%", label: "Resolution rate" },
-  { value: "23", label: "Bookings" },
-  { value: "312", label: "Staff minutes saved" },
-]
+  { label: "After-hours answered", value: "41" },
+  { label: "Resolution rate", value: "87%" },
+  { label: "Bookings", value: "23" },
+  { label: "Staff minutes saved", value: "312" },
+];
 
-const autonomySegments = ["After-hours", "+ Overflow", "Full line"] as const
+const autonomySegments = ["After-hours", "+ Overflow", "Full line"] as const;
 
 const controlBadges = [
   { icon: RiPauseCircleLine, label: "Pause agent anytime" },
@@ -68,10 +68,10 @@ const controlBadges = [
   { icon: RiStarLine, label: "VIP list" },
   { icon: RiPlayCircleLine, label: "Listen to any call" },
   { icon: RiFlagLine, label: "Flag & review" },
-]
+];
 
 export function ControlRoom() {
-  const [activeSegment, setActiveSegment] = useState(0)
+  const [activeSegment, setActiveSegment] = useState(0);
 
   return (
     <section className="py-20 md:py-28">
@@ -116,10 +116,18 @@ export function ControlRoom() {
                     {call.label}
                   </span>
                   <div className="flex shrink-0 gap-1">
-                    <Button variant="ghost" size="icon-xs" aria-label="Play call">
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      aria-label="Play call"
+                    >
                       <RiPlayLine className="size-3.5" />
                     </Button>
-                    <Button variant="ghost" size="icon-xs" aria-label="Flag call">
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      aria-label="Flag call"
+                    >
                       <RiFlagLine className="size-3.5" />
                     </Button>
                   </div>
@@ -214,5 +222,5 @@ export function ControlRoom() {
         </div>
       </div>
     </section>
-  )
+  );
 }

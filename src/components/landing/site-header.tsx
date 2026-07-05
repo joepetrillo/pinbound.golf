@@ -1,8 +1,8 @@
 "use client";
 
+import { RiFlagLine, RiMenuLine } from "@remixicon/react";
 import Link from "next/link";
 import { useState } from "react";
-import { RiFlagLine, RiMenuLine } from "@remixicon/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/sheet";
 
 const navLinks = [
-  { label: "How It Works", href: "#how" },
-  { label: "Live Demo", href: "#demo" },
-  { label: "Your Rules", href: "#rules" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
+  { href: "#how", label: "How It Works" },
+  { href: "#demo", label: "Live Demo" },
+  { href: "#rules", label: "Your Rules" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
 ] as const;
 
 function Logo() {

@@ -2,10 +2,10 @@ import {
   RiArrowRightLine,
   RiCalendarLine,
   RiShieldCheckLine,
-} from "@remixicon/react"
+} from "@remixicon/react";
 
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 const ruleChips = [
   "Booking windows",
@@ -16,7 +16,7 @@ const ruleChips = [
   "Cart & walking rules",
   "Outing thresholds",
   "Department routing",
-]
+];
 
 export function YourRules() {
   return (
@@ -119,5 +119,5 @@ export function YourRules() {
         </div>
       </div>
     </section>
-  )
+  );
 }

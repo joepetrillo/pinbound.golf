@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
-const TOTAL_SPOTS = 10
-const CLAIMED_SPOTS = 3
-const REMAINING_SPOTS = TOTAL_SPOTS - CLAIMED_SPOTS
+const TOTAL_SPOTS = 10;
+const CLAIMED_SPOTS = 3;
+const REMAINING_SPOTS = TOTAL_SPOTS - CLAIMED_SPOTS;
 
 export function FoundingCourses() {
   return (
@@ -39,15 +39,11 @@ export function FoundingCourses() {
         </div>
 
         <div className="mt-8">
-          <Button
-            render={<a href="#pricing" />}
-            nativeButton={false}
-            size="lg"
-          >
+          <Button render={<a href="#pricing" />} nativeButton={false} size="lg">
             Claim a Founding Spot
           </Button>
         </div>
       </div>
     </section>
-  )
+  );
 }

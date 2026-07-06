@@ -120,6 +120,7 @@ const TranscriptCard = () => {
   const [resetKey, setResetKey] = useState(0);
   const [spokenCount, setSpokenCount] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const pauseRef = useRef(false);
 
   const reset = () => {
@@ -200,9 +201,22 @@ const TranscriptCard = () => {
     ? SCRIPT
     : SCRIPT.slice(0, lineIndex + 1);
 
+  // Keep the transcript pinned to the latest bubble as new lines stream in.
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) {
+      return;
+    }
+
+    element.scrollTo({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      top: element.scrollHeight,
+    });
+  }, [lineIndex, prefersReducedMotion, resetKey, spokenCount]);
+
   return (
     <div
-      className="flex h-[484px] flex-col rounded-xl border bg-muted/50 p-4 shadow-sm md:h-[370px] lg:h-[438px]"
+      className="flex h-72 flex-col rounded-xl border bg-muted/50 p-4 shadow-sm"
       ref={cardRef}
     >
       <div className="mb-4 flex items-center justify-between">
@@ -225,32 +239,37 @@ const TranscriptCard = () => {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col justify-end gap-3 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_32px)]">
-        {visibleLines.map((line) => {
-          const isAgent = line.speaker === "agent";
-          const isActive = prefersReducedMotion
-            ? false
-            : line.id === SCRIPT[lineIndex]?.id;
-          const lineSpokenCount = isActive ? spokenCount : line.words.length;
+      <div
+        className="min-h-0 flex-1 overflow-y-auto [mask-image:linear-gradient(to_bottom,transparent,black_32px)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        ref={scrollRef}
+      >
+        <div className="flex min-h-full flex-col justify-end gap-3">
+          {visibleLines.map((line) => {
+            const isAgent = line.speaker === "agent";
+            const isActive = prefersReducedMotion
+              ? false
+              : line.id === SCRIPT[lineIndex]?.id;
+            const lineSpokenCount = isActive ? spokenCount : line.words.length;
 
-          return (
-            <div
-              className={cn(
-                "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-                isAgent
-                  ? "self-start border bg-background text-foreground"
-                  : "self-end bg-muted text-foreground"
-              )}
-              key={line.id}
-            >
-              <KaraokeLine
-                isActive={isActive}
-                spokenCount={lineSpokenCount}
-                words={line.words}
-              />
-            </div>
-          );
-        })}
+            return (
+              <div
+                className={cn(
+                  "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                  isAgent
+                    ? "self-start border bg-background text-foreground"
+                    : "self-end bg-muted text-foreground"
+                )}
+                key={line.id}
+              >
+                <KaraokeLine
+                  isActive={isActive}
+                  spokenCount={lineSpokenCount}
+                  words={line.words}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

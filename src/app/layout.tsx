@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-const title = "Pinbound — golf course phone answering that follows your rules";
+const title = "Pinbound Golf";
 const description =
   "24/7 AI phone answering for golf courses, wired into your tee sheet — with a dashboard where you control exactly what it's allowed to do. For GMs and pro shops.";
 

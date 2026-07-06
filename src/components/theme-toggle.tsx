@@ -2,6 +2,7 @@
 
 import { RiComputerLine, RiMoonLine, RiSunLine } from "@remixicon/react";
 import { useTheme } from "next-themes";
+import { useSyncExternalStore } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -11,8 +12,19 @@ const OPTIONS = [
   { icon: RiComputerLine, label: "System theme", value: "system" },
 ] as const;
 
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+const subscribeToClient = (_onStoreChange: () => void) => () => {
+  // Snapshot is static; no external store to subscribe to.
+};
+
 export const ThemeToggle = ({ className }: { className?: string }) => {
   const { setTheme, theme } = useTheme();
+  const mounted = useSyncExternalStore(
+    subscribeToClient,
+    getClientSnapshot,
+    getServerSnapshot
+  );
 
   return (
     <div
@@ -22,7 +34,7 @@ export const ThemeToggle = ({ className }: { className?: string }) => {
       )}
     >
       {OPTIONS.map((option) => {
-        const isActive = theme === option.value;
+        const isActive = mounted && theme === option.value;
         return (
           <button
             aria-label={option.label}
@@ -33,7 +45,6 @@ export const ThemeToggle = ({ className }: { className?: string }) => {
             )}
             key={option.value}
             onClick={() => setTheme(option.value)}
-            suppressHydrationWarning
             type="button"
           >
             <option.icon aria-hidden className="size-4" />

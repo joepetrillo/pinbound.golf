@@ -284,13 +284,18 @@ export const Hero = () => (
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
           24/7 AI answering, wired into your tee sheet — with a dashboard where
-          you control exactly what it's allowed to do.
+          you control exactly what it&apos;s allowed to do.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Button render={<Link href={CTA_HREF} />} size="lg">
+          <Button
+            nativeButton={false}
+            render={<Link href={CTA_HREF} />}
+            size="lg"
+          >
             {CTA_LABEL}
           </Button>
           <Button
+            nativeButton={false}
             render={<Link href={DEMO_HREF} />}
             size="lg"
             variant="outline"

@@ -1,0 +1,17 @@
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "oxc.fmt.configPath": "oxfmt.config.ts",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "emmet.showExpandedAbbreviation": "never",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  }
+}

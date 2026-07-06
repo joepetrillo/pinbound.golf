@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { ThemeProvider } from "@/components/theme-provider";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 import "./globals.css";
@@ -54,8 +54,9 @@ const RootLayout = ({
         defaultTheme="system"
         disableTransitionOnChange
         enableSystem
+        enableColorScheme={true}
       >
-        {children}
+        <div className="isolate">{children}</div>
       </ThemeProvider>
     </body>
   </html>

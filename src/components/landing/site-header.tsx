@@ -16,8 +16,8 @@ import {
 import { CTA_HREF, CTA_LABEL, NAV_LINKS } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-const Logo = () => (
-  <Link className="flex items-center gap-2.5" href="/">
+const Logo = ({ onClick }: { onClick?: () => void }) => (
+  <Link className="flex items-center gap-2.5" href="/" onClick={onClick}>
     <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-4" />
     </span>
@@ -81,7 +81,9 @@ export const SiteHeader = () => {
               </Link>
             ))}
             <ThemeToggle />
-            <Button render={<Link href={CTA_HREF} />}>{CTA_LABEL}</Button>
+            <Button nativeButton={false} render={<Link href={CTA_HREF} />}>
+              {CTA_LABEL}
+            </Button>
           </nav>
 
           <div className="md:hidden">
@@ -99,7 +101,11 @@ export const SiteHeader = () => {
               </DrawerTrigger>
               <DrawerContent className="flex h-full flex-col">
                 <div className="flex shrink-0 items-center justify-between p-4">
-                  <Logo />
+                  <Logo
+                    onClick={() => {
+                      setDrawerOpen(false);
+                    }}
+                  />
                   <DrawerClose
                     render={
                       <Button
@@ -133,6 +139,7 @@ export const SiteHeader = () => {
                   <div className="border-t border-border px-4 py-4">
                     <Button
                       className="w-full"
+                      nativeButton={false}
                       render={
                         <Link
                           href={CTA_HREF}

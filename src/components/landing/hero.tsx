@@ -264,9 +264,8 @@ export const Hero = () => (
           Every call answered. Every rule followed.
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
-          Pinbound answers your pro shop phone, books what you allow by phone,
-          enforces your policies, and hands humans the calls that need humans.
-          And it never closes.
+          24/7 AI answering, wired into your tee sheet — with a dashboard where
+          you control exactly what it's allowed to do.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Button render={<Link href={CTA_HREF} />} size="lg">

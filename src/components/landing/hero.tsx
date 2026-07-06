@@ -10,7 +10,6 @@ import { CTA_HREF, CTA_LABEL, DEMO_HREF, DEMO_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const LOOP_PAUSE_MS = 2500;
-const TRANSCRIPT_MIN_HEIGHT = 360;
 const WORD_INTERVAL_MS = 150;
 
 interface ScriptWord {
@@ -203,9 +202,8 @@ const TranscriptCard = () => {
 
   return (
     <div
-      className="flex flex-col rounded-xl border bg-muted/50 p-4 shadow-sm"
+      className="flex h-[484px] flex-col rounded-xl border bg-muted/50 p-4 shadow-sm md:h-[370px] lg:h-[438px]"
       ref={cardRef}
-      style={{ minHeight: TRANSCRIPT_MIN_HEIGHT }}
     >
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground">
@@ -227,7 +225,7 @@ const TranscriptCard = () => {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 overflow-hidden">
+      <div className="flex flex-1 flex-col justify-end gap-3 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_32px)]">
         {visibleLines.map((line) => {
           const isAgent = line.speaker === "agent";
           const isActive = prefersReducedMotion

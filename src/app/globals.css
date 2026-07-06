@@ -121,8 +121,9 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Required for Base UI drawer backdrops on iOS 26+ Safari (see Base UI quick-start). */
   body {
-    @apply bg-background text-foreground;
+    @apply relative bg-background text-foreground;
   }
   html {
     @apply font-sans;

@@ -5,11 +5,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
@@ -44,7 +42,14 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => (
   <html
-    className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+    className={cn(
+      "h-full",
+      "scroll-smooth",
+      "antialiased",
+      geistMono.variable,
+      "font-sans",
+      geist.variable
+    )}
     lang="en"
     suppressHydrationWarning
   >

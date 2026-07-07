@@ -112,7 +112,7 @@ export const SiteHeader = () => {
 
             <DrawerContent
               className="max-h-[85dvh] rounded-t-3xl"
-              overlayClassName="top-[25%] supports-backdrop-filter:backdrop-blur-md"
+              overlayClassName="supports-backdrop-filter:backdrop-blur-md"
             >
               <div className="flex max-h-[85dvh] flex-col px-4 pb-6 md:px-6">
                 <div className="flex shrink-0 items-center justify-between py-4">

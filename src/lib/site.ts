@@ -1,5 +1,4 @@
-// Single source of truth for sitewide copy, CTAs, and the founding-program
-// scarcity counter. Update FOUNDING_SPOTS_CLAIMED as spots are taken.
+// Single source of truth for sitewide copy and CTAs.
 
 export const SITE_NAME = "Pinbound";
 
@@ -13,11 +12,6 @@ export const CTA_HREF = "#founding";
 
 export const DEMO_LABEL = "Hear the Demo";
 export const DEMO_HREF = "#demo";
-
-export const FOUNDING_SPOTS_TOTAL = 10;
-export const FOUNDING_SPOTS_CLAIMED = 3;
-export const FOUNDING_SPOTS_LEFT =
-  FOUNDING_SPOTS_TOTAL - FOUNDING_SPOTS_CLAIMED;
 
 export const NAV_LINKS = [
   { href: "#product", label: "Product" },

@@ -23,6 +23,12 @@ const faqItems = [
   },
   {
     answer:
+      "EZLinks and the GolfNow family first. Every other platform is prioritized by founding course demand — tell us yours.",
+    id: "tee-sheet-support",
+    question: "Which tee sheets do you support today?",
+  },
+  {
+    answer:
       "Works with the major tee sheet platforms today — more coming. Tell us yours.",
     id: "tee-sheet",
     question: "Does it work with my tee sheet?",

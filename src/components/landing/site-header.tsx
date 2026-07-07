@@ -96,11 +96,7 @@ export const SiteHeader = () => {
             </Button>
           </div>
 
-          <Drawer
-            onOpenChange={setMenuOpen}
-            open={menuOpen}
-            swipeDirection="right"
-          >
+          <Drawer onOpenChange={setMenuOpen} open={menuOpen} showSwipeHandle>
             <DrawerTrigger
               className="lg:hidden"
               render={
@@ -114,9 +110,12 @@ export const SiteHeader = () => {
               <RiMenuLine className="size-5" />
             </DrawerTrigger>
 
-            <DrawerContent className="w-full! rounded-none border-none [--drawer-inset:0px]">
-              <div className="flex h-full flex-col px-4 md:px-6">
-                <div className="flex h-site-header shrink-0 items-center justify-between">
+            <DrawerContent
+              className="max-h-[85dvh] rounded-t-3xl"
+              overlayClassName="supports-backdrop-filter:backdrop-blur-md"
+            >
+              <div className="flex max-h-[85dvh] flex-col px-4 pb-6 md:px-6">
+                <div className="flex shrink-0 items-center justify-between py-4">
                   <Logo onClick={closeMenu} />
                   <DrawerClose
                     className="-mr-1"
@@ -134,7 +133,7 @@ export const SiteHeader = () => {
                 </div>
 
                 <nav aria-label="Primary" className="flex-1 overflow-y-auto">
-                  <ul className="border-t border-border pt-2">
+                  <ul>
                     {NAV_LINKS.map((link) => (
                       <li key={link.href}>
                         <Link
@@ -148,7 +147,7 @@ export const SiteHeader = () => {
                     ))}
                   </ul>
 
-                  <div className="mt-6 space-y-3 border-t border-border pt-6">
+                  <div className="mt-6 space-y-3">
                     <Button
                       className="w-full"
                       nativeButton={false}
@@ -169,10 +168,8 @@ export const SiteHeader = () => {
                   </div>
                 </nav>
 
-                <div className="flex shrink-0 items-center justify-between border-t border-border py-4">
-                  <span className="text-sm text-muted-foreground">
-                    Appearance
-                  </span>
+                <div className="flex shrink-0 items-center justify-between pt-6">
+                  <span className="text-muted-foreground">Appearance</span>
                   <ThemeToggle />
                 </div>
               </div>

@@ -13,6 +13,13 @@ const policyRule = {
   value: "Same-day only. Further out: online only.",
 };
 
+const proofPoints = [
+  "Every call logged with transcript and audio",
+  "Rules editable anytime, live",
+  "VIP list — numbers that always ring straight to staff",
+  "Autonomy dial — after-hours → overflow → full line, the GM decides when it earns more",
+];
+
 const transcriptLines: TranscriptLine[] = [
   {
     id: "caller-request",
@@ -63,7 +70,7 @@ const TranscriptBubble = ({ line }: TranscriptBubbleProps) => {
 export const PolicyFidelity = () => (
   <Section id="product">
     <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-      It follows your rules, not a script
+      Your rules. Your control.
     </h2>
     <p className="mt-4 max-w-prose text-muted-foreground">
       Generic agents say yes to everything. Yours follows your rules — the same
@@ -96,5 +103,9 @@ export const PolicyFidelity = () => (
         </p>
       </div>
     </div>
+
+    <p className="mt-10 text-sm leading-relaxed text-muted-foreground">
+      {proofPoints.join(" · ")}
+    </p>
   </Section>
 );

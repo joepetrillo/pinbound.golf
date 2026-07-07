@@ -49,18 +49,26 @@ const SCRIPT: ScriptLine[] = [
   makeLine(
     "caller-request",
     "caller",
-    "Any tee times tomorrow morning for two?"
+    "Hey — do you have anything tomorrow morning for two?"
   ),
+  makeLine(
+    "agent-course",
+    "agent",
+    "Sure. Are you looking at the Jones Course, or the Nicklaus?"
+  ),
+  makeLine("caller-course", "caller", "Jones is fine."),
   makeLine(
     "agent-offer",
     "agent",
-    "I have 7:40 and 8:10 on the Jones Course. Want me to hold one?"
+    "On Jones tomorrow I have 7:40 and 8:10, both walking. Want me to hold one?"
   ),
-  makeLine("caller-confirm", "caller", "Grab the 7:40."),
+  makeLine("caller-confirm", "caller", "Yeah, grab the 7:40."),
+  makeLine("agent-name", "agent", "What's the name for the booking?"),
+  makeLine("caller-name", "caller", "Marcus Chen."),
   makeLine(
     "agent-booked",
     "agent",
-    "You're booked — 7:40 AM, Jones Course, two players. Confirmation is on its way."
+    "You're all set — 7:40 AM, Jones Course, two players under Marcus Chen. I'll text a confirmation to this number."
   ),
 ];
 
@@ -216,7 +224,7 @@ const TranscriptCard = () => {
 
   return (
     <div
-      className="flex h-72 flex-col rounded-xl border bg-muted/50 p-4 shadow-sm"
+      className="flex h-96 flex-col rounded-xl border bg-muted/50 p-4 shadow-sm"
       ref={cardRef}
     >
       <div className="mb-4 flex items-center justify-between">
@@ -280,11 +288,12 @@ export const Hero = () => (
     <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
       <div>
         <h1 className="text-5xl font-medium tracking-tight text-balance md:text-6xl">
-          Every call answered. Every rule followed.
+          The pro shop assistant that answers every call and never clocks out
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
-          24/7 AI answering, wired into your tee sheet — with a dashboard where
-          you control exactly what it&apos;s allowed to do.
+          Pinbound answers your pro shop line 24/7 — books tee times through
+          your tee sheet, enforces your booking rules exactly, answers golfer
+          questions, and hands the calls that need a human to your staff.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Button

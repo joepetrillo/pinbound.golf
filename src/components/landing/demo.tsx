@@ -78,7 +78,7 @@ const sampleCalls: SampleCall[] = [
     duration: "0:52",
     id: "policy",
     transcript:
-      "Caller: Can I cancel tomorrow's 8:00 tee time? Agent: Cancellations need 24 hours' notice — that one is inside the window, so I can't release it without a charge. Want me to transfer you to the shop?",
+      "Caller: Can I cancel tomorrow's 8:00 tee time? Agent: Cancellations need 24 hours' notice — that's inside the 24-hour window, so I can't cancel it by phone — want me to transfer you to the shop?",
     waveform: makeWaveform(
       "policy",
       [6, 10, 8, 14, 12, 7, 15, 9, 11, 16, 5, 13, 10, 8, 14, 6, 12, 9, 15, 7]

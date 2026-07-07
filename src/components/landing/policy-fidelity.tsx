@@ -31,16 +31,6 @@ const transcriptLines: TranscriptLine[] = [
     speaker: "agent",
     text: "Phone bookings at Pinehills are same-day only. For that Saturday I can text you our online booking link — want me to send it?",
   },
-  {
-    id: "caller-accept",
-    speaker: "caller",
-    text: "Yeah, that works.",
-  },
-  {
-    id: "agent-confirm",
-    speaker: "agent",
-    text: "Done — link sent to the number you're calling from.",
-  },
 ];
 
 interface TranscriptBubbleProps {

@@ -29,7 +29,6 @@ const resourcesLinks: readonly FooterLink[] = [
 const companyLinks: readonly FooterLink[] = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-  { href: "/careers", label: "Careers" },
 ];
 
 const legalLinks: readonly FooterLink[] = [

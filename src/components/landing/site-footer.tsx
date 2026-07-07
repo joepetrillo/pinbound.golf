@@ -16,7 +16,7 @@ interface FooterLink {
 
 const productLinks: readonly FooterLink[] = [
   { href: "#product", label: "Product" },
-  { href: "#how-it-works", label: "How it works" },
+  { href: "#integrations", label: "Integrations" },
   { href: "#demo", label: "Demo" },
   { href: "#pricing", label: "Pricing" },
 ];

@@ -1,11 +1,6 @@
 import { Section } from "@/components/section";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  CTA_LABEL,
-  FOUNDING_SPOTS_LEFT,
-  FOUNDING_SPOTS_TOTAL,
-} from "@/lib/site";
+import { CTA_LABEL } from "@/lib/site";
 
 const foundingTerms = [
   {
@@ -37,14 +32,9 @@ export const FoundingProgram = () => (
   <Section id="founding">
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
       <div>
-        <div className="flex flex-wrap items-center gap-3">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            The Founding Course Program
-          </h2>
-          <Badge variant="outline">
-            {FOUNDING_SPOTS_LEFT} of {FOUNDING_SPOTS_TOTAL} spots left
-          </Badge>
-        </div>
+        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+          The Founding Course Program
+        </h2>
 
         <div className="mt-10 max-w-prose">
           <Button

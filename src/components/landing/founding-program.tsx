@@ -35,38 +35,42 @@ const foundingTerms = [
 
 export const FoundingProgram = () => (
   <Section id="founding">
-    <div className="flex flex-wrap items-center gap-3">
-      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-        The Founding Course Program
-      </h2>
-      <Badge variant="outline">
-        {FOUNDING_SPOTS_LEFT} of {FOUNDING_SPOTS_TOTAL} spots left
-      </Badge>
-    </div>
-
-    <dl className="mt-8 max-w-prose space-y-5">
-      {foundingTerms.map((term) => (
-        <div key={term.id}>
-          <dt className="font-medium text-foreground">{term.title}</dt>
-          <dd className="mt-1 text-muted-foreground">{term.description}</dd>
+    <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
+      <div>
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+            The Founding Course Program
+          </h2>
+          <Badge variant="outline">
+            {FOUNDING_SPOTS_LEFT} of {FOUNDING_SPOTS_TOTAL} spots left
+          </Badge>
         </div>
-      ))}
-    </dl>
 
-    <div className="mt-10 max-w-prose">
-      <Button
-        nativeButton={false}
-        render={
-          <a aria-label={CTA_LABEL} href="mailto:founders@pinbound.golf" />
-        }
-        size="lg"
-      >
-        {CTA_LABEL}
-      </Button>
-      <p className="mt-4 text-muted-foreground">
-        Tell us about your course and we&apos;ll walk through shadow-mode setup.
-        Most founding courses are live on after-hours within days.
-      </p>
+        <div className="mt-10 max-w-prose">
+          <Button
+            nativeButton={false}
+            render={
+              <a aria-label={CTA_LABEL} href="mailto:founders@pinbound.golf" />
+            }
+            size="lg"
+          >
+            {CTA_LABEL}
+          </Button>
+          <p className="mt-4 text-muted-foreground">
+            Tell us about your course and we&apos;ll walk through shadow-mode
+            setup. Most founding courses are live on after-hours within days.
+          </p>
+        </div>
+      </div>
+
+      <dl className="max-w-prose space-y-5">
+        {foundingTerms.map((term) => (
+          <div key={term.id}>
+            <dt className="font-medium text-foreground">{term.title}</dt>
+            <dd className="mt-1 text-muted-foreground">{term.description}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   </Section>
 );

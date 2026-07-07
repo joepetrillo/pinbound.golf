@@ -1,6 +1,7 @@
 import { RiFlagLine } from "@remixicon/react";
 import Link from "next/link";
 
+import { ThemeToggle } from "@/components/theme-toggle";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 
 interface FooterColumnProps {
@@ -12,6 +13,18 @@ interface FooterLink {
   href: string;
   label: string;
 }
+
+const productLinks: readonly FooterLink[] = [
+  { href: "#product", label: "Product" },
+  { href: "#how-it-works", label: "How it works" },
+  { href: "#demo", label: "Demo" },
+  { href: "#pricing", label: "Pricing" },
+];
+
+const resourcesLinks: readonly FooterLink[] = [
+  { href: "#faq", label: "FAQ" },
+  { href: "/get-started", label: "Get started" },
+];
 
 const companyLinks: readonly FooterLink[] = [
   { href: "/about", label: "About" },
@@ -25,26 +38,21 @@ const legalLinks: readonly FooterLink[] = [
   { href: "/terms", label: "Terms of service" },
 ];
 
-const productLinks: readonly FooterLink[] = [
-  { href: "#how-it-works", label: "How it works" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#product", label: "Product" },
-  { href: "#faq", label: "FAQ" },
-];
-
 const Logo = () => (
-  <Link className="flex items-center gap-2.5" href="/">
-    <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-      <RiFlagLine aria-hidden className="size-4" />
+  <Link className="inline-flex items-center gap-2.5 hover:opacity-90" href="/">
+    <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+      <RiFlagLine aria-hidden className="size-3.5" />
     </span>
-    <span className="font-bold tracking-tight text-foreground">pinbound</span>
+    <span className="text-sm font-semibold tracking-[0.12em] text-foreground uppercase">
+      pinbound
+    </span>
   </Link>
 );
 
 const FooterColumn = ({ links, title }: FooterColumnProps) => (
   <div>
-    <h3 className="text-sm font-medium text-foreground">{title}</h3>
-    <ul className="mt-4 space-y-3">
+    <h3 className="mb-3 text-sm font-medium text-foreground">{title}</h3>
+    <ul className="space-y-2">
       {links.map((link) => (
         <li key={link.href}>
           <Link
@@ -60,27 +68,29 @@ const FooterColumn = ({ links, title }: FooterColumnProps) => (
 );
 
 export const SiteFooter = () => (
-  <footer className="border-t border-border bg-background py-12">
-    <div className="mx-auto w-full max-w-5xl px-5">
-      <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div>
+  <footer className="@container w-full border-t bg-background" id="site-footer">
+    <div className="px-6 py-6">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 @2xl:grid-cols-4 @4xl:grid-cols-6">
+        <div className="col-span-full @4xl:col-span-2">
           <Logo />
-          <p className="mt-4 max-w-sm text-sm text-muted-foreground">
+          <p className="mt-3 max-w-xs text-sm text-balance text-muted-foreground">
             {SITE_DESCRIPTION}
           </p>
         </div>
 
         <FooterColumn links={productLinks} title="Product" />
         <FooterColumn links={companyLinks} title="Company" />
+        <FooterColumn links={resourcesLinks} title="Resources" />
         <FooterColumn links={legalLinks} title="Legal" />
       </div>
 
-      <div className="mt-10 space-y-4 border-t border-border pt-8">
-        <p className="text-sm text-muted-foreground">
-          {SITE_NAME} always identifies itself to callers as your course&apos;s
-          virtual assistant.
-        </p>
-        <p className="text-sm text-muted-foreground">© 2026 {SITE_NAME}</p>
+      <div className="mx-auto mt-14 max-w-6xl">
+        <div className="flex flex-wrap-reverse items-center justify-between gap-x-8 gap-y-6">
+          <p className="text-sm text-balance text-muted-foreground">
+            © 2026 {SITE_NAME}. All rights reserved.
+          </p>
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   </footer>

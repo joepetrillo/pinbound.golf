@@ -11,7 +11,10 @@ interface SectionProps {
 // The one container every landing section uses: shared max width, horizontal
 // padding, vertical rhythm, and scroll offset for the sticky header.
 export const Section = ({ children, className, id }: SectionProps) => (
-  <section className={cn("scroll-mt-20 py-16 md:py-24", className)} id={id}>
-    <div className="mx-auto w-full max-w-5xl px-5">{children}</div>
+  <section
+    className={cn("scroll-mt-20 px-4 py-16 md:px-6 md:py-24", className)}
+    id={id}
+  >
+    <div className="mx-auto w-full max-w-6xl">{children}</div>
   </section>
 );

@@ -7,24 +7,18 @@ import { HumanHandoff } from "@/components/landing/human-handoff";
 import { PolicyFidelity } from "@/components/landing/policy-fidelity";
 import { Pricing } from "@/components/landing/pricing";
 import { Problem } from "@/components/landing/problem";
-import { SiteFooter } from "@/components/landing/site-footer";
-import { SiteHeader } from "@/components/landing/site-header";
 
 const Page = () => (
   <>
-    <SiteHeader />
-    <main className="flex-1">
-      <Hero />
-      <Problem />
-      <Demo />
-      <PolicyFidelity />
-      <ControlRoom />
-      <HumanHandoff />
-      <Pricing />
-      <FoundingProgram />
-      <Faq />
-    </main>
-    <SiteFooter />
+    <Hero />
+    <Problem />
+    <Demo />
+    <PolicyFidelity />
+    <ControlRoom />
+    <HumanHandoff />
+    <Pricing />
+    <FoundingProgram />
+    <Faq />
   </>
 );
 

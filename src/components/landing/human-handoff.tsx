@@ -14,24 +14,28 @@ const handoffTranscript: HandoffLine[] = [
 
 export const HumanHandoff = () => (
   <Section>
-    <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-      &ldquo;Talk to a person&rdquo; always works
-    </h2>
-    <p className="mt-4 max-w-prose text-muted-foreground">
-      Callers who ask for a person get transferred immediately — no pushback, no
-      script. VIP numbers on your list skip the agent and ring straight to the
-      front desk.
-    </p>
-
-    <Card className="mt-6 max-w-md rounded-xl p-4 shadow-sm ring-border">
-      <div className="space-y-2">
-        {handoffTranscript.map((line) => (
-          <p key={line.id} className="text-sm">
-            <span className="font-medium capitalize">{line.role}:</span>{" "}
-            <span className="text-muted-foreground">{line.text}</span>
-          </p>
-        ))}
+    <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+      <div>
+        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+          &ldquo;Talk to a person&rdquo; always works
+        </h2>
+        <p className="mt-4 max-w-prose text-muted-foreground">
+          Callers who ask for a person get transferred immediately — no
+          pushback, no script. VIP numbers on your list skip the agent and ring
+          straight to the front desk.
+        </p>
       </div>
-    </Card>
+
+      <Card className="max-w-md rounded-xl p-4 shadow-sm ring-border">
+        <div className="space-y-2">
+          {handoffTranscript.map((line) => (
+            <p key={line.id} className="text-sm">
+              <span className="font-medium capitalize">{line.role}:</span>{" "}
+              <span className="text-muted-foreground">{line.text}</span>
+            </p>
+          ))}
+        </div>
+      </Card>
+    </div>
   </Section>
 );

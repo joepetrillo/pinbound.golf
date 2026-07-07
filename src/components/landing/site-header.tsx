@@ -13,109 +13,163 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { CTA_HREF, CTA_LABEL, NAV_LINKS } from "@/lib/site";
+import {
+  CONTACT_HREF,
+  CONTACT_LABEL,
+  GET_STARTED_HREF,
+  GET_STARTED_LABEL,
+  NAV_LINKS,
+} from "@/lib/site";
 
 const Logo = ({ onClick }: { onClick?: () => void }) => (
-  <Link className="flex items-center gap-2.5" href="/" onClick={onClick}>
-    <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-      <RiFlagLine aria-hidden className="size-4" />
+  <Link
+    aria-label="Homepage"
+    className="relative top-px inline-flex items-center gap-2.5"
+    href="/"
+    onClick={onClick}
+  >
+    <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+      <RiFlagLine aria-hidden className="size-3.5" />
     </span>
-    <span className="font-bold tracking-tight text-foreground">pinbound</span>
+    <span className="text-sm font-semibold tracking-[0.12em] text-foreground uppercase">
+      pinbound
+    </span>
   </Link>
 );
 
+const DesktopNav = () => (
+  <nav
+    aria-label="Primary"
+    className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
+  >
+    <ul className="flex items-center">
+      {NAV_LINKS.map((link) => (
+        <li key={link.href}>
+          <Link
+            className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            href={link.href}
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </nav>
+);
+
 export const SiteHeader = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-background">
-      <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-5">
-        <Logo />
+    <header
+      className="fixed top-0 left-0 z-50 w-full bg-background px-4 md:px-6"
+      id="site-header"
+    >
+      <div className="relative mx-auto grid h-site-header max-w-6xl grid-cols-[1fr_auto] items-center lg:grid-cols-[auto_1fr_auto]">
+        <div className="col-start-1 row-start-1">
+          <Logo />
+        </div>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              href={link.href}
+        <DesktopNav />
+
+        <div className="col-start-2 row-start-1 flex items-center gap-2 justify-self-end lg:col-start-3">
+          <div className="hidden items-center gap-2 lg:flex">
+            <Button
+              nativeButton={false}
+              render={<Link href={CONTACT_HREF} />}
+              size="sm"
+              variant="outline"
             >
-              {link.label}
-            </Link>
-          ))}
-          <ThemeToggle />
-          <Button nativeButton={false} render={<Link href={CTA_HREF} />}>
-            {CTA_LABEL}
-          </Button>
-        </nav>
+              {CONTACT_LABEL}
+            </Button>
+            <Button
+              className="bg-foreground text-background hover:bg-foreground/90"
+              nativeButton={false}
+              render={<Link href={GET_STARTED_HREF} />}
+              size="sm"
+            >
+              {GET_STARTED_LABEL}
+            </Button>
+          </div>
 
-        <div className="md:hidden">
           <Drawer
-            onOpenChange={setDrawerOpen}
-            open={drawerOpen}
+            onOpenChange={setMenuOpen}
+            open={menuOpen}
             swipeDirection="right"
           >
             <DrawerTrigger
+              className="lg:hidden"
               render={
-                <Button aria-label="Open menu" size="icon" variant="ghost" />
+                <Button
+                  aria-label="Open navigation"
+                  size="icon"
+                  variant="ghost"
+                />
               }
             >
               <RiMenuLine className="size-5" />
             </DrawerTrigger>
-            <DrawerContent className="flex h-full flex-col">
-              <div className="flex shrink-0 items-center justify-between p-4">
-                <Logo
-                  onClick={() => {
-                    setDrawerOpen(false);
-                  }}
-                />
-                <DrawerClose
-                  render={
-                    <Button
-                      aria-label="Close menu"
-                      size="icon"
-                      variant="ghost"
-                    />
-                  }
-                >
-                  <RiCloseLine className="size-5" />
-                </DrawerClose>
-                <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
-              </div>
 
-              <nav className="flex flex-1 flex-col px-4">
-                {NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    className="py-3 text-base text-muted-foreground transition-colors hover:text-foreground"
-                    href={link.href}
-                    onClick={() => {
-                      setDrawerOpen(false);
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="mt-auto shrink-0">
-                <div className="border-t border-border px-4 py-4">
-                  <Button
-                    className="w-full"
-                    nativeButton={false}
+            <DrawerContent className="w-full! rounded-none border-none [--drawer-inset:0px]">
+              <div className="flex h-full flex-col px-4 md:px-6">
+                <div className="flex h-site-header shrink-0 items-center justify-between">
+                  <Logo onClick={closeMenu} />
+                  <DrawerClose
+                    className="-mr-1"
                     render={
-                      <Link
-                        href={CTA_HREF}
-                        onClick={() => {
-                          setDrawerOpen(false);
-                        }}
+                      <Button
+                        aria-label="Close navigation"
+                        size="icon"
+                        variant="ghost"
                       />
                     }
                   >
-                    {CTA_LABEL}
-                  </Button>
+                    <RiCloseLine className="size-5" />
+                  </DrawerClose>
+                  <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-border px-4 py-4">
+                <nav aria-label="Primary" className="flex-1 overflow-y-auto">
+                  <ul className="border-t border-border pt-2">
+                    {NAV_LINKS.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          className="block py-3 text-lg text-foreground transition-colors hover:text-muted-foreground"
+                          href={link.href}
+                          onClick={closeMenu}
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 space-y-3 border-t border-border pt-6">
+                    <Button
+                      className="w-full"
+                      nativeButton={false}
+                      render={<Link href={CONTACT_HREF} onClick={closeMenu} />}
+                      variant="outline"
+                    >
+                      {CONTACT_LABEL}
+                    </Button>
+                    <Button
+                      className="w-full bg-foreground text-background hover:bg-foreground/90"
+                      nativeButton={false}
+                      render={
+                        <Link href={GET_STARTED_HREF} onClick={closeMenu} />
+                      }
+                    >
+                      {GET_STARTED_LABEL}
+                    </Button>
+                  </div>
+                </nav>
+
+                <div className="flex shrink-0 items-center justify-between border-t border-border py-4">
                   <span className="text-sm text-muted-foreground">
                     Appearance
                   </span>

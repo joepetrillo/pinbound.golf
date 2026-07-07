@@ -279,7 +279,7 @@ export const Hero = () => (
   <Section className="pt-14 md:pt-20">
     <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
       <div>
-        <h1 className="text-5xl font-extrabold tracking-tight text-balance md:text-6xl">
+        <h1 className="text-5xl font-medium tracking-tight text-balance md:text-6xl">
           Every call answered. Every rule followed.
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">

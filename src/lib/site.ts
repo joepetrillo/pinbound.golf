@@ -21,7 +21,13 @@ export const FOUNDING_SPOTS_LEFT =
 
 export const NAV_LINKS = [
   { href: "#product", label: "Product" },
-  { href: "#how-it-works", label: "How it works" },
+  { href: "#demo", label: "Demo" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },
 ] as const;
+
+export const CONTACT_LABEL = "Contact";
+export const CONTACT_HREF = "/contact";
+
+export const GET_STARTED_LABEL = "Get started";
+export const GET_STARTED_HREF = "/get-started";

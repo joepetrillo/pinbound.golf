@@ -42,26 +42,26 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => (
   <html
+    lang="en"
     className={cn(
-      "h-full",
       "scroll-smooth",
       "antialiased",
-      geistMono.variable,
       "font-sans",
+      geistMono.variable,
       geist.variable
     )}
-    lang="en"
+    data-scroll-behavior="smooth"
     suppressHydrationWarning
   >
-    <body className="flex min-h-full flex-col">
+    <body>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
         disableTransitionOnChange
-        enableSystem
         enableColorScheme={true}
+        enableSystem
       >
-        <div className="isolate">{children}</div>
+        <div className="isolate flex min-h-dvh flex-col">{children}</div>
       </ThemeProvider>
     </body>
   </html>

@@ -48,21 +48,23 @@ const faqItems = [
 
 export const Faq = () => (
   <Section id="faq">
-    <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-      Questions GMs ask
-    </h2>
+    <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-12">
+      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+        Questions GMs ask
+      </h2>
 
-    <Accordion className="mt-10 max-w-3xl">
-      {faqItems.map((item) => (
-        <AccordionItem key={item.id} value={item.id}>
-          <AccordionTrigger className="text-base">
-            {item.question}
-          </AccordionTrigger>
-          <AccordionContent>
-            <p className="text-muted-foreground">{item.answer}</p>
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
+      <Accordion>
+        {faqItems.map((item) => (
+          <AccordionItem key={item.id} value={item.id}>
+            <AccordionTrigger className="text-base">
+              {item.question}
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-muted-foreground">{item.answer}</p>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </div>
   </Section>
 );

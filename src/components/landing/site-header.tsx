@@ -2,8 +2,7 @@
 
 import { RiCloseLine, RiFlagLine, RiMenuLine } from "@remixicon/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -59,18 +58,11 @@ const DesktopNav = () => (
 );
 
 export const SiteHeader = () => {
-  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
-
-  // Header lives in the shared layout, so Activity does not hide it.
-  // Close the drawer whenever the route changes instead.
-  useLayoutEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
 
   return (
     <header

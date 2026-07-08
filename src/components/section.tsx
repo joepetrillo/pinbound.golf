@@ -12,7 +12,7 @@ interface SectionProps {
 // padding, vertical rhythm, and scroll offset for the sticky header.
 export const Section = ({ children, className, id }: SectionProps) => (
   <section
-    className={cn("scroll-mt-20 px-4 py-16 md:px-6 md:py-24", className)}
+    className={cn("scroll-mt-14 px-4 py-16 md:px-6 md:py-24", className)}
     id={id}
   >
     <div className="mx-auto w-full max-w-6xl">{children}</div>

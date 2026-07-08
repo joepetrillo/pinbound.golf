@@ -40,7 +40,7 @@ export const ThemeToggle = ({ className }: { className?: string }) => {
             aria-label={option.label}
             aria-pressed={isActive}
             className={cn(
-              "flex size-7 items-center justify-center rounded-full text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
+              "flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
               isActive && "bg-muted text-foreground"
             )}
             key={option.value}

@@ -2,7 +2,8 @@
 
 import { RiCloseLine, RiFlagLine, RiMenuLine } from "@remixicon/react";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useLayoutEffect, useState } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,7 @@ const Logo = ({ onClick }: { onClick?: () => void }) => (
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-3.5" />
     </span>
-    <span className="text-sm font-semibold tracking-[0.12em] text-foreground uppercase">
+    <span className="text-sm font-medium tracking-[0.12em] text-foreground uppercase">
       pinbound
     </span>
   </Link>
@@ -58,11 +59,18 @@ const DesktopNav = () => (
 );
 
 export const SiteHeader = () => {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
+
+  // Header lives in the shared layout, so Activity does not hide it.
+  // Close the drawer whenever the route changes instead.
+  useLayoutEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header

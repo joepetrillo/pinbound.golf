@@ -1,7 +1,10 @@
 {
   "editor.defaultFormatter": "oxc.oxc-vscode",
+  "eslint.enable": false,
+  "oxc.enable": true,
   "oxc.fmt.configPath": "oxfmt.config.ts",
   "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "emmet.showExpandedAbbreviation": "never",

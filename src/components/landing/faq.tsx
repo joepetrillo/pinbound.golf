@@ -40,7 +40,7 @@ const faqItems = [
   },
   {
     answer:
-      "You do — pause it, edit rules, and set the autonomy dial from the control room.",
+      "You do — pause it, add details, modify rules, and monitor everything from the dashboard.",
     id: "who-controls",
     question: "Who controls it?",
   },
@@ -49,8 +49,8 @@ const faqItems = [
 export const Faq = () => (
   <Section id="faq">
     <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-12">
-      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-        Questions GMs ask
+      <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+        Fair questions, straight answers
       </h2>
 
       <Accordion>

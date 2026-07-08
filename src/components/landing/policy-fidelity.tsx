@@ -1,65 +1,30 @@
+import {
+  RiEqualizer2Line,
+  RiFileList3Line,
+  RiShieldCheckLine,
+} from "@remixicon/react";
+
 import { Section } from "@/components/section";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
-interface TranscriptLine {
-  id: string;
-  speaker: "agent" | "caller";
-  text: string;
-}
-
-const policyRule = {
-  label: "Phone bookings",
-  value: "Same-day only. Further out: online only.",
-};
-
-const proofPoints = [
-  "Every call logged with transcript and audio",
-  "Rules editable anytime, live",
-  "VIP list — numbers that always ring straight to staff",
-  "Autonomy dial — after-hours → overflow → full line, the GM decides when it earns more",
-];
-
-const transcriptLines: TranscriptLine[] = [
+const policyRules = [
   {
-    id: "caller-request",
-    speaker: "caller",
-    text: "I'd like to book a tee time for Saturday the 12th — two players.",
+    id: "phone-bookings",
+    label: "Phone bookings",
+    value: "Same-day only. Further out: online only.",
   },
   {
-    id: "agent-policy",
-    speaker: "agent",
-    text: "Phone bookings at Pinehills are same-day only. For that Saturday I can text you our online booking link — want me to send it?",
+    id: "cancellations",
+    label: "Cancellations",
+    value: "24 hours' notice. Inside that: transfer to shop.",
   },
 ];
 
-interface TranscriptBubbleProps {
-  line: TranscriptLine;
-}
-
-const TranscriptBubble = ({ line }: TranscriptBubbleProps) => {
-  const isAgent = line.speaker === "agent";
-
-  return (
-    <div
-      className={cn(
-        "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-        isAgent
-          ? "self-start border bg-background text-foreground"
-          : "self-end bg-muted text-foreground"
-      )}
-    >
-      <span className="mb-1 block text-[10px] font-medium tracking-wide text-foreground/70 uppercase">
-        {isAgent ? "Agent" : "Caller"}
-      </span>
-      {line.text}
-    </div>
-  );
-};
+const autonomyStages = ["After-hours", "Overflow", "Full line"];
 
 export const PolicyFidelity = () => (
-  <Section id="product">
-    <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+  <Section>
+    <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
       Your rules. Your control.
     </h2>
     <p className="mt-4 max-w-prose text-muted-foreground">
@@ -67,35 +32,82 @@ export const PolicyFidelity = () => (
       policies your staff enforces at the counter.
     </p>
 
-    <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
+    <div className="mt-10 grid gap-6 md:grid-cols-3">
       <Card className="rounded-xl shadow-sm ring-border">
-        <CardContent className="flex flex-col gap-3 p-5">
-          <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Incoming call
+        <CardContent className="flex h-full flex-col p-6">
+          <RiShieldCheckLine
+            aria-hidden="true"
+            className="size-5 text-primary"
+          />
+          <h3 className="mt-4 font-medium">Rules you write once</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Plain-English policies, editable anytime — live. Every call checks
+            them before confirming anything on the tee sheet.
           </p>
-          {transcriptLines.map((line) => (
-            <TranscriptBubble key={line.id} line={line} />
-          ))}
+          <div className="mt-4 flex flex-col gap-2">
+            {policyRules.map((rule) => (
+              <div
+                className="rounded-lg border bg-muted/40 p-3 font-mono text-xs leading-relaxed"
+                key={rule.id}
+              >
+                <p className="text-muted-foreground">{rule.label}</p>
+                <p className="mt-1 font-medium text-foreground">{rule.value}</p>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
-      <div className="rounded-xl border bg-muted/40 p-4 lg:sticky lg:top-24">
-        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-          Rule in your dashboard
-        </p>
-        <div className="mt-3 rounded-lg border bg-background p-3 font-mono text-xs leading-relaxed">
-          <p className="text-muted-foreground">{policyRule.label}</p>
-          <p className="mt-1 font-medium text-foreground">{policyRule.value}</p>
-        </div>
-        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-          You set this once. Every call checks it before confirming anything on
-          the tee sheet.
-        </p>
-      </div>
-    </div>
+      <Card className="rounded-xl shadow-sm ring-border">
+        <CardContent className="flex h-full flex-col p-6">
+          <RiFileList3Line aria-hidden="true" className="size-5 text-primary" />
+          <h3 className="mt-4 font-medium">Every call on the record</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Every call is logged with a transcript and audio, so you can review
+            exactly what was said — and tighten a rule the moment you spot a
+            gap.
+          </p>
+          <div className="mt-4 rounded-lg border bg-muted/40 p-3 text-xs leading-relaxed">
+            <p className="font-medium">Sat 8:14 AM · Booking · 0:38</p>
+            <p className="mt-1 text-muted-foreground">
+              Transcript + audio · booked 7:40 AM, 2 players
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
-    <p className="mt-10 text-sm leading-relaxed text-muted-foreground">
-      {proofPoints.join(" · ")}
-    </p>
+      <Card className="rounded-xl shadow-sm ring-border">
+        <CardContent className="flex h-full flex-col p-6">
+          <RiEqualizer2Line
+            aria-hidden="true"
+            className="size-5 text-primary"
+          />
+          <h3 className="mt-4 font-medium">You set the autonomy</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Start it on after-hours only, widen it as it earns trust — the GM
+            decides when it takes more. VIP numbers always ring straight to
+            staff.
+          </p>
+          <div className="mt-4 flex items-center gap-2">
+            {autonomyStages.map((stage, index) => (
+              <div className="flex items-center gap-2" key={stage}>
+                {index > 0 ? (
+                  <span aria-hidden="true" className="h-px w-3 bg-border" />
+                ) : null}
+                <span
+                  className={
+                    index === 0
+                      ? "rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 text-xs font-medium"
+                      : "rounded-full border px-2.5 py-1 text-xs text-muted-foreground"
+                  }
+                >
+                  {stage}
+                </span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   </Section>
 );

@@ -1,208 +1,291 @@
 "use client";
 
-import {
-  RiMicLine,
-  RiPlayCircleLine,
-  RiStopCircleLine,
-} from "@remixicon/react";
-import { useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 
 import { Section } from "@/components/section";
+import {
+  AudioPlayerButton,
+  AudioPlayerDuration,
+  AudioPlayerProvider,
+  AudioPlayerTime,
+  useAudioPlayer,
+  useAudioPlayerTime,
+} from "@/components/ui/audio-player";
+import { LiveWaveform } from "@/components/ui/live-waveform";
+import {
+  ScrubBarContainer,
+  ScrubBarProgress,
+  ScrubBarTrack,
+} from "@/components/ui/scrub-bar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AudioScrubber, Waveform } from "@/components/ui/waveform";
 import { cn } from "@/lib/utils";
 
-interface MicStateListening {
-  status: "listening";
-}
+// The orb pulls in three.js — load it lazily on the client only.
+const Orb = dynamic(
+  async () => {
+    const mod = await import("@/components/ui/orb");
+    return mod.Orb;
+  },
+  {
+    loading: () => <Skeleton className="size-full rounded-full" />,
+    ssr: false,
+  }
+);
 
-interface MicStateIdle {
-  status: "idle";
-}
+const ORB_COLORS: [string, string] = ["#a3c293", "#5f8050"];
+const ROW_WAVEFORM_HEIGHT = 40;
+const LIVE_WAVEFORM_HEIGHT = 48;
 
-interface MicStateUnavailable {
-  status: "unavailable";
-}
-
-type MicState = MicStateIdle | MicStateListening | MicStateUnavailable;
+type MicStatus = "idle" | "listening" | "unavailable";
 
 interface SampleCall {
   caption: string;
-  duration: string;
+  durationLabel: string;
+  durationSeconds: number;
   id: string;
+  peaks: number[];
+  src: string;
   transcript: string;
-  waveform: WaveformBar[];
 }
 
-interface WaveformBar {
-  height: number;
-  id: string;
-}
-
-interface WaveformProps {
-  active?: boolean;
-  bars: WaveformBar[];
-}
-
-interface SampleCallCardProps {
-  call: SampleCall;
-  emphasized?: boolean;
-  playing: boolean;
-  onToggle: () => void;
-}
-
-interface TalkWidgetProps {
-  micState: MicState;
-  onStart: () => void;
-  onStop: () => void;
-}
-
-const makeWaveform = (prefix: string, heights: number[]): WaveformBar[] =>
-  heights.map((height, index) => ({
-    height,
-    id: `${prefix}-w${String(index + 1).padStart(2, "0")}`,
-  }));
-
+// Peaks are precomputed from the recordings in public/audio
 const sampleCalls: SampleCall[] = [
   {
     caption: "Booking a tee time",
-    duration: "0:38",
+    durationLabel: "0:19",
+    durationSeconds: 19.77,
     id: "booking",
+    peaks: [
+      0.521, 0.531, 0.459, 0.456, 0.397, 0.531, 0.558, 0.34, 0.719, 0.08, 0.464,
+      0.784, 0.672, 0.767, 0.371, 0.975, 1, 0.723, 0.792, 0.907, 0.639, 0.495,
+      0.684, 0.398, 0.888, 0.751, 0.867, 0.08, 0.548, 0.466, 0.496, 0.544,
+      0.193, 0.08, 0.414, 0.783, 0.544, 0.688, 0.826, 0.876, 0.684, 0.708,
+      0.452, 0.591, 0.679, 0.854, 0.705, 0.763,
+    ],
+    src: "/audio/sample-call-booking.m4a",
     transcript:
       "Caller: Any tee times tomorrow morning for two? Agent: I have 7:40 and 8:10 — want me to hold one?",
-    waveform: makeWaveform(
-      "booking",
-      [4, 8, 12, 16, 10, 14, 7, 11, 15, 9, 13, 6, 10, 14, 8, 12, 5, 15, 11, 7]
-    ),
   },
   {
     caption: "Policy question",
-    duration: "0:52",
+    durationLabel: "0:16",
+    durationSeconds: 16.78,
     id: "policy",
+    peaks: [
+      0.35, 0.357, 0.337, 0.581, 0.597, 0.528, 0.367, 0.432, 0.112, 0.08, 0.582,
+      0.806, 0.808, 0.794, 0.816, 0.804, 0.862, 0.201, 0.772, 0.856, 0.792,
+      0.823, 0.672, 0.524, 0.76, 0.736, 0.793, 0.603, 0.725, 0.614, 0.819,
+      0.735, 0.758, 0.691, 0.762, 0.081, 0.416, 0.788, 0.479, 0.552, 0.435,
+      0.08, 0.082, 1, 0.874, 0.781, 0.771, 0.656,
+    ],
+    src: "/audio/sample-call-policy.m4a",
     transcript:
-      "Caller: Can I cancel tomorrow's 8:00 tee time? Agent: Cancellations need 24 hours' notice — that's inside the 24-hour window, so I can't cancel it by phone — want me to transfer you to the shop?",
-    waveform: makeWaveform(
-      "policy",
-      [6, 10, 8, 14, 12, 7, 15, 9, 11, 16, 5, 13, 10, 8, 14, 6, 12, 9, 15, 7]
-    ),
+      "Caller: Can I cancel tomorrow's 8:00 tee time? Agent: Cancellations need 24 hours' notice — that's inside the window, so I can't cancel it by phone. Want me to transfer you to the shop?",
   },
   {
     caption: "Human handoff",
-    duration: "0:44",
+    durationLabel: "0:07",
+    durationSeconds: 7.49,
     id: "handoff",
+    peaks: [
+      0.348, 0.564, 0.419, 0.385, 0.466, 0.413, 0.38, 0.376, 0.51, 0.371, 0.344,
+      0.345, 0.476, 0.646, 0.384, 0.419, 0.364, 0.13, 0.08, 0.08, 0.08, 0.08,
+      0.202, 0.5, 0.63, 0.691, 0.288, 0.09, 0.561, 0.648, 0.695, 0.569, 0.646,
+      0.652, 0.134, 0.08, 0.792, 1, 0.926, 0.702, 0.773, 0.792, 0.492, 0.756,
+      0.62, 0.617, 0.777, 0.365,
+    ],
+    src: "/audio/sample-call-handoff.m4a",
     transcript:
       "Caller: I need to talk to someone about a league outing. Agent: I'll get the shop — one moment while I transfer you.",
-    waveform: makeWaveform(
-      "handoff",
-      [5, 9, 13, 7, 15, 11, 8, 14, 10, 6, 16, 12, 9, 13, 7, 11, 15, 8, 10, 6]
-    ),
+  },
+  {
+    caption: "Hours & rates",
+    durationLabel: "0:14",
+    durationSeconds: 14.49,
+    id: "hours",
+    peaks: [
+      0.517, 0.487, 0.721, 0.507, 0.511, 0.55, 0.249, 0.507, 0.566, 0.437,
+      0.507, 0.107, 0.08, 0.08, 0.879, 0.782, 0.558, 0.778, 0.305, 0.706, 1,
+      0.857, 0.955, 0.804, 0.537, 0.824, 0.916, 0.805, 0.54, 0.731, 0.457, 0.79,
+      0.865, 0.783, 0.376, 0.85, 0.94, 0.684, 0.104, 0.256, 0.73, 0.259, 0.489,
+      0.105, 0.092, 0.472, 0.132, 0.08,
+    ],
+    src: "/audio/sample-call-hours.m4a",
+    transcript:
+      "Caller: What time do you open tomorrow, and what's the weekday rate? Agent: We open at 6:30. Eighteen holes on a weekday is $52 with a cart, or $38 walking.",
+  },
+  {
+    caption: "Weather & rain checks",
+    durationLabel: "0:13",
+    durationSeconds: 13.45,
+    id: "weather",
+    peaks: [
+      0.362, 0.724, 0.542, 0.483, 0.612, 0.445, 0.294, 0.7, 0.532, 0.552, 0.457,
+      0.277, 0.566, 0.543, 0.595, 0.496, 0.562, 0.479, 0.294, 0.089, 0.08, 0.08,
+      0.67, 0.798, 0.771, 0.645, 0.165, 0.902, 0.938, 0.871, 0.602, 0.928,
+      0.757, 0.781, 0.156, 0.617, 0.846, 0.89, 0.562, 0.259, 0.814, 0.858,
+      0.812, 0.832, 1, 0.791, 0.732, 0.424,
+    ],
+    src: "/audio/sample-call-weather.m4a",
+    transcript:
+      "Caller: What happens to our 1:30 if it rains out? Agent: If the course closes, you get a rain check for the unplayed holes, good for 30 days.",
   },
 ];
 
-const Waveform = ({ active, bars }: WaveformProps) => (
-  <div
-    aria-hidden="true"
-    className="flex h-5 flex-1 items-center justify-center gap-px"
-  >
-    {bars.map((bar) => (
-      <div
-        key={bar.id}
-        className={cn(
-          "w-0.5 rounded-full transition-colors",
-          active ? "bg-primary" : "bg-primary/40"
-        )}
-        style={{ height: `${bar.height}px` }}
-      />
-    ))}
-  </div>
-);
+interface SampleCallRowProps {
+  call: SampleCall;
+}
 
-const SampleCallCard = ({
-  call,
-  emphasized = false,
-  playing,
-  onToggle,
-}: SampleCallCardProps) => (
-  <button
-    type="button"
-    aria-label={`${playing ? "Pause" : "Play"} sample call: ${call.caption}`}
-    aria-pressed={playing}
-    className={cn(
-      "flex w-full flex-col gap-3 rounded-xl border bg-card p-4 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30",
-      emphasized && "border-primary/40 bg-muted/60 ring-2 ring-primary/20",
-      playing && "border-primary/30 bg-muted/50"
-    )}
-    onClick={onToggle}
-  >
-    <div className="flex items-center gap-3">
-      <RiPlayCircleLine
-        aria-hidden="true"
-        className={cn(
-          "size-6 shrink-0 transition-colors",
-          playing ? "text-primary" : "text-muted-foreground"
-        )}
-      />
-      <Waveform active={playing} bars={call.waveform} />
-      <span className="shrink-0 text-xs font-medium text-muted-foreground tabular-nums">
-        {call.duration}
-      </span>
-    </div>
-    <div>
-      <p className="text-sm font-medium">{call.caption}</p>
-      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-        {call.transcript}
-      </p>
-    </div>
-  </button>
-);
+const SampleCallScrubber = ({ call }: SampleCallRowProps) => {
+  const player = useAudioPlayer();
+  const time = useAudioPlayerTime();
+  const duration =
+    player.duration && Number.isFinite(player.duration)
+      ? player.duration
+      : call.durationSeconds;
 
-const TalkWidget = ({ micState, onStart, onStop }: TalkWidgetProps) => {
-  if (micState.status === "unavailable") {
+  return (
+    <>
+      <AudioScrubber
+        barGap={1}
+        barWidth={2}
+        className="hidden h-10 w-full sm:block"
+        currentTime={time}
+        data={call.peaks}
+        duration={duration}
+        height={ROW_WAVEFORM_HEIGHT}
+        onSeek={(seconds) => player.seek(seconds)}
+        showHandle={false}
+      />
+      <ScrubBarContainer
+        className="sm:hidden"
+        duration={duration}
+        onScrub={(seconds) => player.seek(seconds)}
+        value={time}
+      >
+        <ScrubBarTrack aria-label={`Seek within ${call.caption}`}>
+          <ScrubBarProgress />
+        </ScrubBarTrack>
+      </ScrubBarContainer>
+      <div className="flex items-center justify-between">
+        <AudioPlayerTime className="text-xs" />
+        <AudioPlayerDuration
+          className="text-xs"
+          fallbackDuration={call.durationSeconds}
+        />
+      </div>
+    </>
+  );
+};
+
+const SampleCallRow = ({ call }: SampleCallRowProps) => {
+  const player = useAudioPlayer();
+  const active = player.isItemActive(call.id);
+
+  return (
+    <div
+      className={cn(
+        "flex w-full items-start gap-4 p-5 transition-colors",
+        active && "bg-muted/50"
+      )}
+    >
+      <AudioPlayerButton
+        aria-label={`Play sample call: ${call.caption}`}
+        className="mt-0.5 shrink-0 rounded-full"
+        item={{ id: call.id, src: call.src }}
+        size="icon-sm"
+        variant={active ? "default" : "secondary"}
+      />
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="text-sm font-medium">{call.caption}</p>
+          {active ? null : (
+            <span className="shrink-0 text-xs font-medium text-muted-foreground tabular-nums">
+              {call.durationLabel}
+            </span>
+          )}
+        </div>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+          {call.transcript}
+        </p>
+        <div className="mt-3 flex flex-col gap-1">
+          {active ? (
+            <SampleCallScrubber call={call} />
+          ) : (
+            <Waveform
+              barGap={1}
+              barWidth={2}
+              className="hidden h-10 w-full opacity-40 sm:block"
+              data={call.peaks}
+              height={ROW_WAVEFORM_HEIGHT}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface TalkWidgetProps {
+  micStatus: MicStatus;
+  onMicError: () => void;
+  onToggle: () => void;
+}
+
+const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
+  if (micStatus === "unavailable") {
     return (
       <output className="block rounded-xl border border-dashed bg-muted/40 px-6 py-8 text-center">
         <p className="text-sm font-medium">
           Mic unavailable — listen to a recorded call instead
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Browser permissions blocked live voice. The sample calls below show
-          the same agent handling common calls.
+          Browser permissions blocked live voice. The sample calls show the same
+          agent handling common calls.
         </p>
       </output>
     );
   }
 
-  const listening = micState.status === "listening";
+  const listening = micStatus === "listening";
 
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="relative">
-        {!listening && (
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 rounded-full bg-primary/20 motion-safe:animate-ping"
-          />
+      <button
+        aria-label={listening ? "Stop listening" : "Tap to talk"}
+        aria-pressed={listening}
+        className={cn(
+          "relative size-32 overflow-hidden rounded-full border bg-background shadow-lg transition-transform focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-none active:scale-95",
+          listening && "ring-4 ring-primary/30"
         )}
-        <button
-          type="button"
-          aria-label={listening ? "Stop listening" : "Tap to talk"}
-          aria-pressed={listening}
-          className={cn(
-            "relative flex size-24 flex-col items-center justify-center gap-1 rounded-full bg-primary text-primary-foreground shadow-lg transition-transform focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 active:scale-95",
-            listening && "ring-4 ring-primary/30"
-          )}
-          onClick={listening ? onStop : onStart}
-        >
-          {listening ? (
-            <RiStopCircleLine aria-hidden="true" className="size-8" />
-          ) : (
-            <RiMicLine aria-hidden="true" className="size-8" />
-          )}
-          <span className="text-[9px] font-semibold tracking-widest uppercase">
-            {listening ? "Listening" : "Tap to talk"}
-          </span>
-        </button>
+        onClick={onToggle}
+        type="button"
+      >
+        <span className="pointer-events-none absolute inset-0" aria-hidden>
+          <Orb
+            agentState={listening ? "listening" : null}
+            colors={ORB_COLORS}
+          />
+        </span>
+      </button>
+
+      <div className="mt-4 flex h-12 w-44 items-center justify-center">
+        {listening ? (
+          <LiveWaveform
+            active
+            barGap={2}
+            barWidth={3}
+            height={LIVE_WAVEFORM_HEIGHT}
+            onError={onMicError}
+          />
+        ) : null}
       </div>
-      <p className="mt-6 text-sm font-medium">
+
+      <p className={cn("text-sm font-medium", listening && "shimmer")}>
         {listening
-          ? "Speak now — tap stop when finished"
+          ? "Listening — tap the orb to stop"
           : "Talk to the demo agent"}
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
@@ -215,81 +298,43 @@ const TalkWidget = ({ micState, onStart, onStop }: TalkWidgetProps) => {
 };
 
 export const Demo = () => {
-  const [micState, setMicState] = useState<MicState>({ status: "idle" });
-  const [playingId, setPlayingId] = useState<string | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  const [micStatus, setMicStatus] = useState<MicStatus>("idle");
 
-  const releaseStream = () => {
-    const tracks = streamRef.current?.getTracks() ?? [];
-    for (const track of tracks) {
-      track.stop();
-    }
-    streamRef.current = null;
+  const handleToggle = () => {
+    setMicStatus((status) => (status === "listening" ? "idle" : "listening"));
   };
-
-  const handleStart = async () => {
-    if (micState.status === "unavailable") {
-      return;
-    }
-
-    if (!navigator.mediaDevices?.getUserMedia) {
-      releaseStream();
-      setMicState({ status: "unavailable" });
-      return;
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
-      setMicState({ status: "listening" });
-    } catch {
-      releaseStream();
-      setMicState({ status: "unavailable" });
-    }
-  };
-
-  const handleStop = () => {
-    releaseStream();
-    setMicState({ status: "idle" });
-  };
-
-  const micUnavailable = micState.status === "unavailable";
 
   return (
     <Section id="demo">
-      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+      <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
         Hear it yourself
       </h2>
       <p className="mt-4 max-w-prose text-muted-foreground">
-        Tap the mic to try it live, or play a sample call from a real pro shop
+        Tap the orb to try it live, or play a sample call from a real pro shop
         scenario.
       </p>
 
-      <div className="mt-10 rounded-2xl border bg-muted/50 p-8 md:p-10">
-        <TalkWidget
-          micState={micState}
-          onStart={handleStart}
-          onStop={handleStop}
-        />
-
-        <div
-          className={cn(
-            "mt-10 grid gap-4 md:grid-cols-3",
-            micUnavailable && "md:gap-5"
-          )}
-        >
-          {sampleCalls.map((call) => (
-            <SampleCallCard
-              key={call.id}
-              call={call}
-              emphasized={micUnavailable}
-              playing={playingId === call.id}
-              onToggle={() =>
-                setPlayingId((prev) => (prev === call.id ? null : call.id))
-              }
-            />
-          ))}
+      <div className="mt-10 grid gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">
+        <div className="flex items-center justify-center rounded-2xl border bg-muted/30 p-8 md:p-10 lg:sticky lg:top-24">
+          <TalkWidget
+            micStatus={micStatus}
+            onMicError={() => setMicStatus("unavailable")}
+            onToggle={handleToggle}
+          />
         </div>
+
+        <AudioPlayerProvider>
+          <div
+            className={cn(
+              "flex flex-col divide-y overflow-hidden rounded-2xl border",
+              micStatus === "unavailable" && "ring-2 ring-primary/20"
+            )}
+          >
+            {sampleCalls.map((call) => (
+              <SampleCallRow call={call} key={call.id} />
+            ))}
+          </div>
+        </AudioPlayerProvider>
       </div>
     </Section>
   );

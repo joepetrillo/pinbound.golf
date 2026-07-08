@@ -1,40 +1,24 @@
-import { RiFlagLine } from "@remixicon/react";
+import { RiArrowRightLine, RiFlagLine } from "@remixicon/react";
 import Link from "next/link";
 
 import { ThemeToggle } from "@/components/theme-toggle";
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
-
-interface FooterColumnProps {
-  links: readonly FooterLink[];
-  title: string;
-}
+import { Button } from "@/components/ui/button";
+import { CTA_HREF, CTA_LABEL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 
 interface FooterLink {
   href: string;
   label: string;
 }
 
-const productLinks: readonly FooterLink[] = [
-  { href: "#product", label: "Product" },
-  { href: "#integrations", label: "Integrations" },
-  { href: "#demo", label: "Demo" },
-  { href: "#pricing", label: "Pricing" },
-];
-
-const resourcesLinks: readonly FooterLink[] = [
-  { href: "#faq", label: "FAQ" },
-  { href: "/get-started", label: "Get started" },
-];
-
-const companyLinks: readonly FooterLink[] = [
-  { href: "/about", label: "About" },
+const indexLinks: readonly FooterLink[] = [
+  { href: "/#product", label: "Product" },
+  { href: "/#integrations", label: "Integrations" },
+  { href: "/#demo", label: "Demo" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
-];
-
-const legalLinks: readonly FooterLink[] = [
-  { href: "/privacy", label: "Privacy policy" },
-  { href: "/security", label: "Security" },
-  { href: "/terms", label: "Terms of service" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
 ];
 
 const Logo = () => (
@@ -42,51 +26,55 @@ const Logo = () => (
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-3.5" />
     </span>
-    <span className="text-sm font-semibold tracking-[0.12em] text-foreground uppercase">
+    <span className="text-sm font-medium tracking-[0.12em] text-foreground uppercase">
       pinbound
     </span>
   </Link>
 );
 
-const FooterColumn = ({ links, title }: FooterColumnProps) => (
-  <div>
-    <h3 className="mb-3 text-sm font-medium text-foreground">{title}</h3>
-    <ul className="space-y-2">
-      {links.map((link) => (
-        <li key={link.href}>
-          <Link
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            href={link.href}
-          >
-            {link.label}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-
 export const SiteFooter = () => (
   <footer className="@container w-full border-t bg-background" id="site-footer">
-    <div className="px-6 py-6">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 @2xl:grid-cols-4 @4xl:grid-cols-6">
-        <div className="col-span-full @4xl:col-span-2">
+    <div className="px-6 pt-14 pb-6">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 @3xl:flex-row @3xl:items-start @3xl:justify-between">
+        <div className="max-w-sm">
           <Logo />
-          <p className="mt-3 max-w-xs text-sm text-balance text-muted-foreground">
-            {SITE_DESCRIPTION}
+          <p className="mt-5 text-sm text-balance text-muted-foreground">
+            {SITE_TAGLINE}
           </p>
+          <Button
+            className="mt-6 text-xs tracking-[0.12em] uppercase"
+            nativeButton={false}
+            render={<Link href={CTA_HREF} />}
+            variant="outline"
+          >
+            {CTA_LABEL}
+            <RiArrowRightLine aria-hidden className="size-3.5" />
+          </Button>
         </div>
 
-        <FooterColumn links={productLinks} title="Product" />
-        <FooterColumn links={companyLinks} title="Company" />
-        <FooterColumn links={resourcesLinks} title="Resources" />
-        <FooterColumn links={legalLinks} title="Legal" />
+        <nav aria-label="Footer" className="max-w-md">
+          <ul className="flex flex-wrap gap-2 @3xl:justify-end">
+            {indexLinks.map((link) => (
+              <li key={link.href}>
+                <Button
+                  className="text-xs tracking-[0.12em] text-muted-foreground uppercase"
+                  nativeButton={false}
+                  render={<Link href={link.href} />}
+                  size="sm"
+                  variant="outline"
+                >
+                  {link.label}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
 
-      <div className="mx-auto mt-14 max-w-6xl">
+      <div className="mx-auto max-w-6xl pt-14">
         <div className="flex flex-wrap-reverse items-center justify-between gap-x-8 gap-y-6">
           <p className="text-sm text-balance text-muted-foreground">
-            © 2026 {SITE_NAME}. All rights reserved.
+            © 2026 {SITE_NAME} · All rights reserved
           </p>
           <ThemeToggle />
         </div>

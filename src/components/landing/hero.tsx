@@ -6,11 +6,22 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
+import { Message, MessageContent } from "@/components/ui/message";
+import {
+  MessageScroller,
+  MessageScrollerButton,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerProvider,
+  MessageScrollerViewport,
+} from "@/components/ui/message-scroller";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CTA_HREF, CTA_LABEL, DEMO_HREF, DEMO_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-const LOOP_PAUSE_MS = 2500;
-const WORD_INTERVAL_MS = 150;
+const WORD_INTERVAL_MS = 175;
+const LINE_PAUSE_MS = 400;
+const NEXT_CONVERSATION_PAUSE_MS = 3000;
 
 interface ScriptWord {
   id: string;
@@ -40,36 +51,110 @@ const makeLine = (
   })),
 });
 
-const SCRIPT: ScriptLine[] = [
-  makeLine(
-    "agent-greeting",
-    "agent",
-    "Thanks for calling Pinehills — this is the virtual assistant. This call may be recorded. How can I help?"
-  ),
-  makeLine(
-    "caller-request",
-    "caller",
-    "Hey — do you have anything tomorrow morning for two?"
-  ),
-  makeLine(
-    "agent-course",
-    "agent",
-    "Sure. Are you looking at the Jones Course, or the Nicklaus?"
-  ),
-  makeLine("caller-course", "caller", "Jones is fine."),
-  makeLine(
-    "agent-offer",
-    "agent",
-    "On Jones tomorrow I have 7:40 and 8:10, both walking. Want me to hold one?"
-  ),
-  makeLine("caller-confirm", "caller", "Yeah, grab the 7:40."),
-  makeLine("agent-name", "agent", "What's the name for the booking?"),
-  makeLine("caller-name", "caller", "Marcus Chen."),
-  makeLine(
-    "agent-booked",
-    "agent",
-    "You're all set — 7:40 AM, Jones Course, two players under Marcus Chen. I'll text a confirmation to this number."
-  ),
+interface Conversation {
+  id: string;
+  label: string;
+  lines: ScriptLine[];
+}
+
+const GREETING_ID = "agent-greeting";
+const GREETING_TEXT =
+  "Thanks for calling Pinehills — this is the virtual assistant. How can I help?";
+
+const CONVERSATIONS: Conversation[] = [
+  {
+    id: "booking",
+    label: "Booking",
+    lines: [
+      makeLine(GREETING_ID, "agent", GREETING_TEXT),
+      makeLine(
+        "caller-request",
+        "caller",
+        "Hey — do you have anything tomorrow morning for two?"
+      ),
+      makeLine(
+        "agent-course",
+        "agent",
+        "Sure. Are you looking at the Jones Course, or the Nicklaus?"
+      ),
+      makeLine("caller-course", "caller", "Jones is fine."),
+      makeLine(
+        "agent-offer",
+        "agent",
+        "On Jones tomorrow I have 7:40 and 8:10, both walking. Want me to hold one?"
+      ),
+      makeLine("caller-confirm", "caller", "Yeah, grab the 7:40."),
+      makeLine("agent-name", "agent", "What's the name for the booking?"),
+      makeLine("caller-name", "caller", "Marcus Chen."),
+      makeLine(
+        "agent-booked",
+        "agent",
+        "You're all set — 7:40 AM, Jones Course, two players under Marcus Chen. I'll text a confirmation to this number."
+      ),
+    ],
+  },
+  {
+    id: "cancellation",
+    label: "Cancellation",
+    lines: [
+      makeLine(GREETING_ID, "agent", GREETING_TEXT),
+      makeLine(
+        "caller-request",
+        "caller",
+        "I need to cancel my tee time this afternoon."
+      ),
+      makeLine(
+        "agent-lookup",
+        "agent",
+        "I can help with that. What's the name on the booking?"
+      ),
+      makeLine("caller-name", "caller", "Dana Ortiz."),
+      makeLine(
+        "agent-policy",
+        "agent",
+        "Found it — 2:30 PM today, two players. Our policy asks for 24 hours' notice, so I can't cancel this one myself. Want me to transfer you to the shop?"
+      ),
+      makeLine("caller-confirm", "caller", "Yes, please."),
+      makeLine(
+        "agent-transfer",
+        "agent",
+        "Transferring you now — they'll have your booking pulled up when they pick up."
+      ),
+    ],
+  },
+  {
+    id: "hours",
+    label: "Hours & rates",
+    lines: [
+      makeLine(GREETING_ID, "agent", GREETING_TEXT),
+      makeLine(
+        "caller-hours",
+        "caller",
+        "What time do you open tomorrow? And can I still walk on?"
+      ),
+      makeLine(
+        "agent-hours",
+        "agent",
+        "First tee time is 6:30 AM and the shop opens at 6. Walk-ons are welcome, but mornings usually book out — afternoons are your best bet."
+      ),
+      makeLine(
+        "caller-rates",
+        "caller",
+        "Got it. What's the weekend rate for 18 with a cart?"
+      ),
+      makeLine(
+        "agent-rates",
+        "agent",
+        "Weekends it's $68 for 18 with a cart, $49 walking. Twilight starts at 3 PM at $42."
+      ),
+      makeLine("caller-thanks", "caller", "Perfect, thanks."),
+      makeLine(
+        "agent-close",
+        "agent",
+        "Anytime — want me to text you a booking link before the morning fills up?"
+      ),
+    ],
+  },
 ];
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
@@ -117,6 +202,126 @@ const KaraokeLine = ({ isActive, spokenCount, words }: KaraokeLineProps) => (
   </span>
 );
 
+interface ConversationTranscriptProps {
+  isVisible: boolean;
+  lines: ScriptLine[];
+  onComplete: () => void;
+  prefersReducedMotion: boolean;
+}
+
+const ConversationTranscript = ({
+  isVisible,
+  lines,
+  onComplete,
+  prefersReducedMotion,
+}: ConversationTranscriptProps) => {
+  // Start past the greeting so it appears fully spoken right away — switching
+  // tabs shouldn't replay the same opening line every time.
+  const [lineIndex, setLineIndex] = useState(() =>
+    Math.min(1, lines.length - 1)
+  );
+  const [spokenCount, setSpokenCount] = useState(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const currentLine = lines[lineIndex];
+    if (!currentLine) {
+      return;
+    }
+
+    if (spokenCount >= currentLine.words.length) {
+      if (lineIndex >= lines.length - 1) {
+        if (!isVisible) {
+          return;
+        }
+        const timeout = setTimeout(onComplete, NEXT_CONVERSATION_PAUSE_MS);
+        return () => {
+          clearTimeout(timeout);
+        };
+      }
+
+      const timeout = setTimeout(() => {
+        setLineIndex((index) => index + 1);
+        setSpokenCount(0);
+      }, LINE_PAUSE_MS);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+
+    if (!isVisible) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setSpokenCount((count) => count + 1);
+    }, WORD_INTERVAL_MS);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [
+    isVisible,
+    lineIndex,
+    lines,
+    onComplete,
+    prefersReducedMotion,
+    spokenCount,
+  ]);
+
+  const visibleLines = prefersReducedMotion
+    ? lines
+    : lines.slice(0, lineIndex + 1);
+
+  return (
+    <MessageScrollerProvider autoScroll>
+      <MessageScroller className="min-h-0 flex-1">
+        <MessageScrollerViewport>
+          <MessageScrollerContent className="min-h-full justify-end gap-3">
+            {visibleLines.map((line) => {
+              const isAgent = line.speaker === "agent";
+              const isActive = prefersReducedMotion
+                ? false
+                : line.id === lines[lineIndex]?.id;
+              const lineSpokenCount = isActive
+                ? spokenCount
+                : line.words.length;
+
+              return (
+                <MessageScrollerItem key={line.id}>
+                  <Message align={isAgent ? "start" : "end"}>
+                    <MessageContent>
+                      <div
+                        className={cn(
+                          "w-fit max-w-[70%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed text-pretty",
+                          isAgent
+                            ? "border bg-background text-foreground"
+                            : "bg-muted text-foreground"
+                        )}
+                        data-slot="message-bubble"
+                      >
+                        <KaraokeLine
+                          isActive={isActive}
+                          spokenCount={lineSpokenCount}
+                          words={line.words}
+                        />
+                      </div>
+                    </MessageContent>
+                  </Message>
+                </MessageScrollerItem>
+              );
+            })}
+          </MessageScrollerContent>
+        </MessageScrollerViewport>
+        <MessageScrollerButton aria-label="Scroll to latest message" />
+      </MessageScroller>
+    </MessageScrollerProvider>
+  );
+};
+
 const TranscriptCard = () => {
   const prefersReducedMotion = useSyncExternalStore(
     subscribeReducedMotion,
@@ -124,18 +329,18 @@ const TranscriptCard = () => {
     getReducedMotionServerSnapshot
   );
   const [isVisible, setIsVisible] = useState(true);
-  const [lineIndex, setLineIndex] = useState(0);
-  const [resetKey, setResetKey] = useState(0);
-  const [spokenCount, setSpokenCount] = useState(0);
+  const [activeId, setActiveId] = useState(CONVERSATIONS[0]?.id);
+  const [restartNonce, setRestartNonce] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const pauseRef = useRef(false);
 
-  const reset = () => {
-    pauseRef.current = false;
-    setLineIndex(0);
-    setSpokenCount(0);
-    setResetKey((key) => key + 1);
+  const conversation =
+    CONVERSATIONS.find(({ id }) => id === activeId) ?? CONVERSATIONS[0];
+
+  const advanceToNext = () => {
+    setActiveId((currentId) => {
+      const index = CONVERSATIONS.findIndex(({ id }) => id === currentId);
+      return CONVERSATIONS[(index + 1) % CONVERSATIONS.length]?.id;
+    });
   };
 
   useEffect(() => {
@@ -158,88 +363,33 @@ const TranscriptCard = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      return;
-    }
-
-    const currentLine = SCRIPT[lineIndex];
-    if (!currentLine) {
-      return;
-    }
-
-    const words = currentLine.text.split(" ");
-
-    if (spokenCount >= words.length) {
-      if (lineIndex >= SCRIPT.length - 1) {
-        pauseRef.current = true;
-        const timeout = setTimeout(() => {
-          pauseRef.current = false;
-          setLineIndex(0);
-          setSpokenCount(0);
-        }, LOOP_PAUSE_MS);
-        return () => {
-          clearTimeout(timeout);
-        };
-      }
-
-      const timeout = setTimeout(() => {
-        setLineIndex((index) => index + 1);
-        setSpokenCount(0);
-      }, 300);
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-
-    if (pauseRef.current || !isVisible) {
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-      setSpokenCount((count) => count + 1);
-    }, WORD_INTERVAL_MS);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [isVisible, lineIndex, prefersReducedMotion, resetKey, spokenCount]);
-
-  const visibleLines = prefersReducedMotion
-    ? SCRIPT
-    : SCRIPT.slice(0, lineIndex + 1);
-
-  // Keep the transcript pinned to the latest bubble as new lines stream in.
-  useEffect(() => {
-    const element = scrollRef.current;
-    if (!element) {
-      return;
-    }
-
-    element.scrollTo({
-      behavior: prefersReducedMotion ? "auto" : "smooth",
-      top: element.scrollHeight,
-    });
-  }, [lineIndex, prefersReducedMotion, resetKey, spokenCount]);
+  if (!conversation) {
+    return null;
+  }
 
   return (
     <div
       className="flex h-96 flex-col rounded-xl border bg-muted/50 p-4 shadow-sm"
       ref={cardRef}
     >
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground">
-          <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full rounded-full bg-primary opacity-75 motion-safe:animate-ping" />
-            <span className="relative inline-flex size-2 rounded-full bg-primary" />
-          </span>
-          Incoming call · 9:12 AM
-        </div>
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <Tabs
+          onValueChange={(value) => setActiveId(String(value))}
+          value={conversation.id}
+        >
+          <TabsList className="h-8">
+            {CONVERSATIONS.map(({ id, label }) => (
+              <TabsTrigger className="px-2.5 text-xs" key={id} value={id}>
+                {label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
         {prefersReducedMotion ? null : (
           <button
             aria-label="Restart transcript"
-            className="flex size-7 items-center justify-center rounded-full border bg-background text-muted-foreground transition-colors hover:text-foreground"
-            onClick={reset}
+            className="flex size-7 shrink-0 items-center justify-center rounded-full border bg-background text-muted-foreground transition-colors hover:text-foreground"
+            onClick={() => setRestartNonce((nonce) => nonce + 1)}
             type="button"
           >
             <RiRestartLine className="size-3.5" />
@@ -247,38 +397,13 @@ const TranscriptCard = () => {
         )}
       </div>
 
-      <div
-        className="min-h-0 flex-1 overflow-y-auto [mask-image:linear-gradient(to_bottom,transparent,black_32px)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        ref={scrollRef}
-      >
-        <div className="flex min-h-full flex-col justify-end gap-3">
-          {visibleLines.map((line) => {
-            const isAgent = line.speaker === "agent";
-            const isActive = prefersReducedMotion
-              ? false
-              : line.id === SCRIPT[lineIndex]?.id;
-            const lineSpokenCount = isActive ? spokenCount : line.words.length;
-
-            return (
-              <div
-                className={cn(
-                  "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-                  isAgent
-                    ? "self-start border bg-background text-foreground"
-                    : "self-end bg-muted text-foreground"
-                )}
-                key={line.id}
-              >
-                <KaraokeLine
-                  isActive={isActive}
-                  spokenCount={lineSpokenCount}
-                  words={line.words}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <ConversationTranscript
+        isVisible={isVisible}
+        key={`${conversation.id}-${restartNonce}`}
+        lines={conversation.lines}
+        onComplete={advanceToNext}
+        prefersReducedMotion={prefersReducedMotion}
+      />
     </div>
   );
 };
@@ -291,9 +416,10 @@ export const Hero = () => (
           The pro shop assistant that answers every call and never clocks out
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
-          Pinbound answers your pro shop line 24/7 — books tee times through
-          your tee sheet, enforces your booking rules exactly, answers golfer
-          questions, and hands the calls that need a human to your staff.
+          Pinbound answers your phone 24/7. It books tee times straight into
+          your tee sheet, enforces your policies, and handles the questions your
+          staff answers a dozen times a day. Your team can put the phone down
+          and focus on the customers in front of them.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Button

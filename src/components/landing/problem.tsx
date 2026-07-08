@@ -21,16 +21,17 @@ const missedCalls = [
 ];
 
 export const Problem = () => (
-  <Section>
+  <Section id="product">
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
       <div className="space-y-4">
-        <p className="text-2xl font-semibold tracking-tight text-balance md:text-3xl">
+        <p className="text-2xl font-medium tracking-tight text-balance md:text-3xl">
           Saturday morning: line at the counter, two staff checking in golfers,
           phone ringing out. That caller books somewhere else.
         </p>
         <p className="max-w-prose text-muted-foreground">
-          Industry audits find about 81% of after-hours calls to golf courses go
-          unanswered or hit voicemail.
+          Most calls that come in after hours — and plenty during them — go
+          unanswered or land in voicemail. Every one of them is a golfer who was
+          ready to book.
         </p>
       </div>
 

@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Message, MessageContent } from "@/components/ui/message";
 import {
   MessageScroller,
-  MessageScrollerButton,
   MessageScrollerContent,
   MessageScrollerItem,
   MessageScrollerProvider,
@@ -19,9 +18,9 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CTA_HREF, CTA_LABEL, DEMO_HREF, DEMO_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-const WORD_INTERVAL_MS = 175;
-const LINE_PAUSE_MS = 400;
-const NEXT_CONVERSATION_PAUSE_MS = 3000;
+const WORD_INTERVAL_MS = 225;
+const LINE_PAUSE_MS = 500;
+const NEXT_CONVERSATION_PAUSE_MS = 2000;
 
 interface ScriptWord {
   id: string;
@@ -279,7 +278,10 @@ const ConversationTranscript = ({
   return (
     <MessageScrollerProvider autoScroll>
       <MessageScroller className="min-h-0 flex-1">
-        <MessageScrollerViewport>
+        <MessageScrollerViewport
+          className="pointer-events-none scrollbar-gutter-auto overflow-y-hidden"
+          tabIndex={-1}
+        >
           <MessageScrollerContent className="min-h-full justify-end gap-3">
             {visibleLines.map((line) => {
               const isAgent = line.speaker === "agent";
@@ -316,7 +318,6 @@ const ConversationTranscript = ({
             })}
           </MessageScrollerContent>
         </MessageScrollerViewport>
-        <MessageScrollerButton aria-label="Scroll to latest message" />
       </MessageScroller>
     </MessageScrollerProvider>
   );
@@ -397,13 +398,23 @@ const TranscriptCard = () => {
         )}
       </div>
 
-      <ConversationTranscript
-        isVisible={isVisible}
-        key={`${conversation.id}-${restartNonce}`}
-        lines={conversation.lines}
-        onComplete={advanceToNext}
-        prefersReducedMotion={prefersReducedMotion}
-      />
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col",
+          prefersReducedMotion
+            ? null
+            : "animate-in duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] fade-in"
+        )}
+        key={conversation.id}
+      >
+        <ConversationTranscript
+          isVisible={isVisible}
+          key={`${conversation.id}-${restartNonce}`}
+          lines={conversation.lines}
+          onComplete={advanceToNext}
+          prefersReducedMotion={prefersReducedMotion}
+        />
+      </div>
     </div>
   );
 };
@@ -413,13 +424,13 @@ export const Hero = () => (
     <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
       <div>
         <h1 className="text-5xl font-medium tracking-tight text-balance md:text-6xl">
-          The pro shop assistant that answers every call and never clocks out
+          The pro shop assistant that never clocks out
         </h1>
         <p className="mt-6 max-w-prose text-lg text-muted-foreground">
-          Pinbound answers your phone 24/7. It books tee times straight into
-          your tee sheet, enforces your policies, and handles the questions your
-          staff answers a dozen times a day. Your team can put the phone down
-          and focus on the customers in front of them.
+          Pinbound is an AI phone agent that answers calls 24/7, books tee times
+          directly into your tee sheet, and handles routine questions according
+          to your course’s policies. Every caller gets the help they need, while
+          your staff stays present with the golfers right in front of them.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Button

@@ -47,6 +47,8 @@ const RootLayout = ({
       "scroll-smooth",
       "antialiased",
       "font-sans",
+      "bg-background",
+      "overflow-y-scroll",
       geistMono.variable,
       geist.variable
     )}

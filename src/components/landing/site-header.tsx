@@ -2,7 +2,7 @@
 
 import { RiCloseLine, RiFlagLine, RiMenuLine } from "@remixicon/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,8 @@ import {
   GET_STARTED_LABEL,
   NAV_LINKS,
 } from "@/lib/site";
+
+const DESKTOP_HEADER_MEDIA_QUERY = "(min-width: 768px)";
 
 const Logo = ({ onClick }: { onClick?: () => void }) => (
   <Link
@@ -40,7 +42,7 @@ const Logo = ({ onClick }: { onClick?: () => void }) => (
 const DesktopNav = () => (
   <nav
     aria-label="Primary"
-    className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
+    className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:block"
   >
     <ul className="flex items-center">
       {NAV_LINKS.map((link) => (
@@ -59,6 +61,23 @@ const DesktopNav = () => (
 
 export const SiteHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuCloseRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const desktopMediaQuery = window.matchMedia(DESKTOP_HEADER_MEDIA_QUERY);
+    const closeMenuOnDesktop = () => {
+      if (desktopMediaQuery.matches) {
+        setMenuOpen(false);
+      }
+    };
+
+    closeMenuOnDesktop();
+    desktopMediaQuery.addEventListener("change", closeMenuOnDesktop);
+
+    return () => {
+      desktopMediaQuery.removeEventListener("change", closeMenuOnDesktop);
+    };
+  }, []);
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -69,15 +88,15 @@ export const SiteHeader = () => {
       className="fixed top-0 left-0 z-50 w-full bg-background px-4 md:px-6"
       id="site-header"
     >
-      <div className="relative mx-auto grid h-site-header max-w-6xl grid-cols-[1fr_auto] items-center lg:grid-cols-[auto_1fr_auto]">
+      <div className="relative mx-auto grid h-site-header max-w-6xl grid-cols-[1fr_auto] items-center md:grid-cols-[auto_1fr_auto]">
         <div className="col-start-1 row-start-1">
           <Logo />
         </div>
 
         <DesktopNav />
 
-        <div className="col-start-2 row-start-1 flex items-center gap-2 justify-self-end lg:col-start-3">
-          <div className="hidden items-center gap-2 lg:flex">
+        <div className="col-start-2 row-start-1 flex items-center gap-2 justify-self-end md:col-start-3">
+          <div className="hidden items-center gap-2 md:flex">
             <Button
               nativeButton={false}
               render={<Link href={CONTACT_HREF} />}
@@ -98,7 +117,7 @@ export const SiteHeader = () => {
 
           <Drawer onOpenChange={setMenuOpen} open={menuOpen} showSwipeHandle>
             <DrawerTrigger
-              className="lg:hidden"
+              className="md:hidden"
               render={
                 <Button
                   aria-label="Open navigation"
@@ -112,13 +131,14 @@ export const SiteHeader = () => {
 
             <DrawerContent
               className="max-h-[85dvh] rounded-t-3xl"
+              initialFocus={menuCloseRef}
               overlayClassName="supports-backdrop-filter:backdrop-blur-md"
             >
               <div className="flex max-h-[85dvh] flex-col px-4 pb-6 md:px-6">
                 <div className="flex shrink-0 items-center justify-between py-4">
                   <Logo onClick={closeMenu} />
                   <DrawerClose
-                    className="-mr-1"
+                    ref={menuCloseRef}
                     render={
                       <Button
                         aria-label="Close navigation"
@@ -132,12 +152,15 @@ export const SiteHeader = () => {
                   <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
                 </div>
 
-                <nav aria-label="Primary" className="flex-1 overflow-y-auto">
+                <nav
+                  aria-label="Primary"
+                  className="flex-1 overflow-y-auto p-0.5"
+                >
                   <ul>
                     {NAV_LINKS.map((link) => (
                       <li key={link.href}>
                         <Link
-                          className="block py-3 text-lg text-foreground transition-colors hover:text-muted-foreground"
+                          className="inline-block py-3 text-lg text-foreground transition-colors hover:text-muted-foreground"
                           href={link.href}
                           onClick={closeMenu}
                         >

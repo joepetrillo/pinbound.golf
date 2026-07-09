@@ -403,6 +403,8 @@ export const ScrollingWaveform = ({
 export type AudioScrubberProps = WaveformProps & {
   currentTime?: number;
   duration?: number;
+  onScrubEnd?: () => void;
+  onScrubStart?: () => void;
   onSeek?: (time: number) => void;
   showHandle?: boolean;
 };
@@ -411,6 +413,8 @@ export const AudioScrubber = ({
   data = [],
   currentTime = 0,
   duration = 100,
+  onScrubEnd,
+  onScrubStart,
   onSeek,
   showHandle = true,
   barWidth = 3,
@@ -455,6 +459,7 @@ export const AudioScrubber = ({
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
+    onScrubStart?.();
     setIsDragging(true);
     handleScrub(e.clientX);
   };
@@ -468,16 +473,19 @@ export const AudioScrubber = ({
 
     const handleMouseUp = () => {
       setIsDragging(false);
+      onScrubEnd?.();
     };
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("blur", handleMouseUp);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("blur", handleMouseUp);
     };
-  }, [isDragging, duration, handleScrub]);
+  }, [isDragging, handleScrub, onScrubEnd]);
 
   const heightStyle = typeof height === "number" ? `${height}px` : height;
 

@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Section } from "@/components/section";
 import {
@@ -138,13 +138,44 @@ interface SampleCallRowProps {
   call: SampleCall;
 }
 
-const SampleCallScrubber = ({ call }: SampleCallRowProps) => {
+interface SampleCallScrubberProps extends SampleCallRowProps {
+  onScrubbingPlayingChange: (playing: boolean) => void;
+}
+
+const SampleCallScrubber = ({
+  call,
+  onScrubbingPlayingChange,
+}: SampleCallScrubberProps) => {
   const player = useAudioPlayer();
   const time = useAudioPlayerTime();
+  const resumeAfterScrubRef = useRef(false);
   const duration =
     player.duration && Number.isFinite(player.duration)
       ? player.duration
       : call.durationSeconds;
+
+  const handleScrubStart = () => {
+    const wasPlaying = player.ref.current?.paused === false;
+    resumeAfterScrubRef.current = wasPlaying;
+    onScrubbingPlayingChange(wasPlaying);
+    if (wasPlaying) {
+      void player.pause();
+    }
+  };
+
+  const handleScrubEnd = async () => {
+    if (!resumeAfterScrubRef.current) {
+      onScrubbingPlayingChange(false);
+      return;
+    }
+    resumeAfterScrubRef.current = false;
+    try {
+      await player.play();
+    } catch {
+      // Playback can be rejected by the browser if it loses user activation.
+    }
+    requestAnimationFrame(() => onScrubbingPlayingChange(false));
+  };
 
   return (
     <>
@@ -156,6 +187,8 @@ const SampleCallScrubber = ({ call }: SampleCallRowProps) => {
         data={call.peaks}
         duration={duration}
         height={ROW_WAVEFORM_HEIGHT}
+        onScrubEnd={handleScrubEnd}
+        onScrubStart={handleScrubStart}
         onSeek={(seconds) => player.seek(seconds)}
         showHandle={false}
       />
@@ -163,6 +196,8 @@ const SampleCallScrubber = ({ call }: SampleCallRowProps) => {
         className="sm:hidden"
         duration={duration}
         onScrub={(seconds) => player.seek(seconds)}
+        onScrubEnd={handleScrubEnd}
+        onScrubStart={handleScrubStart}
         value={time}
       >
         <ScrubBarTrack aria-label={`Seek within ${call.caption}`}>
@@ -183,6 +218,7 @@ const SampleCallScrubber = ({ call }: SampleCallRowProps) => {
 const SampleCallRow = ({ call }: SampleCallRowProps) => {
   const player = useAudioPlayer();
   const active = player.isItemActive(call.id);
+  const [isScrubbingWhilePlaying, setIsScrubbingWhilePlaying] = useState(false);
 
   return (
     <div
@@ -197,6 +233,7 @@ const SampleCallRow = ({ call }: SampleCallRowProps) => {
         item={{ id: call.id, src: call.src }}
         size="icon-sm"
         variant={active ? "default" : "secondary"}
+        visualPlaying={active && isScrubbingWhilePlaying ? true : undefined}
       />
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-3">
@@ -212,7 +249,10 @@ const SampleCallRow = ({ call }: SampleCallRowProps) => {
         </p>
         <div className="mt-3 flex flex-col gap-1">
           {active ? (
-            <SampleCallScrubber call={call} />
+            <SampleCallScrubber
+              call={call}
+              onScrubbingPlayingChange={setIsScrubbingWhilePlaying}
+            />
           ) : (
             <Waveform
               barGap={1}

@@ -317,6 +317,7 @@ const Spinner = ({ className }: { className?: string }) => (
 );
 
 interface PlayButtonProps extends ComponentProps<typeof Button> {
+  iconPlaying?: boolean;
   loading?: boolean;
   onPlayingChange: (playing: boolean) => void;
   playing: boolean;
@@ -324,6 +325,7 @@ interface PlayButtonProps extends ComponentProps<typeof Button> {
 
 const PlayButton = ({
   playing,
+  iconPlaying = playing,
   onPlayingChange,
   className,
   onClick,
@@ -342,7 +344,7 @@ const PlayButton = ({
     }}
     type="button"
   >
-    {playing ? (
+    {iconPlaying ? (
       <RiPauseFill
         aria-hidden="true"
         className={cn("size-4", loading && "opacity-0")}
@@ -365,10 +367,12 @@ export interface AudioPlayerButtonProps<TData = unknown> extends ComponentProps<
   typeof Button
 > {
   item?: AudioPlayerItem<TData>;
+  visualPlaying?: boolean;
 }
 
 export function AudioPlayerButton<TData = unknown>({
   item,
+  visualPlaying,
   ...otherProps
 }: AudioPlayerButtonProps<TData>) {
   const player = useAudioPlayer<TData>();
@@ -382,6 +386,7 @@ export function AudioPlayerButton<TData = unknown>({
   return (
     <PlayButton
       {...otherProps}
+      iconPlaying={visualPlaying ?? playing}
       loading={loading}
       onPlayingChange={(shouldPlay) => {
         if (shouldPlay) {

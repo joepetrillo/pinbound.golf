@@ -135,10 +135,12 @@ function ScrubBarTrack({ className, children, ...props }: ScrubBarTrackProps) {
         onScrubEnd?.();
         window.removeEventListener("pointermove", handleMove);
         window.removeEventListener("pointerup", handleUp);
+        window.removeEventListener("pointercancel", handleUp);
       };
 
       window.addEventListener("pointermove", handleMove);
       window.addEventListener("pointerup", handleUp, { once: true });
+      window.addEventListener("pointercancel", handleUp, { once: true });
     },
     [duration, getTimeFromClientX, onScrub, onScrubEnd, onScrubStart]
   );

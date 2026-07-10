@@ -28,7 +28,7 @@ export const Problem = () => (
           Saturday morning: line at the counter, two staff checking in golfers,
           phone ringing out. That caller books somewhere else.
         </p>
-        <p className="max-w-prose text-muted-foreground">
+        <p className="max-w-prose text-pretty text-muted-foreground">
           Most calls that come in after hours — and plenty during them — go
           unanswered or land in voicemail. Every one of them is a golfer who was
           ready to book.

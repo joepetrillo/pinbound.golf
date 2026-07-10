@@ -26,6 +26,7 @@ export const NAV_LINKS = [
   { href: "/#demo", label: "Demo" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
+  { href: "/blog", label: "Blog" },
 ] as const;
 
 export const CONTACT_LABEL = "Contact";

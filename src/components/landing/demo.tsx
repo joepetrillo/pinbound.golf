@@ -346,10 +346,10 @@ export const Demo = () => {
 
   return (
     <Section id="demo">
-      <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+      <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
         Hear it yourself
       </h2>
-      <p className="mt-4 max-w-prose text-muted-foreground">
+      <p className="mt-4 max-w-prose text-balance text-muted-foreground">
         Tap the orb to try it live, or play a sample call from a real pro shop
         scenario.
       </p>

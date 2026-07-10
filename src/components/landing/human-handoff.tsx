@@ -1,5 +1,5 @@
 import { Section } from "@/components/section";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Message, MessageContent } from "@/components/ui/message";
 import { cn } from "@/lib/utils";
 
@@ -18,18 +18,18 @@ export const HumanHandoff = () => (
   <Section>
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
       <div>
-        <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+        <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
           &ldquo;Talk to a person&rdquo; always works
         </h2>
-        <p className="mt-4 max-w-prose text-muted-foreground">
+        <p className="mt-4 max-w-prose text-balance text-muted-foreground">
           Callers who ask for a person get transferred immediately — no
           pushback, no script. VIP numbers on your list skip the agent and ring
           straight to the front desk.
         </p>
       </div>
 
-      <Card className="max-w-md rounded-xl p-4 shadow-sm ring-border">
-        <div className="flex flex-col gap-2">
+      <Card className="max-w-md" size="sm">
+        <CardContent className="flex flex-col gap-2">
           {handoffTranscript.map((line) => {
             const isAgent = line.role === "agent";
 
@@ -51,7 +51,7 @@ export const HumanHandoff = () => (
               </Message>
             );
           })}
-        </div>
+        </CardContent>
       </Card>
     </div>
   </Section>

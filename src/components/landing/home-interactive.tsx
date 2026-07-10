@@ -3,7 +3,7 @@
 import { Fragment, useState } from "react";
 import type { ReactNode } from "react";
 
-import { useResetOnHide } from "@/lib/use-reset-on-hide";
+import { useResetOnHide } from "@/hooks/use-reset-on-hide";
 
 /**
  * Remounts the home page tree when Cache Components hides the route via

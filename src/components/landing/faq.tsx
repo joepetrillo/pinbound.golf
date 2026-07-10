@@ -49,7 +49,7 @@ const faqItems = [
 export const Faq = () => (
   <Section id="faq">
     <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-12">
-      <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+      <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
         Fair questions, straight answers
       </h2>
 
@@ -60,7 +60,7 @@ export const Faq = () => (
               {item.question}
             </AccordionTrigger>
             <AccordionContent>
-              <p className="text-muted-foreground">{item.answer}</p>
+              <p className="text-pretty text-muted-foreground">{item.answer}</p>
             </AccordionContent>
           </AccordionItem>
         ))}

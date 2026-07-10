@@ -7,7 +7,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],

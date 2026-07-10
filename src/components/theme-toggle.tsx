@@ -4,7 +4,7 @@ import { RiComputerLine, RiMoonLine, RiSunLine } from "@remixicon/react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
 
-import { cn } from "@/lib/utils";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const OPTIONS = [
   { icon: RiSunLine, label: "Light theme", value: "light" },
@@ -25,32 +25,31 @@ export const ThemeToggle = ({ className }: { className?: string }) => {
     getClientSnapshot,
     getServerSnapshot
   );
+  const selectedTheme = mounted && theme ? [theme] : [];
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-0.5 rounded-full border p-0.5",
-        className
-      )}
+    <ToggleGroup
+      aria-label="Appearance"
+      className={className}
+      onValueChange={(themes) => {
+        const nextTheme = themes.at(-1);
+        if (nextTheme) {
+          setTheme(nextTheme);
+        }
+      }}
+      spacing={1}
+      value={selectedTheme}
+      variant="outline"
     >
-      {OPTIONS.map((option) => {
-        const isActive = mounted && theme === option.value;
-        return (
-          <button
-            aria-label={option.label}
-            aria-pressed={isActive}
-            className={cn(
-              "flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
-              isActive && "bg-muted text-foreground"
-            )}
-            key={option.value}
-            onClick={() => setTheme(option.value)}
-            type="button"
-          >
-            <option.icon aria-hidden className="size-4" />
-          </button>
-        );
-      })}
-    </div>
+      {OPTIONS.map((option) => (
+        <ToggleGroupItem
+          aria-label={option.label}
+          key={option.value}
+          value={option.value}
+        >
+          <option.icon aria-hidden />
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
   );
 };

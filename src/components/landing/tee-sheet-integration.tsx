@@ -1,7 +1,16 @@
+import { RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
 
 import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { CONTACT_HREF } from "@/lib/site";
 
 interface TeeSheetPlatform {
@@ -27,11 +36,11 @@ const platforms: TeeSheetPlatform[] = [
 
 export const TeeSheetIntegration = () => (
   <Section id="integrations">
-    <div className="mx-auto max-w-2xl text-center">
-      <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+    <div className="max-w-2xl">
+      <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
         Wired into your tee sheet
       </h2>
-      <p className="mt-4 text-muted-foreground">
+      <p className="mt-4 leading-relaxed text-balance text-muted-foreground">
         Real read/write integration — availability, bookings, cancellations —
         not a lookup bolted onto a chatbot.
       </p>
@@ -55,15 +64,27 @@ export const TeeSheetIntegration = () => (
       ))}
     </div>
 
-    <p className="mt-8 text-center text-sm text-muted-foreground">
-      Don&apos;t see your tee sheet?{" "}
-      <Link
-        className="text-foreground underline underline-offset-4 transition-colors hover:text-muted-foreground"
-        href={CONTACT_HREF}
-      >
-        Tell us
-      </Link>{" "}
-      — founding courses set our integration priority.
-    </p>
+    <Card className="relative col-span-2 mt-8 md:grid md:grid-cols-[1fr_auto] md:items-center">
+      <CardHeader className="relative">
+        <CardTitle>
+          <h3 className="text-xl font-medium tracking-tight text-balance">
+            Don&apos;t see your tee sheet?
+          </h3>
+        </CardTitle>
+        <CardDescription className="max-w-xl leading-relaxed text-balance">
+          Founding courses shape what we connect next. Tell us what your shop
+          runs and move it up the list.
+        </CardDescription>
+      </CardHeader>
+      <CardFooter className="relative md:pl-0">
+        <Link
+          className={buttonVariants({ className: "w-fit shrink-0" })}
+          href={CONTACT_HREF}
+        >
+          Request your integration
+          <RiArrowRightLine aria-hidden data-icon="inline-end" />
+        </Link>
+      </CardFooter>
+    </Card>
   </Section>
 );

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -97,22 +97,18 @@ export const SiteHeader = () => {
 
         <div className="col-start-2 row-start-1 flex items-center gap-2 justify-self-end md:col-start-3">
           <div className="hidden items-center gap-2 md:flex">
-            <Button
-              nativeButton={false}
-              render={<Link href={CONTACT_HREF} />}
-              size="sm"
-              variant="outline"
+            <Link
+              className={buttonVariants({ size: "sm", variant: "outline" })}
+              href={CONTACT_HREF}
             >
               {CONTACT_LABEL}
-            </Button>
-            <Button
-              className="bg-foreground text-background hover:bg-foreground/90"
-              nativeButton={false}
-              render={<Link href={GET_STARTED_HREF} />}
-              size="sm"
+            </Link>
+            <Link
+              className={buttonVariants({ size: "sm" })}
+              href={GET_STARTED_HREF}
             >
               {GET_STARTED_LABEL}
-            </Button>
+            </Link>
           </div>
 
           <Drawer onOpenChange={setMenuOpen} open={menuOpen} showSwipeHandle>
@@ -171,23 +167,23 @@ export const SiteHeader = () => {
                   </ul>
 
                   <div className="mt-6 space-y-3">
-                    <Button
-                      className="w-full"
-                      nativeButton={false}
-                      render={<Link href={CONTACT_HREF} onClick={closeMenu} />}
-                      variant="outline"
+                    <Link
+                      className={buttonVariants({
+                        className: "w-full",
+                        variant: "outline",
+                      })}
+                      href={CONTACT_HREF}
+                      onClick={closeMenu}
                     >
                       {CONTACT_LABEL}
-                    </Button>
-                    <Button
-                      className="w-full bg-foreground text-background hover:bg-foreground/90"
-                      nativeButton={false}
-                      render={
-                        <Link href={GET_STARTED_HREF} onClick={closeMenu} />
-                      }
+                    </Link>
+                    <Link
+                      className={buttonVariants({ className: "w-full" })}
+                      href={GET_STARTED_HREF}
+                      onClick={closeMenu}
                     >
                       {GET_STARTED_LABEL}
-                    </Button>
+                    </Link>
                   </div>
                 </nav>
 

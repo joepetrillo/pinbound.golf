@@ -1,5 +1,5 @@
 import { Section } from "@/components/section";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { CTA_LABEL, FOUNDERS_EMAIL } from "@/lib/site";
 
 const foundingTerms = [
@@ -30,10 +30,10 @@ const foundingTerms = [
 
 export const Pricing = () => (
   <Section id="pricing">
-    <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+    <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
       Priced like a shift, not a system
     </h2>
-    <p className="mt-4 max-w-prose text-muted-foreground">
+    <p className="mt-4 max-w-prose text-balance text-muted-foreground">
       The pilot is free. Keep it only if it earns the job on your phones and
       your tee sheet.
     </p>
@@ -49,20 +49,18 @@ export const Pricing = () => (
           </span>
           <span className="text-muted-foreground">/ month</span>
         </p>
-        <p className="mt-4 max-w-prose text-muted-foreground">
+        <p className="mt-4 max-w-prose text-balance text-muted-foreground">
           Less than $10 a day, a fraction of a part-time hire.
         </p>
 
         <div className="mt-8 lg:mt-auto lg:pt-10">
-          <Button
-            nativeButton={false}
-            render={
-              <a aria-label={CTA_LABEL} href={`mailto:${FOUNDERS_EMAIL}`} />
-            }
-            size="lg"
+          <a
+            aria-label={CTA_LABEL}
+            className={buttonVariants({ size: "lg" })}
+            href={`mailto:${FOUNDERS_EMAIL}`}
           >
             {CTA_LABEL}
-          </Button>
+          </a>
           <p className="mt-4 max-w-prose text-sm text-muted-foreground">
             Tell us about your course and we&apos;ll walk through shadow-mode
             setup. Most founding courses are live on after-hours within days.
@@ -71,7 +69,7 @@ export const Pricing = () => (
       </div>
 
       <div className="bg-muted/30 p-8 md:p-10">
-        <h3 className="text-lg font-medium tracking-tight">
+        <h3 className="text-lg font-medium tracking-tight text-balance">
           The founding course program
         </h3>
         <p className="mt-2 max-w-prose text-sm text-muted-foreground">

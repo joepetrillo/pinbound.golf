@@ -1,11 +1,11 @@
 "use client";
 
-import { RiRestartLine } from "@remixicon/react";
+import { RiResetLeftLine } from "@remixicon/react";
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { Section } from "@/components/section";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Message, MessageContent } from "@/components/ui/message";
 import {
   MessageScroller,
@@ -387,14 +387,15 @@ const TranscriptCard = () => {
           </TabsList>
         </Tabs>
         {prefersReducedMotion ? null : (
-          <button
+          <Button
             aria-label="Restart transcript"
-            className="flex size-7 shrink-0 items-center justify-center rounded-full border bg-background text-muted-foreground transition-colors hover:text-foreground"
             onClick={() => setRestartNonce((nonce) => nonce + 1)}
+            size="icon-sm"
             type="button"
+            variant="outline"
           >
-            <RiRestartLine className="size-3.5" />
-          </button>
+            <RiResetLeftLine aria-hidden />
+          </Button>
         )}
       </div>
 
@@ -426,28 +427,22 @@ export const Hero = () => (
         <h1 className="text-5xl font-medium tracking-tight text-balance md:text-6xl">
           The pro shop assistant that never clocks out
         </h1>
-        <p className="mt-6 max-w-prose text-lg text-muted-foreground">
+        <p className="mt-6 max-w-prose text-lg text-pretty text-muted-foreground">
           Pinbound is an AI phone agent that answers calls 24/7, books tee times
           directly into your tee sheet, and handles routine questions according
           to your course’s policies. Every caller gets the help they need, while
           your staff stays present with the golfers right in front of them.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Button
-            nativeButton={false}
-            render={<Link href={CTA_HREF} />}
-            size="lg"
-          >
+          <Link className={buttonVariants({ size: "lg" })} href={CTA_HREF}>
             {CTA_LABEL}
-          </Button>
-          <Button
-            nativeButton={false}
-            render={<Link href={DEMO_HREF} />}
-            size="lg"
-            variant="outline"
+          </Link>
+          <Link
+            className={buttonVariants({ size: "lg", variant: "outline" })}
+            href={DEMO_HREF}
           >
             {DEMO_LABEL}
-          </Button>
+          </Link>
         </div>
       </div>
 

@@ -2,7 +2,7 @@ import { RiArrowRightLine, RiFlagLine } from "@remixicon/react";
 import Link from "next/link";
 
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { CTA_HREF, CTA_LABEL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 
 interface FooterLink {
@@ -16,6 +16,7 @@ const indexLinks: readonly FooterLink[] = [
   { href: "/#demo", label: "Demo" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
@@ -41,30 +42,33 @@ export const SiteFooter = () => (
           <p className="mt-5 text-sm text-balance text-muted-foreground">
             {SITE_TAGLINE}
           </p>
-          <Button
-            className="mt-6 text-xs tracking-[0.12em] uppercase"
-            nativeButton={false}
-            render={<Link href={CTA_HREF} />}
-            variant="outline"
+          <Link
+            className={buttonVariants({
+              className: "mt-6 text-xs tracking-[0.12em] uppercase",
+              variant: "outline",
+            })}
+            href={CTA_HREF}
           >
             {CTA_LABEL}
-            <RiArrowRightLine aria-hidden className="size-3.5" />
-          </Button>
+            <RiArrowRightLine aria-hidden data-icon="inline-end" />
+          </Link>
         </div>
 
         <nav aria-label="Footer" className="max-w-md">
           <ul className="flex flex-wrap gap-2 @3xl:justify-end">
             {indexLinks.map((link) => (
               <li key={link.href}>
-                <Button
-                  className="text-xs tracking-[0.12em] text-muted-foreground uppercase"
-                  nativeButton={false}
-                  render={<Link href={link.href} />}
-                  size="sm"
-                  variant="outline"
+                <Link
+                  className={buttonVariants({
+                    className:
+                      "text-xs tracking-[0.12em] text-muted-foreground uppercase",
+                    size: "sm",
+                    variant: "outline",
+                  })}
+                  href={link.href}
                 >
                   {link.label}
-                </Button>
+                </Link>
               </li>
             ))}
           </ul>

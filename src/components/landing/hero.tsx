@@ -434,11 +434,11 @@ export const Hero = () => (
           your staff stays present with the golfers right in front of them.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Link className={buttonVariants({ size: "lg" })} href={CTA_HREF}>
+          <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
             {CTA_LABEL}
           </Link>
           <Link
-            className={buttonVariants({ size: "lg", variant: "outline" })}
+            className={cn(buttonVariants({ size: "lg", variant: "outline" }))}
             href={DEMO_HREF}
           >
             {DEMO_LABEL}

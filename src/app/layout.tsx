@@ -1,5 +1,5 @@
+import { ThemeProvider } from "@wrksz/themes/next";
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { SITE_NAME, SITE_URL } from "@/lib/site";

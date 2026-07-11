@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CONTACT_HREF } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 interface TeeSheetPlatform {
   badge: "Supported" | "Coming soon";
@@ -78,7 +79,7 @@ export const TeeSheetIntegration = () => (
       </CardHeader>
       <CardFooter className="relative md:pl-0">
         <Link
-          className={buttonVariants({ className: "w-fit shrink-0" })}
+          className={cn(buttonVariants({ className: "w-fit shrink-0" }))}
           href={CONTACT_HREF}
         >
           Request your integration

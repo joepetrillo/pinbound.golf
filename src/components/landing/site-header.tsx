@@ -20,6 +20,7 @@ import {
   GET_STARTED_LABEL,
   NAV_LINKS,
 } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 const DESKTOP_HEADER_MEDIA_QUERY = "(min-width: 768px)";
 
@@ -98,13 +99,13 @@ export const SiteHeader = () => {
         <div className="col-start-2 row-start-1 flex items-center gap-2 justify-self-end md:col-start-3">
           <div className="hidden items-center gap-2 md:flex">
             <Link
-              className={buttonVariants({ size: "sm", variant: "outline" })}
+              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
               href={CONTACT_HREF}
             >
               {CONTACT_LABEL}
             </Link>
             <Link
-              className={buttonVariants({ size: "sm" })}
+              className={cn(buttonVariants({ size: "sm" }))}
               href={GET_STARTED_HREF}
             >
               {GET_STARTED_LABEL}
@@ -168,17 +169,19 @@ export const SiteHeader = () => {
 
                   <div className="mt-6 space-y-3">
                     <Link
-                      className={buttonVariants({
-                        className: "w-full",
-                        variant: "outline",
-                      })}
+                      className={cn(
+                        buttonVariants({
+                          className: "w-full",
+                          variant: "outline",
+                        })
+                      )}
                       href={CONTACT_HREF}
                       onClick={closeMenu}
                     >
                       {CONTACT_LABEL}
                     </Link>
                     <Link
-                      className={buttonVariants({ className: "w-full" })}
+                      className={cn(buttonVariants({ className: "w-full" }))}
                       href={GET_STARTED_HREF}
                       onClick={closeMenu}
                     >

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const BlogPostNotFound = () => (
   <section className="flex min-h-[60dvh] flex-col items-center justify-center gap-8 px-6 text-center">
@@ -10,7 +11,7 @@ const BlogPostNotFound = () => (
         The blog post you are looking for does not exist.
       </p>
     </div>
-    <Link className={buttonVariants()} href="/blog">
+    <Link className={cn(buttonVariants())} href="/blog">
       Back to blog
     </Link>
   </section>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { CTA_HREF, CTA_LABEL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 interface FooterLink {
   href: string;
@@ -43,10 +44,12 @@ export const SiteFooter = () => (
             {SITE_TAGLINE}
           </p>
           <Link
-            className={buttonVariants({
-              className: "mt-6 text-xs tracking-[0.12em] uppercase",
-              variant: "outline",
-            })}
+            className={cn(
+              buttonVariants({
+                className: "mt-6 text-xs tracking-[0.12em] uppercase",
+                variant: "outline",
+              })
+            )}
             href={CTA_HREF}
           >
             {CTA_LABEL}
@@ -59,12 +62,14 @@ export const SiteFooter = () => (
             {indexLinks.map((link) => (
               <li key={link.href}>
                 <Link
-                  className={buttonVariants({
-                    className:
-                      "text-xs tracking-[0.12em] text-muted-foreground uppercase",
-                    size: "sm",
-                    variant: "outline",
-                  })}
+                  className={cn(
+                    buttonVariants({
+                      className:
+                        "text-xs tracking-[0.12em] text-muted-foreground uppercase",
+                      size: "sm",
+                      variant: "outline",
+                    })
+                  )}
                   href={link.href}
                 >
                   {link.label}

@@ -1,6 +1,7 @@
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
 import { CTA_LABEL, FOUNDERS_EMAIL } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 const foundingTerms = [
   {
@@ -56,7 +57,7 @@ export const Pricing = () => (
         <div className="mt-8 lg:mt-auto lg:pt-10">
           <a
             aria-label={CTA_LABEL}
-            className={buttonVariants({ size: "lg" })}
+            className={cn(buttonVariants({ size: "lg" }))}
             href={`mailto:${FOUNDERS_EMAIL}`}
           >
             {CTA_LABEL}

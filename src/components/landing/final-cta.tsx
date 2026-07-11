@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
 import { CTA_LABEL, DEMO_HREF, DEMO_LABEL, FOUNDERS_EMAIL } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 // Closing CTA band — the last thing a full-page scroller sees.
 export const FinalCta = () => (
@@ -17,13 +18,13 @@ export const FinalCta = () => (
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a
           aria-label={CTA_LABEL}
-          className={buttonVariants({ size: "lg" })}
+          className={cn(buttonVariants({ size: "lg" }))}
           href={`mailto:${FOUNDERS_EMAIL}`}
         >
           {CTA_LABEL}
         </a>
         <Link
-          className={buttonVariants({ size: "lg", variant: "outline" })}
+          className={cn(buttonVariants({ size: "lg", variant: "outline" }))}
           href={DEMO_HREF}
         >
           {DEMO_LABEL}

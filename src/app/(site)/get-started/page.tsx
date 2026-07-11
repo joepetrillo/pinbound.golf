@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
 import { CTA_HREF, CTA_LABEL } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description: "Start onboarding your course with Pinbound.",
@@ -20,7 +21,7 @@ const GetStartedPage = () => (
       spot and we&apos;ll walk you through shadow-mode setup personally.
     </p>
     <div className="mt-8">
-      <Link className={buttonVariants({ size: "lg" })} href={CTA_HREF}>
+      <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
         {CTA_LABEL}
       </Link>
     </div>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sync shadcn Components"
+  short_description: "Audit and safely update shadcn components"
+  default_prompt: "Use $sync-shadcn-components to audit this project against the latest official shadcn registry and present an update plan."

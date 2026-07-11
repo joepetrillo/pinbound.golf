@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { Suspense } from "react";
 
 import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +11,8 @@ import {
   getReadingTime,
 } from "@/lib/blog";
 import { getMDXComponents } from "@/mdx-components";
+
+export const instant = false;
 
 export const generateStaticParams = (): { slug: string }[] =>
   getBlogPosts().map((post) => ({ slug: post.slugs[0] }));
@@ -113,9 +114,7 @@ const BlogPost = async ({
 
 const BlogPostPage = ({ params }: PageProps<"/blog/[slug]">) => (
   <Section className="pt-12 md:pt-12">
-    <Suspense fallback={null}>
-      <BlogPost params={params} />
-    </Suspense>
+    <BlogPost params={params} />
   </Section>
 );
 

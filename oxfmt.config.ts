@@ -5,7 +5,7 @@ export default defineConfig({
   ...ultracite,
   ignorePatterns: [".agents/**/*"],
   sortTailwindcss: {
-    functions: ["clsx", "cn", "cva", "tw"],
+    functions: ["clsx", "cn", "cva", "cx", "tw"],
     stylesheet: "./src/app/globals.css",
   },
 });

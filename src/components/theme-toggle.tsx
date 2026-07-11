@@ -1,7 +1,7 @@
 "use client";
 
 import { RiComputerLine, RiMoonLine, RiSunLine } from "@remixicon/react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@wrksz/themes/client";
 import { useSyncExternalStore } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -32,7 +32,10 @@ export const ThemeToggle = ({ className }: { className?: string }) => {
       aria-label="Appearance"
       className={className}
       onValueChange={(themes) => {
-        const nextTheme = themes.at(-1);
+        const selected = themes.at(-1);
+        const nextTheme = OPTIONS.find(
+          (option) => option.value === selected
+        )?.value;
         if (nextTheme) {
           setTheme(nextTheme);
         }

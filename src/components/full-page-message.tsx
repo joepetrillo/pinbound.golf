@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface FullPageMessageProps {
   description: string;
@@ -20,7 +21,7 @@ export const FullPageMessage = ({
       <h1 className="text-5xl font-medium tracking-tight">{title}</h1>
       <p className="text-muted-foreground">{description}</p>
     </div>
-    <Link className={buttonVariants()} href="/">
+    <Link className={cn(buttonVariants())} href="/">
       Go back home
     </Link>
   </main>

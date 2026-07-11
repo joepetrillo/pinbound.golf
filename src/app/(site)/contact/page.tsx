@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
 import { FOUNDERS_EMAIL } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   description: "Get in touch with the Pinbound team.",
@@ -21,7 +22,7 @@ const ContactPage = () => (
     <div className="mt-8">
       <a
         aria-label={`Email ${FOUNDERS_EMAIL}`}
-        className={buttonVariants({ size: "lg" })}
+        className={cn(buttonVariants({ size: "lg" }))}
         href={`mailto:${FOUNDERS_EMAIL}`}
       >
         Email {FOUNDERS_EMAIL}

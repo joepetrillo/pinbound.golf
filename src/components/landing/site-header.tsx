@@ -49,7 +49,7 @@ const DesktopNav = () => (
       {NAV_LINKS.map((link) => (
         <li key={link.href}>
           <Link
-            className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className={cn(buttonVariants({ variant: "ghost" }))}
             href={link.href}
           >
             {link.label}
@@ -127,7 +127,7 @@ export const SiteHeader = () => {
             </DrawerTrigger>
 
             <DrawerContent
-              className="max-h-[85dvh] rounded-t-3xl"
+              className="max-h-[85dvh] rounded-t-4xl"
               initialFocus={menuCloseRef}
               overlayClassName="supports-backdrop-filter:backdrop-blur-md"
             >

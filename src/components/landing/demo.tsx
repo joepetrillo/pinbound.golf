@@ -277,7 +277,7 @@ interface TalkWidgetProps {
 const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
   if (micStatus === "unavailable") {
     return (
-      <output className="block rounded-xl border border-dashed bg-muted/40 px-6 py-8 text-center">
+      <output className="block rounded-xl border border-dashed bg-muted/50 px-6 py-8 text-center">
         <p className="text-sm font-medium">
           Mic unavailable — listen to a recorded call instead
         </p>
@@ -324,14 +324,12 @@ const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
       </div>
 
       <p className={cn("text-sm font-medium", listening && "shimmer")}>
-        {listening
-          ? "Listening — tap the orb to stop"
-          : "Talk to the demo agent"}
+        {listening ? "Listening" : "Try the demo agent"}
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
         {listening
-          ? "Speaking with the demo agent — tap the orb to stop."
-          : "Uses your mic in the browser. No recording is saved."}
+          ? "Tap the orb to stop the demo."
+          : "Uses your microphone. No recording is saved."}
       </p>
     </div>
   );
@@ -355,7 +353,7 @@ export const Demo = () => {
       </p>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">
-        <div className="flex items-center justify-center rounded-2xl border bg-muted/30 p-8 md:p-10 lg:sticky lg:top-24">
+        <div className="flex items-center justify-center rounded-4xl border bg-muted/50 p-8 md:p-10 lg:sticky lg:top-24">
           <TalkWidget
             micStatus={micStatus}
             onMicError={() => setMicStatus("unavailable")}
@@ -366,7 +364,7 @@ export const Demo = () => {
         <AudioPlayerProvider>
           <div
             className={cn(
-              "flex flex-col divide-y overflow-hidden rounded-2xl border",
+              "flex flex-col divide-y overflow-hidden rounded-4xl border",
               micStatus === "unavailable" && "ring-2 ring-primary/20"
             )}
           >

@@ -1,6 +1,14 @@
 import { RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
 
+import {
+  ClubCaddieLogo,
+  ClubProphetLogo,
+  ForeUpLogo,
+  GolfNowLogo,
+  LightspeedGolfLogo,
+  TeeSnapLogo,
+} from "@/components/landing/tee-sheet-logos";
 import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -17,22 +25,56 @@ import { cn } from "@/lib/utils";
 interface TeeSheetPlatform {
   badge: "Supported" | "Coming soon";
   id: string;
+  logo: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  logoClassName: string;
   name: string;
 }
 
 const COMING_SOON = "Coming soon";
 
 const platforms: TeeSheetPlatform[] = [
-  { badge: "Supported", id: "ezlinks", name: "EZLinks / GolfNow" },
-  { badge: COMING_SOON, id: "foreup", name: "foreUP" },
+  {
+    badge: "Supported",
+    id: "ezlinks",
+    logo: GolfNowLogo,
+    logoClassName: "h-5",
+    name: "EZLinks / GolfNow",
+  },
+  {
+    badge: COMING_SOON,
+    id: "foreup",
+    logo: ForeUpLogo,
+    logoClassName: "h-6",
+    name: "foreUP",
+  },
   {
     badge: COMING_SOON,
     id: "lightspeed",
+    logo: LightspeedGolfLogo,
+    logoClassName: "h-6",
     name: "Lightspeed Golf (Chronogolf)",
   },
-  { badge: COMING_SOON, id: "club-prophet", name: "Club Prophet" },
-  { badge: COMING_SOON, id: "club-caddie", name: "Club Caddie" },
-  { badge: COMING_SOON, id: "teesnap", name: "TeeSnap" },
+  {
+    badge: COMING_SOON,
+    id: "club-prophet",
+    logo: ClubProphetLogo,
+    logoClassName: "h-5",
+    name: "Club Prophet",
+  },
+  {
+    badge: COMING_SOON,
+    id: "club-caddie",
+    logo: ClubCaddieLogo,
+    logoClassName: "h-7",
+    name: "Club Caddie",
+  },
+  {
+    badge: COMING_SOON,
+    id: "teesnap",
+    logo: TeeSnapLogo,
+    logoClassName: "h-6",
+    name: "TeeSnap",
+  },
 ];
 
 export const TeeSheetIntegration = () => (
@@ -50,10 +92,13 @@ export const TeeSheetIntegration = () => (
     <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {platforms.map((platform) => (
         <div
-          className="relative flex h-32 flex-col items-center justify-center gap-2.5 rounded-xl bg-muted/50 px-6 transition-colors hover:bg-muted/80"
+          className="relative flex h-36 flex-col items-center justify-center gap-3 rounded-4xl bg-muted/50 px-6 transition-colors"
           key={platform.id}
         >
-          <span className="text-center text-lg font-medium tracking-tight text-balance">
+          <platform.logo
+            className={cn("w-auto max-w-full", platform.logoClassName)}
+          />
+          <span className="text-center text-sm text-balance text-muted-foreground">
             {platform.name}
           </span>
           <Badge

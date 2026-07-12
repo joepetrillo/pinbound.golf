@@ -39,7 +39,7 @@ export const Pricing = () => (
       your tee sheet.
     </p>
 
-    <div className="mt-10 grid divide-y overflow-hidden rounded-2xl border lg:grid-cols-2 lg:divide-x lg:divide-y-0">
+    <div className="mt-10 grid divide-y overflow-hidden rounded-4xl border lg:grid-cols-2 lg:divide-x lg:divide-y-0">
       <div className="flex flex-col p-8 md:p-10">
         <p className="text-sm font-medium text-muted-foreground">
           After the free pilot
@@ -70,12 +70,12 @@ export const Pricing = () => (
         </div>
       </div>
 
-      <div className="bg-muted/30 p-8 md:p-10">
+      <div className="bg-muted/50 p-8 md:p-10">
         <h3 className="text-lg font-medium tracking-tight text-balance">
           The founding course program
         </h3>
         <p className="mt-2 max-w-prose text-sm text-muted-foreground">
-          We&apos;re onboarding a small founding cohort for the 2026 season —
+          We&apos;re onboarding a small founding cohort for the 2027 season —
           every course works directly with the founders.
         </p>
 

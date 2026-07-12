@@ -37,7 +37,7 @@ const BlogPage = () => {
 
       {featuredPost ? (
         <Link
-          className="group mt-14 block rounded-2xl border bg-muted/40 transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2"
+          className="group mt-14 block scroll-mt-14 rounded-4xl border bg-muted/50 transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2"
           href={featuredPost.url}
         >
           <article className="flex flex-col gap-6 p-8 md:gap-8 md:p-12">
@@ -67,11 +67,11 @@ const BlogPage = () => {
       )}
 
       {remainingPosts.length > 0 && (
-        <ul className="mt-6 grid gap-px overflow-hidden rounded-2xl border bg-border bg-clip-padding md:grid-cols-2">
+        <ul className="mt-6 grid gap-px overflow-hidden rounded-4xl border bg-border bg-clip-padding md:grid-cols-2">
           {remainingPosts.map((post) => (
             <li className="bg-background odd:last:md:col-span-2" key={post.url}>
               <Link
-                className="group flex h-full flex-col gap-4 p-8 transition-colors hover:bg-muted/40 focus-visible:rounded-2xl focus-visible:bg-muted/40 focus-visible:outline-2 focus-visible:-outline-offset-2 md:p-10"
+                className="group flex h-full scroll-mt-14 flex-col gap-4 p-8 transition-colors hover:bg-muted/50 focus-visible:rounded-4xl focus-visible:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 md:p-10"
                 href={post.url}
               >
                 <time

@@ -370,7 +370,7 @@ const TranscriptCard = () => {
 
   return (
     <div
-      className="flex h-96 flex-col rounded-xl border bg-muted/50 p-4 shadow-sm"
+      className="flex h-96 flex-col rounded-4xl border bg-muted/50 p-4 shadow-sm"
       ref={cardRef}
     >
       <div className="mb-4 flex items-center justify-between gap-2">

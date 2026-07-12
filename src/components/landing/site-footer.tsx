@@ -1,6 +1,7 @@
 import { RiArrowRightLine, RiFlagLine } from "@remixicon/react";
 import Link from "next/link";
 
+import { CurrentYear } from "@/components/landing/current-year";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { CTA_HREF, CTA_LABEL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
@@ -83,7 +84,7 @@ export const SiteFooter = () => (
       <div className="mx-auto max-w-6xl pt-14">
         <div className="flex flex-wrap-reverse items-center justify-between gap-x-8 gap-y-6">
           <p className="text-sm text-balance text-muted-foreground">
-            © 2026 {SITE_NAME} · All rights reserved
+            © <CurrentYear /> {SITE_NAME} · All rights reserved
           </p>
           <ThemeToggle />
         </div>

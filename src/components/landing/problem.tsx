@@ -35,7 +35,7 @@ export const Problem = () => (
         </p>
       </div>
 
-      <div className="rounded-xl border bg-muted/50 p-4">
+      <div className="rounded-4xl border bg-muted/50 p-4">
         <p className="mb-3 text-xs font-medium text-muted-foreground">
           Missed calls
         </p>

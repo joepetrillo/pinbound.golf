@@ -12,9 +12,9 @@ const foundingTerms = [
   },
   {
     description:
-      "After-hours forwarding only — zero risk to your main line while you review every call.",
-    id: "shadow-mode",
-    title: "Starts in shadow mode",
+      "You hear the agent on your own course's calls during the pilot and approve go-live yourself — nothing touches your main line until you say so.",
+    id: "you-approve-go-live",
+    title: "You approve go-live",
   },
   {
     description: "Walk away anytime. No annual lock-in.",
@@ -46,12 +46,12 @@ export const Pricing = () => (
         </p>
         <p className="mt-3 flex items-baseline gap-2">
           <span className="text-5xl font-medium tracking-tight md:text-6xl">
-            $299
+            $399
           </span>
           <span className="text-muted-foreground">/ month</span>
         </p>
         <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-          Less than $10 a day, a fraction of a part-time hire.
+          Less than $14 a day, a fraction of a part-time hire.
         </p>
 
         <div className="mt-8 lg:mt-auto lg:pt-10">
@@ -63,8 +63,9 @@ export const Pricing = () => (
             {CTA_LABEL}
           </a>
           <p className="mt-4 max-w-prose text-sm text-muted-foreground">
-            Tell us about your course and we&apos;ll walk through shadow-mode
-            setup. Most founding courses are live on after-hours within days.
+            Create your workspace, connect your tee sheet, and run a free pilot
+            on your line. Founding courses work directly with the founders
+            through setup.
           </p>
         </div>
       </div>

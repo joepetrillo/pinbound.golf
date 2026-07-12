@@ -330,7 +330,7 @@ const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
         {listening
-          ? "Live wireframe — no backend connected yet."
+          ? "Speaking with the demo agent — tap the orb to stop."
           : "Uses your mic in the browser. No recording is saved."}
       </p>
     </div>
@@ -350,8 +350,8 @@ export const Demo = () => {
         Hear it yourself
       </h2>
       <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-        Tap the orb to try it live, or play a sample call from a real pro shop
-        scenario.
+        Talk to the live demo agent in your browser, or play a simulated call to
+        hear how Pinbound handles common pro-shop scenarios.
       </p>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">

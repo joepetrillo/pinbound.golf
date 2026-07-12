@@ -11,7 +11,7 @@ import {
 const faqItems = [
   {
     answer:
-      "It never confirms a time the tee sheet didn't return. And it starts in shadow mode, so you see every call before it touches your main line.",
+      "It never confirms a time the tee sheet didn't return. During the pilot you review every call and approve go-live yourself — nothing touches your main line until you're ready.",
     id: "booking-wrong",
     question: "What if it books something wrong?",
   },

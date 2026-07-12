@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 const title = "Pinbound Golf";
 const description =
-  "24/7 AI phone answering for golf courses, wired into your tee sheet — with a dashboard where you control exactly what it's allowed to do. For GMs and pro shops.";
+  "Pinbound is an AI phone assistant for golf courses. It answers pro shop calls with fast, consistent help — following your course's policies — so staff can stay with the golfers in front of them.";
 
 export const metadata: Metadata = {
   description,

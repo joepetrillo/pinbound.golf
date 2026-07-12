@@ -17,8 +17,9 @@ const GetStartedPage = () => (
       Get started
     </h1>
     <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-      Sign-up and onboarding are coming soon. In the meantime, claim a founding
-      spot and we&apos;ll walk you through shadow-mode setup personally.
+      Create your workspace, add your course, and walk through onboarding at
+      your own pace. Founding spots include a free pilot and hands-on help from
+      the founders.
     </p>
     <div className="mt-8">
       <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>

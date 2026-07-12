@@ -2,7 +2,7 @@
 
 export const SITE_NAME = "Pinbound";
 
-export const SITE_URL = "https://pinbound-agent.vercel.app";
+export const SITE_URL = "https://pinbound.golf";
 
 export const SITE_DESCRIPTION =
   "Pinbound answers your pro shop's phone, books tee times against your tee sheet, and follows your booking policies. Callers can always reach a person.";

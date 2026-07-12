@@ -1,3 +1,3 @@
 # Pinbound
 
-A SaaS platform that lets golf courses deploy an AI voice agent to handle incoming pro shop calls — answering general and course-specific questions, and checking/booking/canceling tee times — without adding staff. Courses self-configure their agent (hours, amenities, voice, tee sheet connection) through a web dashboard
+A self-serve AI phone assistant for golf courses. Pinbound answers a course's existing public line, handles routine questions from course-approved information, and searches, books, looks up, changes, and cancels tee times. Callers can reach a person immediately, while course teams configure policies, routing, temporary updates, testing, analytics, and usage from a role-based workspace.

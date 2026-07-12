@@ -25,7 +25,7 @@ const BlogPage = () => {
   const [featuredPost, ...remainingPosts] = getBlogPosts();
 
   return (
-    <Section className="pt-12 md:pt-12">
+    <Section className="pt-16 md:pt-16">
       <header className="grid gap-6 md:grid-cols-2 md:items-end">
         <h1 className="text-4xl font-medium tracking-tight text-balance md:text-6xl">
           Blog

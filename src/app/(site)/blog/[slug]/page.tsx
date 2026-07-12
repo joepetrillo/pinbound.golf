@@ -113,7 +113,7 @@ const BlogPost = async ({
 };
 
 const BlogPostPage = ({ params }: PageProps<"/blog/[slug]">) => (
-  <Section className="pt-12 md:pt-12">
+  <Section className="pt-16 md:pt-16">
     <BlogPost params={params} />
   </Section>
 );

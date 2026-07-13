@@ -29,7 +29,7 @@ const Logo = () => (
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-3.5" />
     </span>
-    <span className="text-sm font-medium tracking-[0.12em] text-foreground uppercase">
+    <span className="text-sm font-semibold tracking-[0.12em] text-foreground uppercase">
       pinbound
     </span>
   </Link>

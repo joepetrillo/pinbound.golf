@@ -163,7 +163,9 @@ export function AudioPlayerProvider<TData = unknown>({
 
       const playPromise = audio.play();
       playPromiseRef.current = playPromise;
-      return playPromise;
+      return playPromise.catch(() => {
+        // An interrupted play() rejects with AbortError; safe to ignore.
+      });
     },
     [awaitPendingPlay, loadItem]
   );

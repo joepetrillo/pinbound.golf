@@ -205,14 +205,12 @@ interface ConversationTranscriptProps {
   isVisible: boolean;
   lines: ScriptLine[];
   onComplete: () => void;
-  prefersReducedMotion: boolean;
 }
 
 const ConversationTranscript = ({
   isVisible,
   lines,
   onComplete,
-  prefersReducedMotion,
 }: ConversationTranscriptProps) => {
   // Start past the greeting so it appears fully spoken right away — switching
   // tabs shouldn't replay the same opening line every time.
@@ -222,10 +220,6 @@ const ConversationTranscript = ({
   const [spokenCount, setSpokenCount] = useState(0);
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      return;
-    }
-
     const currentLine = lines[lineIndex];
     if (!currentLine) {
       return;
@@ -262,18 +256,9 @@ const ConversationTranscript = ({
     return () => {
       clearTimeout(timeout);
     };
-  }, [
-    isVisible,
-    lineIndex,
-    lines,
-    onComplete,
-    prefersReducedMotion,
-    spokenCount,
-  ]);
+  }, [isVisible, lineIndex, lines, onComplete, spokenCount]);
 
-  const visibleLines = prefersReducedMotion
-    ? lines
-    : lines.slice(0, lineIndex + 1);
+  const visibleLines = lines.slice(0, lineIndex + 1);
 
   return (
     <MessageScrollerProvider autoScroll>
@@ -285,9 +270,7 @@ const ConversationTranscript = ({
           <MessageScrollerContent className="min-h-full justify-end gap-3">
             {visibleLines.map((line) => {
               const isAgent = line.speaker === "agent";
-              const isActive = prefersReducedMotion
-                ? false
-                : line.id === lines[lineIndex]?.id;
+              const isActive = line.id === lines[lineIndex]?.id;
               const lineSpokenCount = isActive
                 ? spokenCount
                 : line.words.length;
@@ -413,7 +396,6 @@ const TranscriptCard = () => {
           key={`${conversation.id}-${restartNonce}`}
           lines={conversation.lines}
           onComplete={advanceToNext}
-          prefersReducedMotion={prefersReducedMotion}
         />
       </div>
     </div>

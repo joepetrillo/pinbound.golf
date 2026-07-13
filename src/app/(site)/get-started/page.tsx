@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
-import { CTA_HREF, CTA_LABEL } from "@/lib/site";
+import { FOUNDERS_EMAIL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -22,8 +22,11 @@ const GetStartedPage = () => (
       the founders.
     </p>
     <div className="mt-8">
-      <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
-        {CTA_LABEL}
+      <Link
+        className={cn(buttonVariants({ size: "lg" }))}
+        href={`mailto:${FOUNDERS_EMAIL}`}
+      >
+        Email the founders
       </Link>
     </div>
   </Section>

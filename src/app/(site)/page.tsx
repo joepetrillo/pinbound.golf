@@ -3,21 +3,19 @@ import { Faq } from "@/components/landing/faq";
 import { FinalCta } from "@/components/landing/final-cta";
 import { Hero } from "@/components/landing/hero";
 import { HomeInteractive } from "@/components/landing/home-interactive";
-import { HumanHandoff } from "@/components/landing/human-handoff";
 import { PolicyFidelity } from "@/components/landing/policy-fidelity";
 import { Pricing } from "@/components/landing/pricing";
 import { Problem } from "@/components/landing/problem";
 import { TeeSheetIntegration } from "@/components/landing/tee-sheet-integration";
 
-// Sections are grouped into the four nav chunks, in nav order:
-// Product (#product) → Demo (#demo) → Pricing (#pricing) → FAQ (#faq).
+// The page moves from problem to proof to commitment. The logo returns visitors
+// to the beginning; the primary nav jumps to the three decision sections.
 const Page = () => (
   <HomeInteractive>
     <Hero />
     <Problem />
     <PolicyFidelity />
     <TeeSheetIntegration />
-    <HumanHandoff />
     <Demo />
     <Pricing />
     <Faq />

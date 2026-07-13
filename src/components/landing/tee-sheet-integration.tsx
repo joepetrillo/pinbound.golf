@@ -19,7 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CONTACT_HREF } from "@/lib/site";
+import { CTA_HREF, CTA_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 interface TeeSheetPlatform {
@@ -125,9 +125,9 @@ export const TeeSheetIntegration = () => (
       <CardFooter className="relative md:pl-0">
         <Link
           className={cn(buttonVariants({ className: "w-fit shrink-0" }))}
-          href={CONTACT_HREF}
+          href={CTA_HREF}
         >
-          Request your integration
+          {CTA_LABEL}
           <RiArrowRightLine aria-hidden data-icon="inline-end" />
         </Link>
       </CardFooter>

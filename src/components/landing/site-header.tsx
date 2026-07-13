@@ -13,13 +13,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  CONTACT_HREF,
-  CONTACT_LABEL,
-  GET_STARTED_HREF,
-  GET_STARTED_LABEL,
-  NAV_LINKS,
-} from "@/lib/site";
+import { GET_STARTED_HREF, GET_STARTED_LABEL, NAV_LINKS } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const DESKTOP_HEADER_MEDIA_QUERY = "(min-width: 768px)";
@@ -28,7 +22,7 @@ const Logo = ({ onClick }: { onClick?: () => void }) => (
   <Link
     aria-label="Homepage"
     className="relative top-px inline-flex items-center gap-2.5 hover:opacity-90"
-    href="/"
+    href="/#top"
     onClick={onClick}
   >
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
@@ -99,12 +93,6 @@ export const SiteHeader = () => {
         <div className="col-start-2 row-start-1 flex items-center gap-2 justify-self-end md:col-start-3">
           <div className="hidden items-center gap-2 md:flex">
             <Link
-              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
-              href={CONTACT_HREF}
-            >
-              {CONTACT_LABEL}
-            </Link>
-            <Link
               className={cn(buttonVariants({ size: "sm" }))}
               href={GET_STARTED_HREF}
             >
@@ -167,19 +155,7 @@ export const SiteHeader = () => {
                     ))}
                   </ul>
 
-                  <div className="mt-6 space-y-3">
-                    <Link
-                      className={cn(
-                        buttonVariants({
-                          className: "w-full",
-                          variant: "outline",
-                        })
-                      )}
-                      href={CONTACT_HREF}
-                      onClick={closeMenu}
-                    >
-                      {CONTACT_LABEL}
-                    </Link>
+                  <div className="mt-6">
                     <Link
                       className={cn(buttonVariants({ className: "w-full" }))}
                       href={GET_STARTED_HREF}

@@ -11,18 +11,17 @@ export const SITE_DESCRIPTION =
 export const SITE_TAGLINE =
   "Fast, consistent help for callers. Fewer phone interruptions for your staff.";
 
-export const CTA_LABEL = "Start your 30-day pilot";
-export const CTA_HREF = "/#pricing";
+export const CTA_LABEL = "Get started";
+export const CTA_HREF = "/get-started";
 
 export const FOUNDERS_EMAIL = "founders@pinbound.golf";
 
 export const DEMO_LABEL = "Try the demo";
 export const DEMO_HREF = "/#demo";
 
-// Order mirrors the page: product → demo → pricing → FAQ. Root-relative
-// hashes so the links work from any page, not just the homepage.
+// The logo is the persistent route back to the homepage and its beginning, so
+// the primary nav can focus on the three highest-intent sections plus the blog.
 export const NAV_LINKS = [
-  { href: "/#product", label: "Product" },
   { href: "/#demo", label: "Demo" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },

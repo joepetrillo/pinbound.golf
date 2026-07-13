@@ -29,6 +29,14 @@ const controlPoints = [
     id: "coverage",
     title: "Choose the coverage",
   },
+  {
+    description:
+      "Callers who ask for a person transfer immediately, without pushback or a script. Recognized VIP numbers can skip the assistant and ring your team directly.",
+    footer:
+      "If nobody answers, Pinbound captures the reason and creates a callback task.",
+    id: "human-handoff",
+    title: "Keep people within reach",
+  },
 ] as const;
 
 export const PolicyFidelity = () => (
@@ -41,7 +49,7 @@ export const PolicyFidelity = () => (
       calls and tee-sheet actions you authorize.
     </p>
 
-    <div className="mt-10 grid gap-4 md:grid-cols-3">
+    <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {controlPoints.map((point, index) => (
         <Card className="h-full" key={point.id}>
           <CardHeader>

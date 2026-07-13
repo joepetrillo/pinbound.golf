@@ -60,6 +60,7 @@ export const LiveWaveform = ({
   const animationRef = useRef<number>(0);
   const lastUpdateRef = useRef<number>(0);
   const processingAnimationRef = useRef<number | null>(null);
+  const fadeAnimationRef = useRef<number | null>(null);
   const lastActiveDataRef = useRef<number[]>([]);
   const transitionProgressRef = useRef(0);
   const staticBarsRef = useRef<number[]>([]);
@@ -226,16 +227,24 @@ export const LiveWaveform = ({
               );
             }
             needsRedrawRef.current = true;
-            requestAnimationFrame(fadeToIdle);
+            fadeAnimationRef.current = requestAnimationFrame(fadeToIdle);
           } else {
             if (mode === "static") {
               staticBarsRef.current = [];
             } else {
               historyRef.current = [];
             }
+            fadeAnimationRef.current = null;
           }
         };
         fadeToIdle();
+
+        return () => {
+          if (fadeAnimationRef.current !== null) {
+            cancelAnimationFrame(fadeAnimationRef.current);
+            fadeAnimationRef.current = null;
+          }
+        };
       }
     }
   }, [processing, active, barWidth, barGap, mode]);

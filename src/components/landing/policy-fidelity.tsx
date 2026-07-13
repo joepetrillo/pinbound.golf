@@ -10,22 +10,22 @@ import {
 const controlPoints = [
   {
     description:
-      "Write your booking, cancellation, and transfer policies in plain English. Pinbound follows the same rules your staff uses at the counter.",
-    footer: "Update a policy whenever your operation changes.",
+      "Add your hours, rates, booking rules, amenities, and handoff destinations. Schedule frost delays, closures, and cart rules to expire automatically.",
+    footer: "Required setup keeps every course at a reliable baseline.",
     id: "playbook",
     title: "Set the playbook",
   },
   {
     description:
-      "Every call includes a transcript, outcome, and the policy behind the answer. You can see exactly what happened without guessing.",
-    footer: "Clear records. No black-box decisions.",
+      "Recordings, transcripts, outcomes, transfers, tee-sheet actions, uncertain calls, and callback tasks stay searchable in one role-based workspace.",
+    footer: "Daily summaries and alerts keep the right people informed.",
     id: "review",
     title: "Review every call",
   },
   {
     description:
-      "Start with after-hours coverage, add overflow when the shop gets busy, and expand only when you are comfortable with the results.",
-    footer: "Pause it or narrow coverage at any time.",
+      "Run agent-first, overflow-only, busy-line, ring-no-answer, or after-hours coverage. Test privately, approve go-live, and restore normal routing with the kill switch.",
+    footer: "Automatic fallback keeps outages from becoming dead air.",
     id: "coverage",
     title: "Choose the coverage",
   },
@@ -38,7 +38,7 @@ export const PolicyFidelity = () => (
     </h2>
     <p className="mt-4 max-w-prose leading-relaxed text-balance text-muted-foreground">
       Pinbound works from your policies, shows its work, and only handles the
-      calls you choose to give it.
+      calls and tee-sheet actions you authorize.
     </p>
 
     <div className="mt-10 grid gap-4 md:grid-cols-3">

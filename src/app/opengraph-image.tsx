@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Pinbound — every call answered, every rule followed. A phone agent for golf pro shops.";
+  "Pinbound — fast, consistent help for golf course callers while staff stays with the golfers in front of them.";
 
 export const contentType = "image/png";
 
@@ -61,8 +61,8 @@ const opengraphImage = () =>
             lineHeight: 1.1,
           }}
         >
-          <span>Every call answered.</span>
-          <span>Every rule followed.</span>
+          <span>Help every caller.</span>
+          <span>Stay at the counter.</span>
         </div>
         <div
           style={{
@@ -73,7 +73,7 @@ const opengraphImage = () =>
             marginTop: 28,
           }}
         >
-          Phone answering for golf courses, run by your rules.
+          An AI phone assistant connected to your course and your tee sheet.
         </div>
       </div>
 
@@ -103,8 +103,8 @@ const opengraphImage = () =>
             padding: "14px 18px",
           }}
         >
-          Thanks for calling Pinehills — this is the virtual assistant. How can
-          I help?
+          Thanks for calling Pinehills. I&apos;m the AI virtual assistant. This
+          call is recorded. How can I help?
         </div>
         <div
           style={{

@@ -58,7 +58,7 @@ interface Conversation {
 
 const GREETING_ID = "agent-greeting";
 const GREETING_TEXT =
-  "Thanks for calling Pinehills — this is the virtual assistant. How can I help?";
+  "Thanks for calling Pinehills. I'm the AI virtual assistant. This call is recorded. How can I help?";
 
 const CONVERSATIONS: Conversation[] = [
   {
@@ -105,9 +105,9 @@ const CONVERSATIONS: Conversation[] = [
       makeLine(
         "agent-lookup",
         "agent",
-        "I can help with that. What's the name on the booking?"
+        "I can help with that. What's the confirmation number and last name on the booking?"
       ),
-      makeLine("caller-name", "caller", "Dana Ortiz."),
+      makeLine("caller-name", "caller", "P8142, under Ortiz."),
       makeLine(
         "agent-policy",
         "agent",

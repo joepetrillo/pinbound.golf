@@ -11,36 +11,37 @@ import {
 const faqItems = [
   {
     answer:
-      "It never confirms a time the tee sheet didn't return. During the pilot you review every call and approve go-live yourself — nothing touches your main line until you're ready.",
+      "Pinbound never confirms a tee time until EZLinks returns a successful result. Deterministic policy and permission checks run before every write, and each action has an audit record. Failed or uncertain requests go to your staff instead of becoming a guess.",
     id: "booking-wrong",
     question: "What if it books something wrong?",
   },
   {
     answer:
-      'Instantly, always. Saying "talk to a person" transfers immediately, and VIP numbers ring straight through.',
+      'Immediately. Saying "talk to a person" starts a transfer without an argument, and recognized VIP numbers can bypass the assistant. If nobody answers, Pinbound creates a callback task with the reason, details, requested time, and transcript.',
     id: "human-handoff",
     question: "Can callers still reach a person?",
   },
   {
     answer:
-      "EZLinks and the GolfNow family are live today. Every other platform is prioritized by founding-course demand — tell us yours.",
+      "EZLinks is supported at launch for availability, booking, lookup, changes, and cancellations. Other tee sheets are added behind the same normalized adapter, prioritized by course demand and the capabilities each vendor makes available.",
     id: "tee-sheet-support",
     question: "Which tee sheets do you support?",
   },
   {
     answer:
-      "Hibernate or annual options so you're not paying for a quiet shoulder season.",
-    id: "off-season",
-    question: "What about the off-season?",
+      "Pinbound never asks a caller to speak card details. When EZLinks provides a secure hosted checkout and reservation hold, Pinbound texts that link and waits for verified payment before confirming. Otherwise it transfers the caller or sends them to your existing booking flow.",
+    id: "payments",
+    question: "How are payments handled?",
   },
   {
-    answer: "No. It answers as your course's virtual assistant, every time.",
+    answer:
+      "No. Every call opens by identifying Pinbound as an AI or virtual assistant and giving the required recording notice.",
     id: "pretend-human",
     question: "Does it pretend to be human?",
   },
   {
     answer:
-      "You do — pause it, add details, modify rules, and monitor everything from the dashboard.",
+      "Your authorized team controls course facts, temporary updates, permitted tee-sheet actions, handoff rules, coverage, voice, and greeting. Owners manage billing and integrations; staff can review calls and update approved day-to-day information. A kill switch restores normal routing at any time.",
     id: "who-controls",
     question: "Who controls it?",
   },

@@ -9,9 +9,9 @@ export const SITE_DESCRIPTION =
 
 // One-sentence summary used in the footer.
 export const SITE_TAGLINE =
-  "The phone assistant that answers your pro shop's calls and books tee times around the clock.";
+  "Fast, consistent help for callers. Fewer phone interruptions for your staff.";
 
-export const CTA_LABEL = "Claim a founding spot";
+export const CTA_LABEL = "Start your 30-day pilot";
 export const CTA_HREF = "/#pricing";
 
 export const FOUNDERS_EMAIL = "founders@pinbound.golf";

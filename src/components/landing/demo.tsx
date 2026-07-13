@@ -228,7 +228,7 @@ const SampleCallRow = ({ call }: SampleCallRowProps) => {
       )}
     >
       <AudioPlayerButton
-        aria-label={`Play sample call: ${call.caption}`}
+        aria-label={`${active && player.isPlaying ? "Pause" : "Play"} sample call: ${call.caption}`}
         className="mt-0.5 shrink-0 rounded-full"
         item={{ id: call.id, src: call.src }}
         size="icon-sm"
@@ -348,8 +348,9 @@ export const Demo = () => {
         Hear it yourself
       </h2>
       <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-        Talk to the live demo agent in your browser, or play a simulated call to
-        hear how Pinbound handles common pro-shop scenarios.
+        Explore the voice interface or play illustrative sample recordings of
+        common pro-shop scenarios. The course, callers, policies, and tee times
+        in these demos are fictional.
       </p>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">

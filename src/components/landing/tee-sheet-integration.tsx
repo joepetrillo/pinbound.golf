@@ -84,8 +84,8 @@ export const TeeSheetIntegration = () => (
         Wired into your tee sheet
       </h2>
       <p className="mt-4 leading-relaxed text-balance text-muted-foreground">
-        Real read/write integration — availability, bookings, cancellations —
-        not a lookup bolted onto a chatbot.
+        Pinbound searches live availability and can book, look up, change, and
+        cancel tee times. Your tee sheet remains the source of truth.
       </p>
     </div>
 
@@ -118,8 +118,8 @@ export const TeeSheetIntegration = () => (
           </h3>
         </CardTitle>
         <CardDescription className="max-w-xl leading-relaxed text-balance">
-          Founding courses shape what we connect next. Tell us what your shop
-          runs and move it up the list.
+          Tell us what your shop runs. New adapters are prioritized by course
+          demand, with vendor-specific capabilities kept clear.
         </CardDescription>
       </CardHeader>
       <CardFooter className="relative md:pl-0">

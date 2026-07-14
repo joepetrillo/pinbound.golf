@@ -20,7 +20,7 @@ export const formatBlogDate = (publishedAt: string): string =>
 
 export const getBlogPost = (slug: string) => blog.getPage([slug]);
 
-type BlogPost = NonNullable<ReturnType<typeof getBlogPost>>;
+export type BlogPost = NonNullable<ReturnType<typeof getBlogPost>>;
 
 const WORDS_PER_MINUTE = 220;
 const FRONTMATTER_PATTERN = /^---[\s\S]*?---/u;
@@ -40,3 +40,30 @@ export const getBlogPosts = () =>
     .toSorted((firstPost, secondPost) =>
       secondPost.data.publishedAt.localeCompare(firstPost.data.publishedAt)
     );
+
+const RELATED_POST_OFFSETS = [1, -1, 2, -2] as const;
+const RELATED_POST_LIMIT = 2;
+
+export const getRelatedBlogPosts = (slug: string): BlogPost[] => {
+  const posts = getBlogPosts();
+  const currentIndex = posts.findIndex((post) => post.slugs[0] === slug);
+
+  if (currentIndex === -1) {
+    return [];
+  }
+
+  const relatedPosts: BlogPost[] = [];
+
+  for (const offset of RELATED_POST_OFFSETS) {
+    const post = posts[currentIndex + offset];
+    if (post) {
+      relatedPosts.push(post);
+    }
+
+    if (relatedPosts.length === RELATED_POST_LIMIT) {
+      break;
+    }
+  }
+
+  return relatedPosts;
+};

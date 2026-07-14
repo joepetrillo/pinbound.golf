@@ -11,10 +11,23 @@ export const SITE_DESCRIPTION =
 export const SITE_TAGLINE =
   "Fast, consistent help for callers. Fewer phone interruptions for your staff.";
 
-export const CTA_LABEL = "Get started";
+export const CTA_LABEL = "Plan your pilot";
 export const CTA_HREF = "/get-started";
 
-export const FOUNDERS_EMAIL = "founders@pinbound.golf";
+export const FOUNDERS_EMAIL = "contact@pinbound.golf";
+
+const pilotEmailSubject = "Pinbound founding pilot";
+const pilotEmailBody = `Course name:
+Course location:
+Tee sheet:
+Approximate calls per month:
+Preferred coverage (agent-first, overflow, ring-no-answer, or after-hours):
+
+What would you most like Pinbound to handle?`;
+
+export const PILOT_EMAIL_HREF = `mailto:${FOUNDERS_EMAIL}?subject=${encodeURIComponent(
+  pilotEmailSubject
+)}&body=${encodeURIComponent(pilotEmailBody)}`;
 
 export const DEMO_LABEL = "Try the demo";
 export const DEMO_HREF = "/#demo";
@@ -31,5 +44,5 @@ export const NAV_LINKS = [
 export const CONTACT_LABEL = "Contact";
 export const CONTACT_HREF = "/contact";
 
-export const GET_STARTED_LABEL = "Get started";
+export const GET_STARTED_LABEL = CTA_LABEL;
 export const GET_STARTED_HREF = "/get-started";

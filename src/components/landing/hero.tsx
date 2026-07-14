@@ -403,7 +403,7 @@ const TranscriptCard = () => {
 };
 
 export const Hero = () => (
-  <Section className="pt-14 md:pt-20" id="top">
+  <Section className="pt-14 md:pt-20">
     <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
       <div>
         <h1 className="text-5xl font-medium tracking-tight text-balance md:text-6xl">

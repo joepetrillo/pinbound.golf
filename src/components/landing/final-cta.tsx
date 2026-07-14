@@ -12,8 +12,9 @@ export const FinalCta = () => (
       <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
         Ready to stop missing calls?
       </h2>
-      <p className="mt-4 text-muted-foreground">
-        Free 30 day pilot. No contract. Setup in minutes.
+      <p className="mt-4 text-balance text-muted-foreground">
+        Free 30-day pilot. No contract. Begin setup in minutes, then go live
+        after your team tests and approves it.
       </p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>

@@ -6,7 +6,8 @@ import { FOUNDERS_EMAIL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  description: "Get in touch with the Pinbound team.",
+  description:
+    "Contact Pinbound about product questions, tee-sheet integrations, partnerships, or an existing conversation.",
   title: "Contact — Pinbound",
 };
 
@@ -16,8 +17,9 @@ const ContactPage = () => (
       Contact us
     </h1>
     <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-      Have a question about Pinbound, your tee sheet, or the founding program?
-      Email us and we&apos;ll get back to you within a business day.
+      Ask about Pinbound, a tee-sheet integration, a partnership, or an existing
+      conversation. If you are ready to evaluate the product for your course,
+      use Plan your pilot so your first email includes the details we need.
     </p>
     <div className="mt-8">
       <a

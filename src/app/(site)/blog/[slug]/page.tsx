@@ -1,15 +1,28 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   formatBlogDate,
   getBlogPost,
   getBlogPosts,
+  getRelatedBlogPosts,
   getReadingTime,
 } from "@/lib/blog";
+import { CTA_HREF, CTA_LABEL, DEMO_HREF } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import { getMDXComponents } from "@/mdx-components";
 
 export const instant = false;
@@ -53,6 +66,31 @@ const RuleCross = () => (
   </span>
 );
 
+const ArticleNextStep = () => (
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-xl">
+        Hear the operating model in action
+      </CardTitle>
+      <CardDescription className="max-w-prose leading-relaxed">
+        Listen to sample calls for bookings, policy questions, weather, and
+        human handoff—or tell us how your course handles the phone today.
+      </CardDescription>
+    </CardHeader>
+    <CardFooter className="flex-wrap gap-2">
+      <Link
+        className={cn(buttonVariants({ variant: "outline" }))}
+        href={DEMO_HREF}
+      >
+        Hear sample calls
+      </Link>
+      <Link className={cn(buttonVariants())} href={CTA_HREF}>
+        {CTA_LABEL}
+      </Link>
+    </CardFooter>
+  </Card>
+);
+
 const BlogPost = async ({
   params,
 }: Pick<PageProps<"/blog/[slug]">, "params">) => {
@@ -64,6 +102,7 @@ const BlogPost = async ({
   }
 
   const PostBody = post.data.body;
+  const relatedPosts = getRelatedBlogPosts(slug);
 
   return (
     <article>
@@ -107,6 +146,50 @@ const BlogPost = async ({
 
       <div className="typeset typeset-docs mx-auto mt-12 max-w-[37em]">
         <PostBody components={getMDXComponents()} />
+      </div>
+
+      <div className="mx-auto mt-16 max-w-4xl">
+        <ArticleNextStep />
+
+        {relatedPosts.length > 0 ? (
+          <section aria-labelledby="related-articles-heading" className="mt-16">
+            <h2
+              className="text-2xl font-medium tracking-tight md:text-3xl"
+              id="related-articles-heading"
+            >
+              Keep reading
+            </h2>
+            <ul className="mt-6 grid gap-4 md:grid-cols-2">
+              {relatedPosts.map((relatedPost) => (
+                <li key={relatedPost.url}>
+                  <Card className="h-full" size="sm">
+                    <CardHeader>
+                      <CardDescription>
+                        <time dateTime={relatedPost.data.publishedAt}>
+                          {formatBlogDate(relatedPost.data.publishedAt)}
+                        </time>
+                      </CardDescription>
+                      <CardTitle className="text-lg text-balance">
+                        {relatedPost.data.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="leading-relaxed text-muted-foreground">
+                      {relatedPost.data.description}
+                    </CardContent>
+                    <CardFooter className="mt-auto">
+                      <Link
+                        className={cn(buttonVariants({ variant: "outline" }))}
+                        href={relatedPost.url}
+                      >
+                        Read article
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
       </div>
     </article>
   );

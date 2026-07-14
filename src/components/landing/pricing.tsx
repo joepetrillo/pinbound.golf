@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PricingEstimator } from "@/components/landing/pricing-estimator";
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
-import { CTA_HREF, CTA_LABEL } from "@/lib/site";
+import { CONTACT_HREF, CONTACT_LABEL, CTA_HREF, CTA_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const pilotTerms = [
@@ -39,8 +39,9 @@ export const Pricing = () => (
       Pricing that follows your call volume
     </h2>
     <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-      Start with the complete product free for 30 days after activation, then
-      continue with a monthly workspace subscription sized to your calls.
+      Start with every available launch capability free for 30 days after
+      activation, then continue with a monthly workspace subscription sized to
+      your calls.
     </p>
 
     <div className="mt-10 grid divide-y overflow-hidden rounded-4xl border lg:grid-cols-2 lg:divide-x lg:divide-y-0">
@@ -72,12 +73,23 @@ export const Pricing = () => (
         </dl>
 
         <div className="mt-8">
-          <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
-            {CTA_LABEL}
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              className={cn(buttonVariants({ size: "lg", variant: "outline" }))}
+              href={CONTACT_HREF}
+            >
+              {CONTACT_LABEL}
+            </Link>
+            <Link
+              className={cn(buttonVariants({ size: "lg" }))}
+              href={CTA_HREF}
+            >
+              {CTA_LABEL}
+            </Link>
+          </div>
           <p className="mt-4 max-w-prose text-sm text-muted-foreground">
-            Create your workspace, connect your tee sheet and phone routing,
-            test privately, and activate when your team is ready.
+            Plan your pilot with the founders, connect your tee sheet and phone
+            routing, test privately, and activate when your team is ready.
           </p>
         </div>
       </div>

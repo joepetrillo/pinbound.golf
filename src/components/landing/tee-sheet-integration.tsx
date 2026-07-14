@@ -19,7 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CTA_HREF, CTA_LABEL } from "@/lib/site";
+import { CONTACT_HREF, CONTACT_LABEL, CTA_HREF, CTA_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 interface TeeSheetPlatform {
@@ -122,7 +122,18 @@ export const TeeSheetIntegration = () => (
           demand, with vendor-specific capabilities kept clear.
         </CardDescription>
       </CardHeader>
-      <CardFooter className="relative md:pl-0">
+      <CardFooter className="relative flex-wrap gap-2 md:pl-0">
+        <Link
+          className={cn(
+            buttonVariants({
+              className: "w-fit shrink-0",
+              variant: "outline",
+            })
+          )}
+          href={CONTACT_HREF}
+        >
+          {CONTACT_LABEL}
+        </Link>
         <Link
           className={cn(buttonVariants({ className: "w-fit shrink-0" }))}
           href={CTA_HREF}

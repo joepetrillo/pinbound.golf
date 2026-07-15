@@ -162,7 +162,7 @@ const BlogPost = async ({
             <ul className="mt-6 grid gap-4 md:grid-cols-2">
               {relatedPosts.map((relatedPost) => (
                 <li key={relatedPost.url}>
-                  <Card className="h-full" size="sm">
+                  <Card className="h-full">
                     <CardHeader>
                       <CardDescription>
                         <time dateTime={relatedPost.data.publishedAt}>

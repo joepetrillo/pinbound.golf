@@ -3,12 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { ReadingTime } from "@/components/blog/reading-time";
 import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -72,7 +72,7 @@ const ArticleNextStep = () => (
       <CardTitle className="text-xl">
         Hear the operating model in action
       </CardTitle>
-      <CardDescription className="max-w-prose leading-relaxed">
+      <CardDescription className="leading-relaxed text-balance">
         Listen to sample calls for bookings, policy questions, weather, and
         human handoff—or tell us how your course handles the phone today.
       </CardDescription>
@@ -159,32 +159,32 @@ const BlogPost = async ({
             >
               Keep reading
             </h2>
-            <ul className="mt-6 grid gap-4 md:grid-cols-2">
+            <ul className="mt-6 grid gap-px overflow-hidden rounded-4xl border bg-border bg-clip-padding md:grid-cols-2">
               {relatedPosts.map((relatedPost) => (
-                <li key={relatedPost.url}>
-                  <Card className="h-full">
-                    <CardHeader>
-                      <CardDescription>
-                        <time dateTime={relatedPost.data.publishedAt}>
-                          {formatBlogDate(relatedPost.data.publishedAt)}
-                        </time>
-                      </CardDescription>
-                      <CardTitle className="text-lg text-balance">
-                        {relatedPost.data.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="leading-relaxed text-muted-foreground">
+                <li
+                  className="bg-background odd:last:md:col-span-2"
+                  key={relatedPost.url}
+                >
+                  <Link
+                    className="group flex h-full scroll-mt-14 flex-col gap-4 p-8 transition-colors hover:bg-muted/50 focus-visible:rounded-4xl focus-visible:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 md:p-10"
+                    href={relatedPost.url}
+                  >
+                    <time
+                      className="text-xs font-medium tracking-[0.12em] text-muted-foreground uppercase"
+                      dateTime={relatedPost.data.publishedAt}
+                    >
+                      {formatBlogDate(relatedPost.data.publishedAt)}
+                    </time>
+                    <h3 className="text-2xl font-medium tracking-tight text-balance md:text-3xl">
+                      {relatedPost.data.title}
+                    </h3>
+                    <p className="leading-relaxed text-pretty text-muted-foreground">
                       {relatedPost.data.description}
-                    </CardContent>
-                    <CardFooter className="mt-auto">
-                      <Link
-                        className={cn(buttonVariants({ variant: "outline" }))}
-                        href={relatedPost.url}
-                      >
-                        Read article
-                      </Link>
-                    </CardFooter>
-                  </Card>
+                    </p>
+                    <div className="mt-auto pt-4">
+                      <ReadingTime label={getReadingTime(relatedPost)} />
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>

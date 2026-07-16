@@ -1,7 +1,7 @@
-import { RiArrowRightLine } from "@remixicon/react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { ReadingTime } from "@/components/blog/reading-time";
 import { Section } from "@/components/section";
 import { formatBlogDate, getBlogPosts, getReadingTime } from "@/lib/blog";
 
@@ -10,16 +10,6 @@ export const metadata: Metadata = {
     "Notes on building a calmer, more capable pro shop. Articles, tips, and insights for golf pros and their teams.",
   title: "Blog — Pinbound",
 };
-
-const ReadingTime = ({ label }: { label: string }) => (
-  <span className="inline-flex items-center gap-2 text-xs font-medium tracking-[0.12em] text-foreground uppercase">
-    {label}
-    <RiArrowRightLine
-      aria-hidden="true"
-      className="size-3.5 transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"
-    />
-  </span>
-);
 
 const BlogPage = () => {
   const [featuredPost, ...remainingPosts] = getBlogPosts();

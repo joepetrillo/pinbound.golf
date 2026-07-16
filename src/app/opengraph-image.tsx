@@ -40,12 +40,13 @@ const opengraphImage = () =>
       >
         <div
           style={{
-            alignItems: "center",
             color: colors.foreground,
             display: "flex",
-            fontSize: 32,
-            fontWeight: 700,
+            fontSize: 28,
+            fontWeight: 600,
+            letterSpacing: "0.12em",
             marginBottom: 40,
+            textTransform: "uppercase",
           }}
         >
           pinbound
@@ -54,15 +55,13 @@ const opengraphImage = () =>
           style={{
             color: colors.foreground,
             display: "flex",
-            flexDirection: "column",
-            fontSize: 68,
-            fontWeight: 800,
-            letterSpacing: -2,
-            lineHeight: 1.1,
+            fontSize: 60,
+            fontWeight: 500,
+            letterSpacing: "-0.025em",
+            lineHeight: 1,
           }}
         >
-          <span>Help every caller.</span>
-          <span>Stay at the counter.</span>
+          The pro shop assistant that never clocks out
         </div>
         <div
           style={{

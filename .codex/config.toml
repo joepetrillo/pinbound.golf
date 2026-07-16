@@ -8,3 +8,6 @@ args = ["shadcn@latest", "mcp"]
 
 [mcp_servers.resend]
 url = "https://mcp.resend.com/mcp"
+
+[mcp_servers.workos]
+url = "https://mcp.workos.com/mcp"

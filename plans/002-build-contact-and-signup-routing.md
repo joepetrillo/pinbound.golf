@@ -201,3 +201,21 @@ By explicit owner decision, do not add automated tests. Manually verify the full
 ## Maintenance notes
 
 Treat the form schema, email templates, Privacy page, and Resend configuration as one data contract. Any new field or recipient requires validation and disclosure review. Keep `/get-started` provider-agnostic at the public URL even if the auth provider changes later.
+
+## Completion note (2026-07-16)
+
+Implemented on branch `codex/002-contact-signup`. Owner-approved deviations from the original plan:
+
+- **Step 7 scope expansion (owner decision)**: instead of marking the plan BLOCKED on the external WorkOS prerequisite, AuthKit was wired now: `@workos-inc/authkit-nextjs` + `@workos-inc/node`, `src/proxy.ts` (matcher `/get-started`), `src/app/callback/route.ts` (`handleAuth`, `returnPathname: "/"` as a placeholder until the first onboarding screen exists), and `src/app/(site)/get-started/route.ts` (`getSignUpUrl()` redirect; signed-in users skip sign-up; missing config fails closed with 503). Redirect URIs and homepage URLs were configured in the WorkOS "Pinbound" project (Staging → `http://localhost:3000/callback`, Production → `https://pinbound.golf/callback`).
+- A shared `src/app/(site)/contact/schema.ts` was added (Zod schema + limits shared by the client form and the server action) since a `"use server"` file cannot export non-async values.
+
+**WAF (step 5)**: rule `contact-form-rate-limit` (`rule_contact_form_rate_limit_7MUveG`) — `POST /contact`, fixed window, 10 requests / 60 s per IP, exceed → 429. Verified on a preview deployment in log mode first, then active: 10 POSTs pass, subsequent POSTs return 429, GET `/contact` unaffected.
+
+**Provider/browser QA**: dev-server QA at 390 px and 1440 px — empty-submit field errors, invalid-email error, draft values preserved (including the select), keyboard selection of inquiry type, pending/disabled submit, success state with route home, provider-error retry state with visible mailto fallback, honeypot submission reports success and sends nothing. One valid submission produced exactly two delivered Resend messages under one idempotency batch (internal notification with visitor Reply-To; fixed acknowledgement to `delivered@resend.dev`).
+
+**Outstanding manual items (owner)**:
+
+1. Add `WORKOS_API_KEY` to `.env.local` (Staging key) and Vercel Production/Preview (matching environment keys; the Production WorkOS environment has no API key yet — create one in the dashboard). Then verify the full signup → callback → session flow.
+2. `contact@pinbound.golf` cannot receive mail (no MX records). Owner chose Cloudflare Email Routing, which requires moving DNS from Vercel to Cloudflare. Until then `CONTACT_TO_EMAIL=jpetrillo119@gmail.com` (local + all Vercel envs); flip it to `contact@pinbound.golf` after forwarding works.
+3. Point `returnPathname` in `src/app/callback/route.ts` at the first onboarding screen when it exists.
+4. `NEXT_PUBLIC_WORKOS_REDIRECT_URI` is set for Production and Development only; preview deployments fail closed on `/get-started` (dynamic preview URLs need the proxy `redirectUri` option if preview signup is ever required).

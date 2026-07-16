@@ -22,7 +22,7 @@ Execute the plans in order. Each executor must read its plan fully, honor its ST
 | Plan | Title | Priority | Effort | Depends on | Status |
 | --- | --- | --: | --: | --- | --- |
 | [001](./001-refine-homepage-conversion.md) | Refine the homepage without increasing its sprawl | P1 | M | — | TODO |
-| [002](./002-build-contact-and-signup-routing.md) | Build Contact and route Get Started into WorkOS | P1 | M | 001; WorkOS prerequisite for final step | TODO |
+| [002](./002-build-contact-and-signup-routing.md) | Build Contact and route Get Started into WorkOS | P1 | M | 001; WorkOS prerequisite for final step | DONE — see completion note; manual follow-ups: WORKOS_API_KEY env vars, contact@ email forwarding |
 | [003](./003-wire-live-agent-demo.md) | Wire the orb to the finished ElevenLabs agent | P1 | M | 001; finished demo agent | TODO — external agent prerequisite |
 
 Status values: `TODO`, `IN PROGRESS`, `DONE`, `BLOCKED (<reason>)`, or `REJECTED (<reason>)`.

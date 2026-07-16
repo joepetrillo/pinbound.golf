@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { Section } from "@/components/section";
-import { FOUNDERS_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export const metadata: Metadata = {
   description:
@@ -14,7 +14,7 @@ const TermsPage = () => (
     <article className="typeset typeset-docs mx-auto max-w-[45em]">
       <h1>Website terms</h1>
       <p>
-        <strong>Last updated: July 13, 2026</strong>
+        <strong>Last updated: July 16, 2026</strong>
       </p>
       <p>
         These terms govern your use of the Pinbound marketing website. By using
@@ -22,13 +22,19 @@ const TermsPage = () => (
         the website.
       </p>
 
-      <h2>Product pilots and service agreements</h2>
+      <h2>Product pilots and service terms</h2>
       <p>
-        This website describes a developing product and founding-pilot program.
-        It does not itself create a Pinbound account or service contract. Any
-        pilot or paid use of Pinbound is subject to eligibility, technical fit,
-        and a separate written agreement between Pinbound and the participating
-        course.
+        This website describes the Pinbound service and its free 30-day pilot.
+        Browsing the website does not itself create a Pinbound account. Using
+        Pinbound requires creating an account and, before activation, accepting
+        the standard online service terms, the data and call-recording terms,
+        and the telephony and tee-sheet authorizations needed for your course.
+      </p>
+      <p>
+        &quot;No contract&quot; means Pinbound does not require a negotiated or
+        long-term sales contract. The standard click-through service terms
+        accepted at activation still apply, and use of the service remains
+        subject to eligibility and technical fit.
       </p>
       <p>
         Pricing shown on the website is a planning estimate based on the stated
@@ -90,15 +96,15 @@ const TermsPage = () => (
         To the extent permitted by law, Pinbound will not be liable for
         indirect, incidental, special, consequential, or punitive damages
         arising from use of this marketing website. These website terms do not
-        replace or alter the remedies and liability terms in a signed Pinbound
-        service agreement.
+        replace or alter the remedies and liability terms in the Pinbound
+        service terms accepted at account activation.
       </p>
 
       <h2>Changes and contact</h2>
       <p>
         We may update these terms as the website and product develop. The date
         above will show the latest revision. Questions can be sent to{" "}
-        <a href={`mailto:${FOUNDERS_EMAIL}`}>{FOUNDERS_EMAIL}</a>.
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
     </article>
   </Section>

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 import { Section } from "@/components/section";
-import { FOUNDERS_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export const metadata: Metadata = {
   description:
-    "How Pinbound handles information from this website and founder-led product pilots.",
+    "How Pinbound handles information from this website, the contact form, and product pilots.",
   title: "Privacy — Pinbound",
 };
 
@@ -14,26 +14,39 @@ const PrivacyPage = () => (
     <article className="typeset typeset-docs mx-auto max-w-[45em]">
       <h1>Privacy</h1>
       <p>
-        <strong>Last updated: July 13, 2026</strong>
+        <strong>Last updated: July 16, 2026</strong>
       </p>
       <p>
         This notice explains how Pinbound handles information through this
-        marketing website and during founder-led product pilots. A course&apos;s
-        pilot or paid service may also be governed by a separate agreement that
-        describes the specific data, providers, retention periods, and
+        marketing website and during product pilots. A course&apos;s service use
+        is also governed by the service terms accepted at account activation,
+        which describe the specific data, providers, retention periods, and
         responsibilities for that deployment.
       </p>
 
       <h2>Information we receive</h2>
       <p>
-        If you email us, we receive the contact details and other information
-        you choose to include. Our website host may also process standard
-        technical information such as IP address, browser type, device type,
-        requested pages, timestamps, and diagnostic or security logs.
+        If you submit the contact form, we receive the details you enter: your
+        name, email, course or company, inquiry type, message, and, if you
+        choose to provide them, your tee-sheet provider and phone number. If you
+        email us instead, we receive the contact details and other information
+        you choose to include.
       </p>
       <p>
-        This website does not currently create product accounts, accept payment
-        details, or provide a web form that stores pilot applications.
+        Contact-form submissions are delivered by email through Resend, our
+        email service provider. Each submission sends two transactional emails:
+        an internal notification to our team so we can respond, and a short
+        acknowledgement to the email address you entered confirming we received
+        your message. Submissions are retained at our email provider and in our
+        inbox for as long as reasonably needed to handle the inquiry; they are
+        not stored in a marketing database or CRM, used for marketing, or added
+        to a mailing list. To ask about or request deletion of a submission,
+        email us at the address below.
+      </p>
+      <p>
+        Our website host may also process standard technical information such as
+        IP address, browser type, device type, requested pages, timestamps, and
+        diagnostic or security logs.
       </p>
 
       <h2>Information used in a product pilot</h2>
@@ -54,7 +67,7 @@ const PrivacyPage = () => (
 
       <h2>How we use information</h2>
       <ul>
-        <li>Respond to questions and evaluate founding-pilot fit.</li>
+        <li>Respond to questions and evaluate pilot fit.</li>
         <li>Configure, provide, support, secure, and troubleshoot Pinbound.</li>
         <li>
           Complete authorized call handling, tee-sheet actions, transfers, and
@@ -111,7 +124,7 @@ const PrivacyPage = () => (
       <p>
         We may update this notice as the product and our practices develop. The
         date above will show the latest revision. Questions or requests can be
-        sent to <a href={`mailto:${FOUNDERS_EMAIL}`}>{FOUNDERS_EMAIL}</a>.
+        sent to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
     </article>
   </Section>

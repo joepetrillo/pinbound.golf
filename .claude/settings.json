@@ -11,5 +11,9 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "resend@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true
   }
 }

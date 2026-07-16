@@ -19,6 +19,7 @@
     "@react-three/fiber": "^9.6.1",
     "@remixicon/react": "^4.9.0",
     "@shadcn/react": "^0.2.1",
+    "@vercel/analytics": "^2.0.1",
     "@wrksz/themes": "^1.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

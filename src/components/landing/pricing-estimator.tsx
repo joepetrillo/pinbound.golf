@@ -62,7 +62,7 @@ export const PricingEstimator = () => {
       <div className="mt-10">
         <div className="flex items-end justify-between gap-4">
           <label className="text-sm font-medium" htmlFor="monthly-call-volume">
-            Calls per month
+            Average calls per month
           </label>
           <span className="text-xl font-medium tabular-nums">
             {numberFormatter.format(monthlyCalls)}
@@ -80,13 +80,12 @@ export const PricingEstimator = () => {
         />
         <div className="mt-3 flex justify-between gap-4 text-xs text-muted-foreground tabular-nums">
           <span>{numberFormatter.format(MIN_MONTHLY_CALLS)}</span>
-          <span>1,200–1,500 is typical</span>
           <span>{numberFormatter.format(MAX_MONTHLY_CALLS)}+</span>
         </div>
         <p className="mt-5 text-xs leading-relaxed text-pretty text-muted-foreground">
-          Steps represent about 10 calls per day. This planning estimate assumes
-          one course and an average 90-second call; your pilot usage confirms
-          the right allowance before billing begins.
+          This planning estimate assumes one course and an average 90-second
+          call; your pilot usage confirms the right allowance before billing
+          begins.
         </p>
       </div>
     </div>

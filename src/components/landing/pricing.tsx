@@ -49,7 +49,7 @@ export const Pricing = () => (
 
       <div className="bg-muted/50 p-8 md:p-10">
         <h3 className="text-xl font-medium tracking-tight text-balance">
-          Every estimate includes the complete pilot
+          Every estimate includes the complete service
         </h3>
         <p className="mt-2 max-w-prose text-sm text-muted-foreground">
           No answering-only tier and no per-feature maze. Configure, test, and
@@ -88,8 +88,8 @@ export const Pricing = () => (
             </Link>
           </div>
           <p className="mt-4 max-w-prose text-sm text-muted-foreground">
-            Plan your pilot with the founders, connect your tee sheet and phone
-            routing, test privately, and activate when your team is ready.
+            Connect your tee sheet and phone routing, test privately, and
+            activate when your team feels ready. Pinbound is ready when you are.
           </p>
         </div>
       </div>

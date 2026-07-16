@@ -11,7 +11,7 @@ export const SITE_DESCRIPTION =
 export const SITE_TAGLINE =
   "Fast, consistent help for callers. Fewer phone interruptions for your staff.";
 
-export const CTA_LABEL = "Plan your pilot";
+export const CTA_LABEL = "Get started";
 export const CTA_HREF = "/get-started";
 
 export const FOUNDERS_EMAIL = "contact@pinbound.golf";

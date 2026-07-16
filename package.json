@@ -23,9 +23,9 @@
     "@wrksz/themes": "^1.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "fumadocs-core": "^16.11.4",
-    "fumadocs-mdx": "^15.1.1",
-    "next": "^16.3.0-preview.5",
+    "fumadocs-core": "^16.11.5",
+    "fumadocs-mdx": "^15.2.0",
+    "next": "^16.3.0-preview.6",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "remark-gfm": "^4.0.1",
@@ -43,12 +43,12 @@
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.185.1",
     "eslint-plugin-github": "^6.1.1",
-    "eslint-plugin-sonarjs": "^4.1.0",
-    "oxfmt": "^0.58.0",
-    "oxlint": "^1.73.0",
-    "oxlint-plugin-react-doctor": "^0.7.7",
+    "eslint-plugin-sonarjs": "^4.2.0",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0",
+    "oxlint-plugin-react-doctor": "^0.7.8",
     "tailwindcss": "^4.3.2",
     "typescript": "^6.0.3",
-    "ultracite": "7.9.3"
+    "ultracite": "7.9.4"
   }
 }

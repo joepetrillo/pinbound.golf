@@ -10,32 +10,25 @@ import {
 const controlPoints = [
   {
     description:
-      "Add your hours, rates, booking rules, amenities, and handoff destinations. Schedule frost delays, closures, and cart rules to expire automatically.",
-    footer: "Required setup keeps every course at a reliable baseline.",
-    id: "playbook",
-    title: "Set the playbook",
+      "Give callers reliable answers from approved hours, rates, booking rules, amenities, and temporary updates for frost delays or cart restrictions.",
+    footer: "Time-limited updates expire automatically.",
+    id: "course-knowledge",
+    title: "Course knowledge",
   },
   {
     description:
-      "Recordings, transcripts, outcomes, transfers, tee-sheet actions, uncertain calls, and callback tasks stay searchable in one role-based workspace.",
-    footer: "Daily summaries and alerts keep the right people informed.",
-    id: "review",
-    title: "Review every call",
-  },
-  {
-    description:
-      "Run agent-first, overflow-only, busy-line, ring-no-answer, or after-hours coverage. Test privately, approve go-live, and restore normal routing with the kill switch.",
-    footer: "Automatic fallback keeps outages from becoming dead air.",
-    id: "coverage",
-    title: "Choose the coverage",
-  },
-  {
-    description:
-      "Callers who ask for a person transfer immediately, without pushback or a script. Recognized VIP numbers can skip the assistant and ring your team directly.",
+      "Choose agent-first, overflow-only, busy-line, ring-no-answer, or after-hours coverage, with immediate human transfer and VIP routing.",
     footer:
-      "If nobody answers, Pinbound captures the reason and creates a callback task.",
-    id: "human-handoff",
-    title: "Keep people within reach",
+      "Test privately, approve go-live, use the kill switch, and rely on automatic fallback.",
+    id: "coverage-and-handoff",
+    title: "Coverage and handoff",
+  },
+  {
+    description:
+      "Review recordings, transcripts, outcomes, tee-sheet actions, uncertain calls, and callback tasks in one role-based workspace.",
+    footer: "Summaries and alerts keep the right people informed.",
+    id: "visibility-and-control",
+    title: "Visibility and control",
   },
 ] as const;
 
@@ -49,7 +42,7 @@ export const PolicyFidelity = () => (
       calls and tee-sheet actions you authorize.
     </p>
 
-    <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="mt-10 grid gap-4 md:grid-cols-3">
       {controlPoints.map((point, index) => (
         <Card className="h-full" key={point.id}>
           <CardHeader>

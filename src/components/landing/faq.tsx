@@ -11,39 +11,45 @@ import {
 const faqItems = [
   {
     answer:
-      "Pinbound never confirms a tee time until EZLinks returns a successful result. Deterministic policy and permission checks run before every write, and each action has an audit record. Failed or uncertain requests go to your staff instead of becoming a guess.",
+      "Pinbound checks course rules and permissions before every tee-sheet action, then confirms only after the tee sheet reports success. Failed or uncertain requests go to your staff instead of becoming a guess.",
     id: "booking-wrong",
     question: "What if it books something wrong?",
   },
   {
     answer:
-      'Immediately. Saying "talk to a person" starts a transfer without an argument, and recognized VIP numbers can bypass the assistant. If nobody answers, Pinbound creates a callback task with the reason, details, requested time, and transcript.',
+      'Yes. Saying "talk to a person" starts an immediate transfer, and recognized VIP numbers can bypass the assistant; if nobody answers, Pinbound creates a callback task with the call details.',
     id: "human-handoff",
     question: "Can callers still reach a person?",
   },
   {
     answer:
-      "EZLinks is supported at launch for availability, booking, lookup, changes, and cancellations. Other tee sheets are added behind the same normalized adapter, prioritized by course demand and the capabilities each vendor makes available.",
+      "EZLinks is supported for availability, booking, lookup, changes, and cancellations. Additional tee sheets depend on course demand and the capabilities each vendor makes available.",
     id: "tee-sheet-support",
     question: "Which tee sheets do you support?",
   },
   {
     answer:
-      "Pinbound never asks a caller to speak card details. When EZLinks provides a secure hosted checkout and reservation hold, Pinbound texts that link and waits for verified payment before confirming. Otherwise it transfers the caller or sends them to your existing booking flow.",
+      "Pinbound never asks callers to speak card details. It sends the tee sheet's secure hosted checkout when available; otherwise, it transfers the caller or directs them to your existing booking flow.",
     id: "payments",
     question: "How are payments handled?",
   },
   {
     answer:
-      "No. Every call opens by identifying Pinbound as an AI or virtual assistant and giving the required recording notice.",
+      "No. Every call opens by identifying Pinbound as an automated virtual assistant and gives the required recording notice. Callers can always try to reach a person by saying something like 'talk to a person'.",
     id: "pretend-human",
     question: "Does it pretend to be human?",
   },
   {
     answer:
-      "Your authorized team controls course facts, temporary updates, permitted tee-sheet actions, handoff rules, coverage, voice, and greeting. Owners manage billing and integrations; staff can review calls and update approved day-to-day information. A kill switch restores normal routing at any time.",
-    id: "who-controls",
-    question: "Who controls it?",
+      "Your authorized team controls course facts, temporary updates, tee-sheet permissions, handoff rules, coverage, voice, and greeting. Role-based access limits who can manage integrations, review calls, or update approved information.",
+    id: "course-control",
+    question: "What does the course control?",
+  },
+  {
+    answer:
+      "Automatic fallback routing keeps calls moving and alerts staff when Pinbound or a connection is unavailable. Pinbound never reports an unconfirmed tee-time action as complete.",
+    id: "reliability",
+    question: "What happens if Pinbound or the connection goes down?",
   },
 ];
 

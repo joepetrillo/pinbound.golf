@@ -7,6 +7,10 @@
     "shadcn": {
       "command": "bunx",
       "args": ["shadcn@latest", "mcp"]
+    },
+    "resend": {
+      "type": "http",
+      "url": "https://mcp.resend.com/mcp"
     }
   }
 }

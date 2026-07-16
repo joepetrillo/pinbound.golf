@@ -5,3 +5,6 @@ args = ["-y", "next-devtools-mcp@latest"]
 [mcp_servers.shadcn]
 command = "bunx"
 args = ["shadcn@latest", "mcp"]
+
+[mcp_servers.resend]
+url = "https://mcp.resend.com/mcp"

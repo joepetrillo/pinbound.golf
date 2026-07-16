@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
 import { ThemeProvider } from "@wrksz/themes/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -57,15 +58,17 @@ const RootLayout = ({
     suppressHydrationWarning
   >
     <body>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        disableTransitionOnChange
-        enableColorScheme={true}
-        enableSystem
-      >
-        <div className="isolate flex min-h-dvh flex-col">{children}</div>
-      </ThemeProvider>
+      <AuthKitProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableColorScheme={true}
+          enableSystem
+        >
+          <div className="isolate flex min-h-dvh flex-col">{children}</div>
+        </ThemeProvider>
+      </AuthKitProvider>
       <Analytics />
     </body>
   </html>

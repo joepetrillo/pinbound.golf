@@ -13,6 +13,7 @@
         "@remixicon/react": "^4.9.0",
         "@shadcn/react": "^0.2.1",
         "@vercel/analytics": "^2.0.1",
+        "@vercel/speed-insights": "^2.0.0",
         "@workos-inc/authkit-nextjs": "^4.2.0",
         "@workos-inc/node": "^10.7.0",
         "@wrksz/themes": "^1.0.0",
@@ -630,9 +631,11 @@
 
     "@vercel/analytics": ["@vercel/analytics@2.0.1", "", { "peerDependencies": { "@remix-run/react": "^2", "@sveltejs/kit": "^1 || ^2", "next": ">= 13", "nuxt": ">= 3", "react": "^18 || ^19 || ^19.0.0-rc", "svelte": ">= 4", "vue": "^3", "vue-router": "^4" }, "optionalPeers": ["@remix-run/react", "@sveltejs/kit", "next", "nuxt", "react", "svelte", "vue", "vue-router"] }, "sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g=="],
 
+    "@vercel/speed-insights": ["@vercel/speed-insights@2.0.0", "", { "peerDependencies": { "@sveltejs/kit": "^1 || ^2", "next": ">= 13", "nuxt": ">= 3", "react": "^18 || ^19 || ^19.0.0-rc", "svelte": ">= 4", "vue": "^3", "vue-router": "^4" }, "optionalPeers": ["@sveltejs/kit", "next", "nuxt", "react", "svelte", "vue", "vue-router"] }, "sha512-jwkNcrTeafWxjmWq4AHBaptSqZiJkYU5adLC9QBSqeim0GcqDMgN5Ievh8OG1rJ6W3A4l1oiP7qr9CWxGuzu3w=="],
+
     "@workos-inc/authkit-nextjs": ["@workos-inc/authkit-nextjs@4.2.0", "", { "dependencies": { "@sindresorhus/fnv1a": "^3.1.0", "iron-session": "^8.0.4", "jose": "^5.10.0", "path-to-regexp": "^6.3.0", "valibot": "^1.2.0" }, "peerDependencies": { "@workos-inc/node": "^9.0.0 || ^10.0.0", "next": "^13.5.9 || ^14.2.26 || ^15.2.3 || ^16", "react": "^18.0 || ^19.0.0", "react-dom": "^18.0 || ^19.0.0" } }, "sha512-FQE/ormouDQzLFC/Q7GPqASVjNnZxQhzDQwSSbsQcdKY/Aqsn6p511+AhRrSAlUTd4MygxDb1yL/Jl9kU58dXg=="],
 
-    "@workos-inc/node": ["@workos-inc/node@10.7.0", "", {}, "sha512-rffa9znZuIv4yo+9JRxGOLTTSxh0XhOT6jlsktgqEi9MuB9V0VFHRzLd3bTpkq+J9sgrPZNGpvX4aWNfMqt5cQ=="],
+    "@workos-inc/node": ["@workos-inc/node@10.8.0", "", {}, "sha512-BmKwxaouV4hYhoJ9K0UPLC9LTpVfvnayvAy3lG9ELbZBoEWeaKkXoYn4W+d3vK7SZQ4qj/8PE7ve7sUKXnpRDA=="],
 
     "@wrksz/themes": ["@wrksz/themes@1.0.0", "", { "peerDependencies": { "next": ">=16.0.0", "react": "^18.0.0 || ^19.0.0", "react-dom": "^18.0.0 || ^19.0.0", "typescript": ">=4.5.0" }, "optionalPeers": ["next"] }, "sha512-UZ1mvFe9xXvxPCK/aXKVYbJCtI4gxM9J4orvDEZLdpk/9tvcbH2U8ZU3h5R1Pwjjjf4Q3um0wK4o+wqj3Vv40Q=="],
 

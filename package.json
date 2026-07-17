@@ -21,6 +21,7 @@
     "@remixicon/react": "^4.9.0",
     "@shadcn/react": "^0.2.1",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "@workos-inc/authkit-nextjs": "^4.2.0",
     "@workos-inc/node": "^10.7.0",
     "@wrksz/themes": "^1.0.0",

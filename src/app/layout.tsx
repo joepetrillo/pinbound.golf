@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
 import { ThemeProvider } from "@wrksz/themes/next";
 import type { Metadata } from "next";
@@ -70,6 +71,7 @@ const RootLayout = ({
         </ThemeProvider>
       </AuthKitProvider>
       <Analytics />
+      <SpeedInsights />
     </body>
   </html>
 );

@@ -3,6 +3,7 @@
 export const SITE_NAME = "Pinbound";
 
 export const SITE_URL = "https://pinbound.golf";
+export const MARKETING_HOME_HREF = "/home";
 
 export const SITE_DESCRIPTION =
   "Pinbound answers your pro shop's phone, books tee times against your tee sheet, and follows your booking policies. Callers can always reach a person.";
@@ -12,24 +13,21 @@ export const SITE_TAGLINE =
   "Fast, consistent help for callers. Fewer phone interruptions for your staff.";
 
 export const CTA_LABEL = "Get started";
-export const CTA_HREF = "/get-started";
+export const CTA_HREF = "/auth/sign-up";
 
-export const CONTACT_EMAIL = "contact@pinbound.golf";
+export const CONTACT_EMAIL = "support@pinbound.golf";
 
 export const DEMO_LABEL = "Try the demo";
-export const DEMO_HREF = "/#demo";
+export const DEMO_HREF = `${MARKETING_HOME_HREF}#demo`;
 
 // The logo is the persistent route back to the homepage and its beginning, so
 // the primary nav can focus on the three highest-intent sections plus the blog.
 export const NAV_LINKS = [
-  { href: "/#demo", label: "Demo" },
-  { href: "/#pricing", label: "Pricing" },
-  { href: "/#faq", label: "FAQ" },
+  { href: `${MARKETING_HOME_HREF}#demo`, label: "Demo" },
+  { href: `${MARKETING_HOME_HREF}#pricing`, label: "Pricing" },
+  { href: `${MARKETING_HOME_HREF}#faq`, label: "FAQ" },
   { href: "/blog", label: "Blog" },
 ] as const;
 
 export const CONTACT_LABEL = "Contact";
 export const CONTACT_HREF = "/contact";
-
-export const GET_STARTED_LABEL = CTA_LABEL;
-export const GET_STARTED_HREF = "/get-started";

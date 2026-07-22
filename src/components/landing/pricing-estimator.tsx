@@ -52,7 +52,9 @@ export const PricingEstimator = () => {
           locales="en-US"
           value={estimatedPrice}
         />
-        <span className="text-muted-foreground">/ month</span>
+        <span className="text-sm whitespace-nowrap text-muted-foreground min-[372px]:text-base">
+          / month
+        </span>
       </output>
       <p className="mt-4 max-w-prose text-balance text-muted-foreground">
         One workspace subscription with pooled usage, every launch capability,

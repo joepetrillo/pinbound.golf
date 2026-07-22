@@ -15,7 +15,7 @@ const ComingSoonPage = () => (
     className="flex min-h-dvh flex-col items-center justify-center gap-1 px-6 text-center"
     id="main"
   >
-    <h1 className="text-4xl font-medium tracking-tight sm:text-5xl">
+    <h1 className="text-4xl font-medium tracking-tight text-balance sm:text-5xl">
       Coming Soon
     </h1>
     <p className="mt-4 max-w-prose leading-relaxed text-pretty text-muted-foreground">

@@ -10,18 +10,14 @@ import {
   Text,
 } from "@react-email/components";
 
+import type { ContactInquiry } from "@/app/(site)/contact/schema";
+
 // Internal notification for a contact-form submission. Every value is rendered
 // through JSX text nodes so user-supplied content is always escaped.
 
 export interface ContactNotificationEmailProps {
-  courseOrCompany: string;
-  email: string;
-  inquiryType: string;
-  message: string;
-  name: string;
-  phone?: string;
+  inquiry: ContactInquiry;
   submissionId: string;
-  teeSheetProvider?: string;
 }
 
 const bodyStyle = {
@@ -69,46 +65,52 @@ const FieldRow = ({ label, value }: { label: string; value: string }) => (
 );
 
 export const ContactNotificationEmail = ({
-  courseOrCompany,
-  email,
-  inquiryType,
-  message,
-  name,
-  phone,
+  inquiry,
   submissionId,
-  teeSheetProvider,
-}: ContactNotificationEmailProps) => (
-  <Html lang="en">
-    <Head />
-    <Preview>New contact inquiry from the pinbound.golf contact form</Preview>
-    <Body style={bodyStyle}>
-      <Container style={containerStyle}>
-        <Heading
-          as="h1"
-          style={{ color: "#1c1c1a", fontSize: "18px", margin: "0 0 8px" }}
-        >
-          New contact inquiry
-        </Heading>
-        <Text style={metaStyle}>
-          Submitted through the pinbound.golf contact form. Reply to this email
-          to answer the visitor directly.
-        </Text>
-        <Hr />
-        <FieldRow label="Name" value={name} />
-        <FieldRow label="Email" value={email} />
-        <FieldRow label="Course or company" value={courseOrCompany} />
-        <FieldRow label="Inquiry type" value={inquiryType} />
-        <FieldRow
-          label="Tee-sheet provider"
-          value={teeSheetProvider || "Not provided"}
-        />
-        <FieldRow label="Phone" value={phone || "Not provided"} />
-        <FieldRow label="Message" value={message} />
-        <Hr />
-        <Text style={metaStyle}>Submission ID: {submissionId}</Text>
-      </Container>
-    </Body>
-  </Html>
-);
+}: ContactNotificationEmailProps) => {
+  const {
+    courseOrCompany,
+    email,
+    inquiryType,
+    message,
+    name,
+    phone,
+    teeSheetProvider,
+  } = inquiry;
+
+  return (
+    <Html lang="en">
+      <Head />
+      <Preview>New contact inquiry from the pinbound.golf contact form</Preview>
+      <Body style={bodyStyle}>
+        <Container style={containerStyle}>
+          <Heading
+            as="h1"
+            style={{ color: "#1c1c1a", fontSize: "18px", margin: "0 0 8px" }}
+          >
+            New contact inquiry
+          </Heading>
+          <Text style={metaStyle}>
+            Submitted through the pinbound.golf contact form. Reply to this
+            email to answer the visitor directly.
+          </Text>
+          <Hr />
+          <FieldRow label="Name" value={name} />
+          <FieldRow label="Email" value={email} />
+          <FieldRow label="Course or company" value={courseOrCompany} />
+          <FieldRow label="Inquiry type" value={inquiryType} />
+          <FieldRow
+            label="Tee-sheet provider"
+            value={teeSheetProvider || "Not provided"}
+          />
+          <FieldRow label="Phone" value={phone || "Not provided"} />
+          <FieldRow label="Message" value={message} />
+          <Hr />
+          <Text style={metaStyle}>Submission ID: {submissionId}</Text>
+        </Container>
+      </Body>
+    </Html>
+  );
+};
 
 export default ContactNotificationEmail;

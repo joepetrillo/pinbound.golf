@@ -4,7 +4,13 @@ import Link from "next/link";
 import { CurrentYear } from "@/components/landing/current-year";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
-import { CTA_HREF, CTA_LABEL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
+import {
+  CTA_HREF,
+  CTA_LABEL,
+  MARKETING_HOME_HREF,
+  SITE_NAME,
+  SITE_TAGLINE,
+} from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 interface FooterLink {
@@ -13,11 +19,11 @@ interface FooterLink {
 }
 
 const indexLinks: readonly FooterLink[] = [
-  { href: "/#product", label: "Product" },
-  { href: "/#integrations", label: "Integrations" },
-  { href: "/#demo", label: "Demo" },
-  { href: "/#pricing", label: "Pricing" },
-  { href: "/#faq", label: "FAQ" },
+  { href: `${MARKETING_HOME_HREF}#product`, label: "Product" },
+  { href: `${MARKETING_HOME_HREF}#integrations`, label: "Integrations" },
+  { href: `${MARKETING_HOME_HREF}#demo`, label: "Demo" },
+  { href: `${MARKETING_HOME_HREF}#pricing`, label: "Pricing" },
+  { href: `${MARKETING_HOME_HREF}#faq`, label: "FAQ" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
@@ -44,7 +50,7 @@ export const SiteFooter = () => (
           <p className="mt-5 text-sm text-balance text-muted-foreground">
             {SITE_TAGLINE}
           </p>
-          <Link
+          <a
             className={cn(
               buttonVariants({
                 className: "mt-6 text-xs tracking-[0.12em] uppercase",
@@ -55,7 +61,7 @@ export const SiteFooter = () => (
           >
             {CTA_LABEL}
             <RiArrowRightLine aria-hidden data-icon="inline-end" />
-          </Link>
+          </a>
         </div>
 
         <nav aria-label="Footer" className="max-w-md">

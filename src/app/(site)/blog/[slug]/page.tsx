@@ -74,7 +74,7 @@ const ArticleNextStep = () => (
       </CardTitle>
       <CardDescription className="leading-relaxed text-balance">
         Listen to sample calls for bookings, policy questions, weather, and
-        human handoff—or tell us how your course handles the phone today.
+        human handoff.
       </CardDescription>
     </CardHeader>
     <CardFooter className="flex-wrap gap-2">
@@ -84,9 +84,9 @@ const ArticleNextStep = () => (
       >
         Hear sample calls
       </Link>
-      <Link className={cn(buttonVariants())} href={CTA_HREF}>
+      <a className={cn(buttonVariants())} href={CTA_HREF}>
         {CTA_LABEL}
-      </Link>
+      </a>
     </CardFooter>
   </Card>
 );

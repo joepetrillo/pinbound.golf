@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-// The contact form, this schema, the two email templates, and the Privacy
-// disclosure are one data contract: adding a field here requires updating all
-// of them together.
+// Canonical contract shared by form extraction, delivery, and notification
+// rendering. Presentation and Privacy copy still need deliberate review when a
+// field changes.
 
 export const INQUIRY_TYPES = [
   "Product question",
@@ -11,8 +11,6 @@ export const INQUIRY_TYPES = [
   "Support",
   "Other",
 ] as const;
-
-export type InquiryType = (typeof INQUIRY_TYPES)[number];
 
 export const NAME_MAX_LENGTH = 100;
 export const EMAIL_MAX_LENGTH = 254;
@@ -68,9 +66,14 @@ export const contactFormSchema = z.object({
     .optional(),
 });
 
-export type ContactFormValues = z.infer<typeof contactFormSchema>;
+export const CONTACT_FIELD_NAMES = contactFormSchema.keyof().options;
 
-export type ContactFieldName = keyof ContactFormValues;
+export const CONTACT_OPERATION_ID_FIELD = "contactOperationId";
+export const contactOperationIdSchema = z.uuid();
+
+export type ContactInquiry = z.output<typeof contactFormSchema>;
+
+export type ContactFieldName = keyof ContactInquiry;
 
 export type ContactFieldErrors = Partial<Record<ContactFieldName, string[]>>;
 
@@ -79,13 +82,22 @@ export type ContactFieldErrors = Partial<Record<ContactFieldName, string[]>>;
 export type ContactFormDraft = Partial<Record<ContactFieldName, string>>;
 
 export type ContactFormState =
-  | { status: "idle" }
+  | {
+      status: "idle";
+      // Kept after Activity hide clears validation/delivery errors so drafts
+      // survive without remounting the uncontrolled fields empty.
+      values?: ContactFormDraft;
+    }
   | { status: "success"; submissionId: string }
   | {
       status: "invalid";
       fieldErrors: ContactFieldErrors;
       values: ContactFormDraft;
     }
-  | { status: "failed"; values: ContactFormDraft };
+  | {
+      status: "failed";
+      operationId: string;
+      values: ContactFormDraft;
+    };
 
 export const CONTACT_FORM_IDLE_STATE: ContactFormState = { status: "idle" };

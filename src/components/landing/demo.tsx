@@ -244,7 +244,7 @@ const SampleCallRow = ({ call }: SampleCallRowProps) => {
             </span>
           )}
         </div>
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+        <p className="mt-1 text-xs leading-relaxed text-pretty text-muted-foreground">
           {call.transcript}
         </p>
         <div className="mt-3 flex flex-col gap-1">
@@ -281,7 +281,7 @@ const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
         <p className="text-sm font-medium">
           Mic unavailable — listen to a recorded call instead
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="mt-1 text-xs text-pretty text-muted-foreground">
           Browser permissions blocked live voice. The sample calls show the same
           agent handling common calls.
         </p>
@@ -326,7 +326,7 @@ const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
       <p className={cn("text-sm font-medium", listening && "shimmer")}>
         {listening ? "Listening" : "Try the demo agent"}
       </p>
-      <p className="mt-1 text-xs text-muted-foreground">
+      <p className="mt-1 text-xs text-pretty text-muted-foreground">
         {listening
           ? "Tap the orb to stop the demo."
           : "Uses your microphone. No recording is saved."}

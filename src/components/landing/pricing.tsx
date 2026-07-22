@@ -51,7 +51,7 @@ export const Pricing = () => (
         <h3 className="text-xl font-medium tracking-tight text-balance">
           Every estimate includes the complete service
         </h3>
-        <p className="mt-2 max-w-prose text-sm text-muted-foreground">
+        <p className="mt-2 max-w-prose text-sm text-pretty text-muted-foreground">
           No answering-only tier and no per-feature maze. Configure, test, and
           approve the full experience before your paid plan begins.
         </p>
@@ -64,7 +64,7 @@ export const Pricing = () => (
               </span>
               <div>
                 <dt className="font-medium text-foreground">{term.title}</dt>
-                <dd className="mt-1 text-sm text-muted-foreground">
+                <dd className="mt-1 text-sm text-pretty text-muted-foreground">
                   {term.description}
                 </dd>
               </div>
@@ -80,14 +80,11 @@ export const Pricing = () => (
             >
               {CONTACT_LABEL}
             </Link>
-            <Link
-              className={cn(buttonVariants({ size: "lg" }))}
-              href={CTA_HREF}
-            >
+            <a className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
               {CTA_LABEL}
-            </Link>
+            </a>
           </div>
-          <p className="mt-4 max-w-prose text-sm text-muted-foreground">
+          <p className="mt-4 max-w-prose text-sm text-pretty text-muted-foreground">
             Connect your tee sheet and phone routing, test privately, and
             activate when your team feels ready. Pinbound is ready when you are.
           </p>

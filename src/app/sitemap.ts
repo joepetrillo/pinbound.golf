@@ -1,23 +1,13 @@
 import type { MetadataRoute } from "next";
 
+import { isProductionComingSoon } from "@/env/server";
 import { getBlogPosts } from "@/lib/blog";
 import { SITE_URL } from "@/lib/site";
 
-const isProductionPrelaunch = () =>
-  process.env.VERCEL_ENV === "production" &&
-  process.env.COMING_SOON_MODE === "true";
-
-const staticRoutes = [
-  "",
-  "/blog",
-  "/contact",
-  "/get-started",
-  "/privacy",
-  "/terms",
-] as const;
+const staticRoutes = ["", "/blog", "/contact", "/privacy", "/terms"] as const;
 
 const sitemap = (): MetadataRoute.Sitemap => {
-  if (isProductionPrelaunch()) {
+  if (isProductionComingSoon()) {
     return [];
   }
 

@@ -16,7 +16,7 @@ const BlogPage = () => {
 
   return (
     <Section className="pt-16 md:pt-16">
-      <header className="grid gap-6 md:grid-cols-2 md:items-end">
+      <header className="grid gap-6 md:grid-cols-[1fr_3fr] md:items-end">
         <h1 className="text-4xl font-medium tracking-tight text-balance md:text-6xl">
           Blog
         </h1>
@@ -51,7 +51,7 @@ const BlogPage = () => {
           </article>
         </Link>
       ) : (
-        <p className="mt-14 text-muted-foreground">
+        <p className="mt-14 text-balance text-muted-foreground">
           Nothing published yet — check back soon.
         </p>
       )}

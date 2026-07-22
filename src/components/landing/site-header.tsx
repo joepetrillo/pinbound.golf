@@ -16,8 +16,9 @@ import {
 import {
   CONTACT_HREF,
   CONTACT_LABEL,
-  GET_STARTED_HREF,
-  GET_STARTED_LABEL,
+  CTA_HREF,
+  CTA_LABEL,
+  MARKETING_HOME_HREF,
   NAV_LINKS,
 } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -28,7 +29,7 @@ const Logo = ({ onClick }: { onClick?: () => void }) => (
   <Link
     aria-label="Homepage"
     className="relative top-px inline-flex items-center gap-2.5 hover:opacity-90"
-    href="/"
+    href={MARKETING_HOME_HREF}
     onClick={onClick}
   >
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
@@ -104,12 +105,9 @@ export const SiteHeader = () => {
             >
               {CONTACT_LABEL}
             </Link>
-            <Link
-              className={cn(buttonVariants({ size: "sm" }))}
-              href={GET_STARTED_HREF}
-            >
-              {GET_STARTED_LABEL}
-            </Link>
+            <a className={cn(buttonVariants({ size: "sm" }))} href={CTA_HREF}>
+              {CTA_LABEL}
+            </a>
           </div>
 
           <Drawer onOpenChange={setMenuOpen} open={menuOpen} showSwipeHandle>
@@ -180,13 +178,13 @@ export const SiteHeader = () => {
                     >
                       {CONTACT_LABEL}
                     </Link>
-                    <Link
+                    <a
                       className={cn(buttonVariants({ className: "w-full" }))}
-                      href={GET_STARTED_HREF}
+                      href={CTA_HREF}
                       onClick={closeMenu}
                     >
-                      {GET_STARTED_LABEL}
-                    </Link>
+                      {CTA_LABEL}
+                    </a>
                   </div>
                 </nav>
 

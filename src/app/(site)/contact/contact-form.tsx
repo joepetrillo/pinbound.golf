@@ -1,8 +1,33 @@
 "use client";
 
+import { RiCheckLine, RiErrorWarningLine } from "@remixicon/react";
 import Link from "next/link";
-import { useActionState, useId } from "react";
+import {
+  startTransition,
+  useActionState,
+  useId,
+  useLayoutEffect,
+  useRef,
+} from "react";
 
+import { submitContactInquiry } from "@/app/(site)/contact/actions";
+import {
+  CONTACT_FIELD_NAMES,
+  CONTACT_FORM_IDLE_STATE,
+  CONTACT_OPERATION_ID_FIELD,
+  COURSE_MAX_LENGTH,
+  EMAIL_MAX_LENGTH,
+  INQUIRY_TYPES,
+  MESSAGE_MAX_LENGTH,
+  NAME_MAX_LENGTH,
+  PHONE_MAX_LENGTH,
+  TEE_SHEET_MAX_LENGTH,
+} from "@/app/(site)/contact/schema";
+import type {
+  ContactFieldName,
+  ContactFormState,
+} from "@/app/(site)/contact/schema";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Field,
@@ -15,26 +40,80 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { useResetOnHide } from "@/hooks/use-reset-on-hide";
+import { CONTACT_EMAIL, MARKETING_HOME_HREF } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-import { submitContactInquiry } from "./actions";
-import {
-  CONTACT_FORM_IDLE_STATE,
-  COURSE_MAX_LENGTH,
-  EMAIL_MAX_LENGTH,
-  INQUIRY_TYPES,
-  MESSAGE_MAX_LENGTH,
-  NAME_MAX_LENGTH,
-  PHONE_MAX_LENGTH,
-  TEE_SHEET_MAX_LENGTH,
-} from "./schema";
-import type { ContactFieldName, ContactFormState } from "./schema";
+// Client wrapper so Activity hide can reset without a server round-trip.
+const contactFormAction = (
+  previousState: ContactFormState,
+  payload: FormData | null
+): Promise<ContactFormState> => {
+  if (payload === null) {
+    switch (previousState.status) {
+      case "success": {
+        // Fresh form next visit — the submission already finished.
+        return Promise.resolve(CONTACT_FORM_IDLE_STATE);
+      }
+      case "invalid":
+      case "failed": {
+        // Drop feedback, keep field values so the uncontrolled form key stays
+        // stable and Activity does not remount an empty draft.
+        return Promise.resolve({
+          status: "idle",
+          values: previousState.values,
+        });
+      }
+      case "idle": {
+        return Promise.resolve(previousState);
+      }
+      default: {
+        const _exhaustive: never = previousState;
+        return _exhaustive;
+      }
+    }
+  }
+  return submitContactInquiry(previousState, payload);
+};
+
+interface ContactAttempt {
+  operationId: string;
+  payloadFingerprint: string;
+}
+
+const payloadFingerprintOf = (formData: FormData): string =>
+  JSON.stringify(
+    CONTACT_FIELD_NAMES.map((field) => {
+      const value = formData.get(field);
+      return [field, typeof value === "string" ? value.trim() : null];
+    })
+  );
+
+const draftValuesOf = (state: ContactFormState) => {
+  switch (state.status) {
+    case "idle": {
+      return state.values;
+    }
+    case "invalid":
+    case "failed": {
+      return state.values;
+    }
+    case "success": {
+      return;
+    }
+    default: {
+      const _exhaustive: never = state;
+      return _exhaustive;
+    }
+  }
+};
 
 const fieldErrorsOf = (state: ContactFormState, field: ContactFieldName) =>
   state.status === "invalid"
@@ -42,27 +121,146 @@ const fieldErrorsOf = (state: ContactFormState, field: ContactFieldName) =>
     : undefined;
 
 const draftValue = (state: ContactFormState, field: ContactFieldName) =>
-  state.status === "invalid" || state.status === "failed"
-    ? state.values[field]
-    : undefined;
+  draftValuesOf(state)?.[field];
+
+const formKeyOf = (state: ContactFormState) => {
+  const values = draftValuesOf(state);
+  return values ? JSON.stringify(values) : state.status;
+};
+
+const operationIdOf = (state: ContactFormState) =>
+  state.status === "failed" ? state.operationId : undefined;
+
+const ContactFormStatus = ({ state }: { state: ContactFormState }) => {
+  if (state.status === "failed") {
+    return (
+      <Alert
+        variant="destructive"
+        className="border-destructive/25 bg-destructive/5"
+      >
+        <RiErrorWarningLine />
+        <AlertTitle>Your message could not be sent</AlertTitle>
+        <AlertDescription>
+          Please try again in a moment, or email us directly at{" "}
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (state.status === "invalid") {
+    return (
+      <Alert
+        variant="destructive"
+        className="border-destructive/25 bg-destructive/5"
+      >
+        <RiErrorWarningLine />
+        <AlertTitle>
+          Please fix the highlighted fields and try again.
+        </AlertTitle>
+      </Alert>
+    );
+  }
+
+  return null;
+};
+
+const ContactFormActions = ({ pending }: { pending: boolean }) => (
+  <Field className="flex-wrap gap-4" orientation="horizontal">
+    <Button
+      aria-busy={pending || undefined}
+      disabled={pending}
+      size="lg"
+      type="submit"
+    >
+      <span className="inline-grid grid-cols-1 grid-rows-1 place-items-center">
+        <span
+          aria-hidden={pending || undefined}
+          className={cn(
+            "col-start-1 row-start-1 inline-flex items-center justify-center gap-1.5",
+            pending && "invisible"
+          )}
+        >
+          Send
+        </span>
+        <span
+          aria-hidden={!pending || undefined}
+          className={cn(
+            "col-start-1 row-start-1 inline-flex items-center justify-center gap-1.5",
+            !pending && "invisible"
+          )}
+        >
+          <Spinner data-icon="inline-start" />
+          Sending…
+        </span>
+      </span>
+    </Button>
+    <FieldDescription>
+      See how we handle your details in our{" "}
+      <Link href="/privacy">privacy notice</Link>.
+    </FieldDescription>
+  </Field>
+);
 
 export const ContactForm = () => {
   const [state, formAction, pending] = useActionState(
-    submitContactInquiry,
+    contactFormAction,
     CONTACT_FORM_IDLE_STATE
   );
   const id = useId();
+  const attemptRef = useRef<ContactAttempt | null>(null);
+  const shouldResetRef = useRef(false);
+
+  useLayoutEffect(() => {
+    if (
+      state.status === "success" ||
+      state.status === "invalid" ||
+      state.status === "failed"
+    ) {
+      shouldResetRef.current = true;
+    }
+  }, [state.status]);
+
+  useResetOnHide(() => {
+    if (!shouldResetRef.current) {
+      return;
+    }
+    shouldResetRef.current = false;
+    attemptRef.current = null;
+    startTransition(() => {
+      formAction(null);
+    });
+  });
+
+  const handleAction = (formData: FormData) => {
+    const payloadFingerprint = payloadFingerprintOf(formData);
+    const previousAttempt = attemptRef.current;
+    const operationId =
+      previousAttempt?.payloadFingerprint === payloadFingerprint
+        ? previousAttempt.operationId
+        : globalThis.crypto.randomUUID();
+
+    attemptRef.current = { operationId, payloadFingerprint };
+    formData.set(CONTACT_OPERATION_ID_FIELD, operationId);
+    formAction(formData);
+  };
 
   if (state.status === "success") {
     return (
-      <div aria-live="polite" className="rounded-3xl border bg-card p-8">
-        <h2 className="text-xl font-medium">Message sent</h2>
-        <p className="mt-3 leading-relaxed text-muted-foreground">
+      <div aria-live="polite" className="rounded-4xl border bg-card p-8">
+        <h2 className="flex items-center gap-2 text-xl font-medium text-balance">
+          <RiCheckLine aria-hidden className="size-5 shrink-0" />
+          Message Sent
+        </h2>
+        <p className="mt-3 leading-relaxed text-balance text-muted-foreground">
           Thanks for reaching out. Your message is on its way to our team, and a
           confirmation is on its way to your inbox. We will follow up by email.
         </p>
         <div className="mt-6">
-          <Link className={cn(buttonVariants({ variant: "outline" }))} href="/">
+          <Link
+            className={cn(buttonVariants({ variant: "outline" }))}
+            href={MARKETING_HOME_HREF}
+          >
             Back to the homepage
           </Link>
         </div>
@@ -79,7 +277,12 @@ export const ContactForm = () => {
     invalid(field) ? errorId(field) : undefined;
 
   return (
-    <form action={formAction} noValidate>
+    <form action={handleAction} key={formKeyOf(state)} noValidate>
+      <input
+        defaultValue={operationIdOf(state)}
+        name={CONTACT_OPERATION_ID_FIELD}
+        type="hidden"
+      />
       <FieldGroup>
         <Field data-invalid={invalid("name") || undefined}>
           <FieldLabel htmlFor={`${id}-name`}>Name</FieldLabel>
@@ -153,11 +356,13 @@ export const ContactForm = () => {
               <SelectValue placeholder="Choose a topic" />
             </SelectTrigger>
             <SelectContent>
-              {INQUIRY_TYPES.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type}
-                </SelectItem>
-              ))}
+              <SelectGroup>
+                {INQUIRY_TYPES.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
           <FieldError
@@ -246,39 +451,8 @@ export const ContactForm = () => {
           />
         </div>
 
-        <output aria-live="polite" className="block">
-          {state.status === "failed" ? (
-            <p className="text-sm text-destructive">
-              Your message could not be sent. Please try again in a moment, or
-              email us directly at{" "}
-              <a
-                className="underline underline-offset-4"
-                href={`mailto:${CONTACT_EMAIL}`}
-              >
-                {CONTACT_EMAIL}
-              </a>
-              .
-            </p>
-          ) : null}
-          {state.status === "invalid" ? (
-            <p className="text-sm text-destructive">
-              Please fix the highlighted fields and try again.
-            </p>
-          ) : null}
-        </output>
-
-        <div className="flex flex-wrap items-center gap-4">
-          <Button disabled={pending} size="lg" type="submit">
-            {pending ? "Sending…" : "Send message"}
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            See how we handle your details in our{" "}
-            <Link className="underline underline-offset-4" href="/privacy">
-              privacy notice
-            </Link>
-            .
-          </p>
-        </div>
+        <ContactFormStatus state={state} />
+        <ContactFormActions pending={pending} />
       </FieldGroup>
     </form>
   );

@@ -2,29 +2,24 @@
 
 import { randomUUID } from "node:crypto";
 
+import { checkBotId } from "botid/server";
 import { createElement } from "react";
-import { Resend } from "resend";
 
-import { ContactAcknowledgementEmail } from "@/emails/contact-acknowledgement";
-import { ContactNotificationEmail } from "@/emails/contact-notification";
-import { CONTACT_EMAIL, SITE_NAME } from "@/lib/site";
-
-import { contactFormSchema } from "./schema";
+import {
+  CONTACT_FIELD_NAMES,
+  CONTACT_OPERATION_ID_FIELD,
+  contactFormSchema,
+  contactOperationIdSchema,
+} from "@/app/(site)/contact/schema";
 import type {
-  ContactFieldName,
   ContactFormDraft,
   ContactFormState,
-} from "./schema";
-
-const FIELD_NAMES: readonly ContactFieldName[] = [
-  "name",
-  "email",
-  "courseOrCompany",
-  "inquiryType",
-  "teeSheetProvider",
-  "phone",
-  "message",
-] as const;
+  ContactInquiry,
+} from "@/app/(site)/contact/schema";
+import { ContactAcknowledgementEmail } from "@/emails/contact-acknowledgement";
+import { ContactNotificationEmail } from "@/emails/contact-notification";
+import { getResend } from "@/lib/resend";
+import { CONTACT_EMAIL, SITE_NAME } from "@/lib/site";
 
 // Visually hidden honeypot field. A filled value means an automated
 // submission: report success without delivering anything.
@@ -32,7 +27,7 @@ const HONEYPOT_FIELD = "website";
 
 const readDraft = (formData: FormData): ContactFormDraft => {
   const draft: ContactFormDraft = {};
-  for (const field of FIELD_NAMES) {
+  for (const field of CONTACT_FIELD_NAMES) {
     const value = formData.get(field);
     if (typeof value === "string") {
       draft[field] = value;
@@ -41,18 +36,65 @@ const readDraft = (formData: FormData): ContactFormDraft => {
   return draft;
 };
 
+const inquiriesMatch = (
+  first: ContactInquiry,
+  second: ContactInquiry
+): boolean =>
+  CONTACT_FIELD_NAMES.every((field) => first[field] === second[field]);
+
+const readSubmittedOperationId = (formData: FormData): string | undefined => {
+  const parsed = contactOperationIdSchema.safeParse(
+    formData.get(CONTACT_OPERATION_ID_FIELD)
+  );
+  return parsed.success ? parsed.data : undefined;
+};
+
+const operationIdFor = (
+  previousState: ContactFormState,
+  formData: FormData,
+  inquiry: ContactInquiry
+): string => {
+  const submittedOperationId = readSubmittedOperationId(formData);
+  if (previousState.status !== "failed") {
+    return submittedOperationId ?? randomUUID();
+  }
+
+  const previousOperationId = contactOperationIdSchema.safeParse(
+    previousState.operationId
+  );
+  const previousInquiry = contactFormSchema.safeParse(previousState.values);
+  const isIdenticalRetry =
+    previousOperationId.success &&
+    previousInquiry.success &&
+    inquiriesMatch(previousInquiry.data, inquiry);
+
+  if (isIdenticalRetry) {
+    return previousOperationId.data;
+  }
+
+  if (
+    submittedOperationId &&
+    (!previousOperationId.success ||
+      submittedOperationId !== previousOperationId.data)
+  ) {
+    return submittedOperationId;
+  }
+
+  return randomUUID();
+};
+
+const failedState = (
+  values: ContactFormDraft,
+  operationId: string
+): ContactFormState => ({ operationId, status: "failed", values });
+
 // Public contact form; intentionally unauthenticated. Abuse is limited by
 // validation, the honeypot, the fixed acknowledgement, and the WAF rate limit.
 // oxlint-disable-next-line react-doctor/server-auth-actions
 export const submitContactInquiry = async (
-  _previousState: ContactFormState,
+  previousState: ContactFormState,
   formData: FormData
 ): Promise<ContactFormState> => {
-  const honeypot = formData.get(HONEYPOT_FIELD);
-  if (typeof honeypot === "string" && honeypot.trim().length > 0) {
-    return { status: "success", submissionId: randomUUID() };
-  }
-
   const draft = readDraft(formData);
   const parsed = contactFormSchema.safeParse(draft);
   if (!parsed.success) {
@@ -60,60 +102,57 @@ export const submitContactInquiry = async (
     return { fieldErrors, status: "invalid", values: draft };
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const fromAddress = process.env.CONTACT_FROM_EMAIL;
-  const toAddress = process.env.CONTACT_TO_EMAIL;
-  if (!(apiKey && fromAddress && toAddress)) {
-    // Fail closed with a retryable state; never expose configuration details.
-    return { status: "failed", values: draft };
+  const inquiry = parsed.data;
+  const operationId = operationIdFor(previousState, formData, inquiry);
+  const honeypot = formData.get(HONEYPOT_FIELD);
+  if (typeof honeypot === "string" && honeypot.trim().length > 0) {
+    return { status: "success", submissionId: operationId };
   }
 
-  const {
-    courseOrCompany,
-    email,
-    inquiryType,
-    message,
-    name,
-    phone,
-    teeSheetProvider,
-  } = parsed.data;
-  const submissionId = randomUUID();
-  const resend = new Resend(apiKey);
-
-  const { error } = await resend.batch.send(
-    [
-      {
-        from: fromAddress,
-        react: createElement(ContactNotificationEmail, {
-          courseOrCompany,
-          email,
-          inquiryType,
-          message,
-          name,
-          phone,
-          submissionId,
-          teeSheetProvider,
-        }),
-        replyTo: email,
-        subject: `New contact inquiry — ${inquiryType}`,
-        to: [toAddress],
-      },
-      {
-        from: fromAddress,
-        react: createElement(ContactAcknowledgementEmail, {
-          contactEmail: CONTACT_EMAIL,
-          submissionId,
-        }),
-        subject: `We received your message — ${SITE_NAME}`,
-        to: [email],
-      },
-    ],
-    { idempotencyKey: `batch-contact-form/${submissionId}` }
-  );
-
-  if (error) {
-    return { status: "failed", values: draft };
+  try {
+    const verification = await checkBotId({
+      advancedOptions: { checkLevel: "basic" },
+      developmentOptions: { bypass: "HUMAN" },
+    });
+    if (verification.isBot) {
+      return { status: "success", submissionId: operationId };
+    }
+  } catch {
+    return failedState(draft, operationId);
   }
 
-  return { status: "success", submissionId };
+  try {
+    const { error } = await getResend().batch.send(
+      [
+        {
+          from: `${SITE_NAME} <${CONTACT_EMAIL}>`,
+          react: createElement(ContactNotificationEmail, {
+            inquiry,
+            submissionId: operationId,
+          }),
+          replyTo: inquiry.email,
+          subject: `New contact inquiry — ${inquiry.inquiryType}`,
+          to: [CONTACT_EMAIL],
+        },
+        {
+          from: `${SITE_NAME} <${CONTACT_EMAIL}>`,
+          react: createElement(ContactAcknowledgementEmail, {
+            contactEmail: CONTACT_EMAIL,
+            submissionId: operationId,
+          }),
+          subject: `We received your message — ${SITE_NAME}`,
+          to: [inquiry.email],
+        },
+      ],
+      { idempotencyKey: `batch-contact-form/${operationId}` }
+    );
+
+    if (error) {
+      return failedState(draft, operationId);
+    }
+  } catch {
+    return failedState(draft, operationId);
+  }
+
+  return { status: "success", submissionId: operationId };
 };

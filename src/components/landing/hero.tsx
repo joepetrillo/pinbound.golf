@@ -353,7 +353,7 @@ const TranscriptCard = () => {
 
   return (
     <div
-      className="flex h-96 flex-col rounded-4xl border bg-muted/50 p-4 shadow-sm"
+      className="flex h-96 min-w-0 flex-col rounded-4xl border bg-muted/50 p-2 shadow-sm min-[372px]:p-4"
       ref={cardRef}
     >
       <div className="mb-4 flex items-center justify-between gap-2">
@@ -363,7 +363,11 @@ const TranscriptCard = () => {
         >
           <TabsList className="h-8">
             {CONVERSATIONS.map(({ id, label }) => (
-              <TabsTrigger className="px-2.5 text-xs" key={id} value={id}>
+              <TabsTrigger
+                className="px-0.5 text-xs min-[372px]:px-2.5"
+                key={id}
+                value={id}
+              >
                 {label}
               </TabsTrigger>
             ))}
@@ -416,9 +420,9 @@ export const Hero = () => (
           your staff stays present with the golfers right in front of them.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
+          <a className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
             {CTA_LABEL}
-          </Link>
+          </a>
           <Link
             className={cn(buttonVariants({ size: "lg", variant: "outline" }))}
             href={DEMO_HREF}

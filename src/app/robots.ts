@@ -1,13 +1,10 @@
 import type { MetadataRoute } from "next";
 
+import { isProductionComingSoon } from "@/env/server";
 import { SITE_URL } from "@/lib/site";
 
-const isProductionPrelaunch = () =>
-  process.env.VERCEL_ENV === "production" &&
-  process.env.COMING_SOON_MODE === "true";
-
 const robots = (): MetadataRoute.Robots => {
-  if (isProductionPrelaunch()) {
+  if (isProductionComingSoon()) {
     return {
       host: SITE_URL,
       rules: {

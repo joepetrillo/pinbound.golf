@@ -346,17 +346,33 @@ const PlayButton = ({
     }}
     type="button"
   >
-    {iconPlaying ? (
-      <RiPauseFill
-        aria-hidden="true"
-        className={cn("size-4", loading && "opacity-0")}
-      />
-    ) : (
-      <RiPlayFill
-        aria-hidden="true"
-        className={cn("size-4", loading && "opacity-0")}
-      />
-    )}
+    <span
+      className={cn(
+        "relative size-4 transition-opacity duration-150 ease-out",
+        loading && "opacity-0"
+      )}
+    >
+      <span
+        className={cn(
+          "absolute inset-0 flex items-center justify-center transition-[filter,opacity,scale] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+          iconPlaying
+            ? "scale-100 opacity-100 blur-none"
+            : "scale-[0.25] opacity-0 blur-xs"
+        )}
+      >
+        <RiPauseFill aria-hidden="true" className="size-4" />
+      </span>
+      <span
+        className={cn(
+          "flex size-4 items-center justify-center transition-[filter,opacity,scale] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+          iconPlaying
+            ? "scale-[0.25] opacity-0 blur-xs"
+            : "scale-100 opacity-100 blur-none"
+        )}
+      >
+        <RiPlayFill aria-hidden="true" className="size-4" />
+      </span>
+    </span>
     {loading && (
       <div className="absolute inset-0 flex items-center justify-center rounded-[inherit] backdrop-blur-xs">
         <Spinner />

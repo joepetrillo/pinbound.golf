@@ -17,9 +17,9 @@ export const FinalCta = () => (
         after your team tests and approves it.
       </p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <Link className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
+        <a className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
           {CTA_LABEL}
-        </Link>
+        </a>
         <Link
           className={cn(buttonVariants({ size: "lg", variant: "outline" }))}
           href={DEMO_HREF}

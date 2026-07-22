@@ -134,13 +134,13 @@ export const TeeSheetIntegration = () => (
         >
           {CONTACT_LABEL}
         </Link>
-        <Link
+        <a
           className={cn(buttonVariants({ className: "w-fit shrink-0" }))}
           href={CTA_HREF}
         >
           {CTA_LABEL}
           <RiArrowRightLine aria-hidden data-icon="inline-end" />
-        </Link>
+        </a>
       </CardFooter>
     </Card>
   </Section>

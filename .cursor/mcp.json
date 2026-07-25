@@ -8,9 +8,6 @@
       "command": "bunx",
       "args": ["shadcn@latest", "mcp"]
     },
-    "resend": {
-      "url": "https://mcp.resend.com/mcp"
-    },
     "workos": {
       "url": "https://mcp.workos.com/mcp"
     }

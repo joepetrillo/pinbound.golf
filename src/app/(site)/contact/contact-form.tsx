@@ -1,31 +1,30 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
 import { RiCheckLine, RiErrorWarningLine } from "@remixicon/react";
 import Link from "next/link";
-import {
-  startTransition,
-  useActionState,
-  useId,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import { useId, useRef } from "react";
+import type { FormEvent, ReactNode } from "react";
+import { Controller } from "react-hook-form";
+import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 
 import { submitContactInquiry } from "@/app/(site)/contact/actions";
 import {
   CONTACT_FIELD_NAMES,
-  CONTACT_FORM_IDLE_STATE,
-  CONTACT_OPERATION_ID_FIELD,
+  contactActionSchema,
   COURSE_MAX_LENGTH,
   EMAIL_MAX_LENGTH,
+  HONEYPOT_FIELD,
   INQUIRY_TYPES,
   MESSAGE_MAX_LENGTH,
+  MESSAGE_MIN_LENGTH,
   NAME_MAX_LENGTH,
-  PHONE_MAX_LENGTH,
   TEE_SHEET_MAX_LENGTH,
 } from "@/app/(site)/contact/schema";
 import type {
+  ContactActionInput,
   ContactFieldName,
-  ContactFormState,
 } from "@/app/(site)/contact/schema";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -37,6 +36,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Select,
   SelectContent,
@@ -47,92 +47,70 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { useResetOnHide } from "@/hooks/use-reset-on-hide";
 import { CONTACT_EMAIL, MARKETING_HOME_HREF } from "@/lib/site";
 import { cn } from "@/lib/utils";
-
-// Client wrapper so Activity hide can reset without a server round-trip.
-const contactFormAction = (
-  previousState: ContactFormState,
-  payload: FormData | null
-): Promise<ContactFormState> => {
-  if (payload === null) {
-    switch (previousState.status) {
-      case "success": {
-        // Fresh form next visit — the submission already finished.
-        return Promise.resolve(CONTACT_FORM_IDLE_STATE);
-      }
-      case "invalid":
-      case "failed": {
-        // Drop feedback, keep field values so the uncontrolled form key stays
-        // stable and Activity does not remount an empty draft.
-        return Promise.resolve({
-          status: "idle",
-          values: previousState.values,
-        });
-      }
-      case "idle": {
-        return Promise.resolve(previousState);
-      }
-      default: {
-        const _exhaustive: never = previousState;
-        return _exhaustive;
-      }
-    }
-  }
-  return submitContactInquiry(previousState, payload);
-};
 
 interface ContactAttempt {
   operationId: string;
   payloadFingerprint: string;
 }
 
-const payloadFingerprintOf = (formData: FormData): string =>
+const payloadFingerprintOf = (values: ContactActionInput): string =>
   JSON.stringify(
     CONTACT_FIELD_NAMES.map((field) => {
-      const value = formData.get(field);
+      const value = values[field];
       return [field, typeof value === "string" ? value.trim() : null];
     })
   );
 
-const draftValuesOf = (state: ContactFormState) => {
-  switch (state.status) {
-    case "idle": {
-      return state.values;
-    }
-    case "invalid":
-    case "failed": {
-      return state.values;
-    }
-    case "success": {
-      return;
-    }
-    default: {
-      const _exhaustive: never = state;
-      return _exhaustive;
-    }
-  }
+// Placeholder UUID so the shared action schema validates on the client; the
+// real idempotency key is stamped in onSubmit before executeAsync.
+const OPERATION_ID_PLACEHOLDER = "00000000-0000-4000-8000-000000000000";
+
+const CONTACT_FORM_DEFAULTS: ContactActionInput = {
+  courseOrCompany: "",
+  email: "",
+  inquiryType: undefined as unknown as ContactActionInput["inquiryType"],
+  message: "",
+  name: "",
+  operationId: OPERATION_ID_PLACEHOLDER,
+  phone: "",
+  teeSheetProvider: "",
+  [HONEYPOT_FIELD]: "",
 };
 
-const fieldErrorsOf = (state: ContactFormState, field: ContactFieldName) =>
-  state.status === "invalid"
-    ? state.fieldErrors[field]?.map((message) => ({ message }))
-    : undefined;
+const fieldErrorList = (message: string | undefined) =>
+  message ? [{ message }] : undefined;
 
-const draftValue = (state: ContactFormState, field: ContactFieldName) =>
-  draftValuesOf(state)?.[field];
+const ContactSuccessMessage = () => (
+  <div aria-live="polite" className="rounded-4xl border bg-card p-8">
+    <h2 className="flex items-center gap-2 text-xl font-medium text-balance">
+      <RiCheckLine aria-hidden className="size-5 shrink-0" />
+      Message Sent
+    </h2>
+    <p className="mt-3 leading-relaxed text-balance text-muted-foreground">
+      Thanks for reaching out. Your message is on its way to our team, and a
+      confirmation is on its way to your inbox. We will follow up by email.
+    </p>
+    <div className="mt-6">
+      <Link
+        className={cn(buttonVariants({ variant: "outline" }))}
+        href={MARKETING_HOME_HREF}
+      >
+        Back to the homepage
+      </Link>
+    </div>
+  </div>
+);
 
-const formKeyOf = (state: ContactFormState) => {
-  const values = draftValuesOf(state);
-  return values ? JSON.stringify(values) : state.status;
-};
-
-const operationIdOf = (state: ContactFormState) =>
-  state.status === "failed" ? state.operationId : undefined;
-
-const ContactFormStatus = ({ state }: { state: ContactFormState }) => {
-  if (state.status === "failed") {
+const ContactFormStatus = ({
+  serverError,
+  hasFieldErrors,
+}: {
+  serverError?: string;
+  hasFieldErrors: boolean;
+}) => {
+  if (serverError) {
     return (
       <Alert
         variant="destructive"
@@ -148,7 +126,7 @@ const ContactFormStatus = ({ state }: { state: ContactFormState }) => {
     );
   }
 
-  if (state.status === "invalid") {
+  if (hasFieldErrors) {
     return (
       <Alert
         variant="destructive"
@@ -202,156 +180,77 @@ const ContactFormActions = ({ pending }: { pending: boolean }) => (
   </Field>
 );
 
-export const ContactForm = () => {
-  const [state, formAction, pending] = useActionState(
-    contactFormAction,
-    CONTACT_FORM_IDLE_STATE
-  );
-  const id = useId();
-  const attemptRef = useRef<ContactAttempt | null>(null);
-  const shouldResetRef = useRef(false);
-
-  useLayoutEffect(() => {
-    if (
-      state.status === "success" ||
-      state.status === "invalid" ||
-      state.status === "failed"
-    ) {
-      shouldResetRef.current = true;
-    }
-  }, [state.status]);
-
-  useResetOnHide(() => {
-    if (!shouldResetRef.current) {
-      return;
-    }
-    shouldResetRef.current = false;
-    attemptRef.current = null;
-    startTransition(() => {
-      formAction(null);
-    });
-  });
-
-  const handleAction = (formData: FormData) => {
-    const payloadFingerprint = payloadFingerprintOf(formData);
-    const previousAttempt = attemptRef.current;
-    const operationId =
-      previousAttempt?.payloadFingerprint === payloadFingerprint
-        ? previousAttempt.operationId
-        : globalThis.crypto.randomUUID();
-
-    attemptRef.current = { operationId, payloadFingerprint };
-    formData.set(CONTACT_OPERATION_ID_FIELD, operationId);
-    formAction(formData);
-  };
-
-  if (state.status === "success") {
-    return (
-      <div aria-live="polite" className="rounded-4xl border bg-card p-8">
-        <h2 className="flex items-center gap-2 text-xl font-medium text-balance">
-          <RiCheckLine aria-hidden className="size-5 shrink-0" />
-          Message Sent
-        </h2>
-        <p className="mt-3 leading-relaxed text-balance text-muted-foreground">
-          Thanks for reaching out. Your message is on its way to our team, and a
-          confirmation is on its way to your inbox. We will follow up by email.
-        </p>
-        <div className="mt-6">
-          <Link
-            className={cn(buttonVariants({ variant: "outline" }))}
-            href={MARKETING_HOME_HREF}
-          >
-            Back to the homepage
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const invalid = (field: ContactFieldName) =>
-    state.status === "invalid" && Boolean(state.fieldErrors[field]?.length);
-
-  const errorId = (field: ContactFieldName) => `${id}-${field}-error`;
-
-  const describedBy = (field: ContactFieldName) =>
-    invalid(field) ? errorId(field) : undefined;
+const TextField = ({
+  id,
+  name,
+  label,
+  errorMessage,
+  children,
+}: {
+  id: string;
+  name: ContactFieldName;
+  label: ReactNode;
+  errorMessage?: string;
+  children: (ids: {
+    fieldId: string;
+    errorId: string;
+    describedBy?: string;
+    invalid: boolean;
+  }) => ReactNode;
+}) => {
+  const invalid = Boolean(errorMessage);
+  const fieldId = `${id}-${name}`;
+  const errorId = `${fieldId}-error`;
 
   return (
-    <form action={handleAction} key={formKeyOf(state)} noValidate>
-      <input
-        defaultValue={operationIdOf(state)}
-        name={CONTACT_OPERATION_ID_FIELD}
-        type="hidden"
-      />
-      <FieldGroup>
-        <Field data-invalid={invalid("name") || undefined}>
-          <FieldLabel htmlFor={`${id}-name`}>Name</FieldLabel>
-          <Input
-            aria-describedby={describedBy("name")}
-            aria-invalid={invalid("name") || undefined}
-            autoComplete="name"
-            defaultValue={draftValue(state, "name")}
-            id={`${id}-name`}
-            maxLength={NAME_MAX_LENGTH}
-            name="name"
-            required
-          />
-          <FieldError
-            errors={fieldErrorsOf(state, "name")}
-            id={errorId("name")}
-          />
-        </Field>
+    <Field data-invalid={invalid || undefined}>
+      <FieldLabel htmlFor={fieldId}>{label}</FieldLabel>
+      {children({
+        describedBy: invalid ? errorId : undefined,
+        errorId,
+        fieldId,
+        invalid,
+      })}
+      <FieldError errors={fieldErrorList(errorMessage)} id={errorId} />
+    </Field>
+  );
+};
 
-        <Field data-invalid={invalid("email") || undefined}>
-          <FieldLabel htmlFor={`${id}-email`}>Email</FieldLabel>
-          <Input
-            aria-describedby={describedBy("email")}
-            aria-invalid={invalid("email") || undefined}
-            autoComplete="email"
-            defaultValue={draftValue(state, "email")}
-            id={`${id}-email`}
-            maxLength={EMAIL_MAX_LENGTH}
-            name="email"
-            required
-            type="email"
-          />
-          <FieldError
-            errors={fieldErrorsOf(state, "email")}
-            id={errorId("email")}
-          />
-        </Field>
-
-        <Field data-invalid={invalid("courseOrCompany") || undefined}>
-          <FieldLabel htmlFor={`${id}-course`}>Course or company</FieldLabel>
-          <Input
-            aria-describedby={describedBy("courseOrCompany")}
-            aria-invalid={invalid("courseOrCompany") || undefined}
-            autoComplete="organization"
-            defaultValue={draftValue(state, "courseOrCompany")}
-            id={`${id}-course`}
-            maxLength={COURSE_MAX_LENGTH}
-            name="courseOrCompany"
-            required
-          />
-          <FieldError
-            errors={fieldErrorsOf(state, "courseOrCompany")}
-            id={errorId("courseOrCompany")}
-          />
-        </Field>
-
-        <Field data-invalid={invalid("inquiryType") || undefined}>
-          <FieldLabel htmlFor={`${id}-inquiry`}>Inquiry type</FieldLabel>
+const InquiryTypeField = ({
+  id,
+  control,
+  errorMessage,
+}: {
+  id: string;
+  control: Control<ContactActionInput>;
+  errorMessage?: string;
+}) => (
+  <TextField
+    errorMessage={errorMessage}
+    id={id}
+    label="Inquiry type"
+    name="inquiryType"
+  >
+    {({ describedBy, fieldId, invalid }) => (
+      <Controller
+        control={control}
+        name="inquiryType"
+        render={({ field }) => (
           <Select
-            defaultValue={draftValue(state, "inquiryType") ?? null}
-            items={INQUIRY_TYPES.map((type) => ({ label: type, value: type }))}
-            name="inquiryType"
-            required
+            items={INQUIRY_TYPES.map((type) => ({
+              label: type,
+              value: type,
+            }))}
+            onValueChange={(value) => {
+              field.onChange(value ?? undefined);
+            }}
+            value={field.value ?? null}
           >
             <SelectTrigger
-              aria-describedby={describedBy("inquiryType")}
-              aria-invalid={invalid("inquiryType") || undefined}
+              aria-describedby={describedBy}
+              aria-invalid={invalid || undefined}
               className="w-full"
-              id={`${id}-inquiry`}
+              id={fieldId}
             >
               <SelectValue placeholder="Choose a topic" />
             </SelectTrigger>
@@ -365,95 +264,247 @@ export const ContactForm = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <FieldError
-            errors={fieldErrorsOf(state, "inquiryType")}
-            id={errorId("inquiryType")}
-          />
-        </Field>
+        )}
+      />
+    )}
+  </TextField>
+);
 
-        <Field data-invalid={invalid("teeSheetProvider") || undefined}>
-          <FieldLabel htmlFor={`${id}-tee-sheet`}>
+const ContactFormFields = ({
+  id,
+  control,
+  register,
+  errors,
+  pending,
+  serverError,
+}: {
+  id: string;
+  control: Control<ContactActionInput>;
+  register: UseFormRegister<ContactActionInput>;
+  errors: FieldErrors<ContactActionInput>;
+  pending: boolean;
+  serverError?: string;
+}) => {
+  const hasFieldErrors = CONTACT_FIELD_NAMES.some((field) => errors[field]);
+
+  return (
+    <FieldGroup>
+      <TextField
+        errorMessage={errors.name?.message}
+        id={id}
+        label="Name"
+        name="name"
+      >
+        {({ describedBy, fieldId, invalid }) => (
+          <Input
+            aria-describedby={describedBy}
+            aria-invalid={invalid || undefined}
+            autoComplete="name"
+            id={fieldId}
+            maxLength={NAME_MAX_LENGTH}
+            {...register("name")}
+          />
+        )}
+      </TextField>
+
+      <TextField
+        errorMessage={errors.email?.message}
+        id={id}
+        label="Email"
+        name="email"
+      >
+        {({ describedBy, fieldId, invalid }) => (
+          <Input
+            aria-describedby={describedBy}
+            aria-invalid={invalid || undefined}
+            autoComplete="email"
+            id={fieldId}
+            maxLength={EMAIL_MAX_LENGTH}
+            type="email"
+            {...register("email")}
+          />
+        )}
+      </TextField>
+
+      <TextField
+        errorMessage={errors.courseOrCompany?.message}
+        id={id}
+        label="Course or company"
+        name="courseOrCompany"
+      >
+        {({ describedBy, fieldId, invalid }) => (
+          <Input
+            aria-describedby={describedBy}
+            aria-invalid={invalid || undefined}
+            autoComplete="organization"
+            id={fieldId}
+            maxLength={COURSE_MAX_LENGTH}
+            {...register("courseOrCompany")}
+          />
+        )}
+      </TextField>
+
+      <InquiryTypeField
+        control={control}
+        errorMessage={errors.inquiryType?.message}
+        id={id}
+      />
+
+      <TextField
+        errorMessage={errors.teeSheetProvider?.message}
+        id={id}
+        label={
+          <>
             Tee-sheet provider{" "}
             <span className="font-normal text-muted-foreground">
               (optional)
             </span>
-          </FieldLabel>
+          </>
+        }
+        name="teeSheetProvider"
+      >
+        {({ describedBy, fieldId, invalid }) => (
           <Input
-            aria-describedby={describedBy("teeSheetProvider")}
-            aria-invalid={invalid("teeSheetProvider") || undefined}
-            defaultValue={draftValue(state, "teeSheetProvider")}
-            id={`${id}-tee-sheet`}
+            aria-describedby={describedBy}
+            aria-invalid={invalid || undefined}
+            id={fieldId}
             maxLength={TEE_SHEET_MAX_LENGTH}
-            name="teeSheetProvider"
+            {...register("teeSheetProvider")}
           />
-          <FieldError
-            errors={fieldErrorsOf(state, "teeSheetProvider")}
-            id={errorId("teeSheetProvider")}
-          />
-        </Field>
+        )}
+      </TextField>
 
-        <Field data-invalid={invalid("phone") || undefined}>
-          <FieldLabel htmlFor={`${id}-phone`}>
+      <TextField
+        errorMessage={errors.phone?.message}
+        id={id}
+        label={
+          <>
             Phone{" "}
             <span className="font-normal text-muted-foreground">
               (optional)
             </span>
-          </FieldLabel>
-          <FieldDescription>
-            Only used if a reply by phone is clearly better for your inquiry.
-          </FieldDescription>
-          <Input
-            aria-describedby={describedBy("phone")}
-            aria-invalid={invalid("phone") || undefined}
-            autoComplete="tel"
-            defaultValue={draftValue(state, "phone")}
-            id={`${id}-phone`}
-            maxLength={PHONE_MAX_LENGTH}
-            name="phone"
-            type="tel"
-          />
-          <FieldError
-            errors={fieldErrorsOf(state, "phone")}
-            id={errorId("phone")}
-          />
-        </Field>
+          </>
+        }
+        name="phone"
+      >
+        {({ describedBy, fieldId, invalid }) => (
+          <>
+            <FieldDescription>
+              Only used if a reply by phone is clearly better for your inquiry.
+            </FieldDescription>
+            <Controller
+              control={control}
+              name="phone"
+              render={({ field }) => {
+                const handleBlur = field.onBlur;
+                return (
+                  <PhoneInput
+                    aria-describedby={describedBy}
+                    aria-invalid={invalid || undefined}
+                    defaultCountry="US"
+                    id={fieldId}
+                    onBlur={handleBlur}
+                    onChange={(value) => {
+                      field.onChange(value ?? "");
+                    }}
+                    placeholder="Enter phone number"
+                    value={field.value || undefined}
+                  />
+                );
+              }}
+            />
+          </>
+        )}
+      </TextField>
 
-        <Field data-invalid={invalid("message") || undefined}>
-          <FieldLabel htmlFor={`${id}-message`}>Message</FieldLabel>
-          <Textarea
-            aria-describedby={describedBy("message")}
-            aria-invalid={invalid("message") || undefined}
-            className="min-h-32"
-            defaultValue={draftValue(state, "message")}
-            id={`${id}-message`}
-            maxLength={MESSAGE_MAX_LENGTH}
-            name="message"
-            required
-          />
-          <FieldDescription>
-            Up to {MESSAGE_MAX_LENGTH.toLocaleString("en-US")} characters.
-          </FieldDescription>
-          <FieldError
-            errors={fieldErrorsOf(state, "message")}
-            id={errorId("message")}
-          />
-        </Field>
+      <TextField
+        errorMessage={errors.message?.message}
+        id={id}
+        label="Message"
+        name="message"
+      >
+        {({ describedBy, fieldId, invalid }) => (
+          <>
+            <Textarea
+              aria-describedby={describedBy}
+              aria-invalid={invalid || undefined}
+              className="min-h-32"
+              id={fieldId}
+              maxLength={MESSAGE_MAX_LENGTH}
+              {...register("message")}
+            />
+            <FieldDescription>
+              At least {MESSAGE_MIN_LENGTH.toLocaleString("en-US")} characters,
+              up to {MESSAGE_MAX_LENGTH.toLocaleString("en-US")}.
+            </FieldDescription>
+          </>
+        )}
+      </TextField>
 
-        {/* Honeypot: hidden from people, filled only by bots. Never delivered. */}
-        <div aria-hidden="true" className="sr-only">
-          <label htmlFor={`${id}-website`}>Website</label>
-          <input
-            autoComplete="off"
-            id={`${id}-website`}
-            name="website"
-            tabIndex={-1}
-            type="text"
-          />
-        </div>
+      {/* Honeypot: hidden from people, filled only by bots. Never delivered. */}
+      <div aria-hidden="true" className="sr-only">
+        <label htmlFor={`${id}-website`}>Website</label>
+        <input
+          autoComplete="off"
+          id={`${id}-website`}
+          tabIndex={-1}
+          type="text"
+          {...register(HONEYPOT_FIELD)}
+        />
+      </div>
 
-        <ContactFormStatus state={state} />
-        <ContactFormActions pending={pending} />
-      </FieldGroup>
+      <ContactFormStatus
+        hasFieldErrors={hasFieldErrors}
+        serverError={serverError}
+      />
+      <ContactFormActions pending={pending} />
+    </FieldGroup>
+  );
+};
+
+export const ContactForm = () => {
+  const id = useId();
+  const attemptRef = useRef<ContactAttempt | null>(null);
+
+  const { form, action } = useHookFormAction(
+    submitContactInquiry,
+    zodResolver(contactActionSchema),
+    {
+      formProps: {
+        defaultValues: CONTACT_FORM_DEFAULTS,
+        mode: "onSubmit",
+      },
+    }
+  );
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    void form.handleSubmit(async (values) => {
+      const payloadFingerprint = payloadFingerprintOf(values);
+      const previousAttempt = attemptRef.current;
+      const operationId =
+        previousAttempt?.payloadFingerprint === payloadFingerprint
+          ? previousAttempt.operationId
+          : globalThis.crypto.randomUUID();
+
+      attemptRef.current = { operationId, payloadFingerprint };
+      await action.executeAsync({ ...values, operationId });
+    })(event);
+  };
+
+  if (action.hasSucceeded) {
+    return <ContactSuccessMessage />;
+  }
+
+  return (
+    <form noValidate onSubmit={onSubmit}>
+      <ContactFormFields
+        control={form.control}
+        errors={form.formState.errors}
+        id={id}
+        pending={action.isPending}
+        register={form.register}
+        serverError={action.result.serverError}
+      />
     </form>
   );
 };

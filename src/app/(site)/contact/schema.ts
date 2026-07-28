@@ -1,8 +1,9 @@
+import { isValidPhoneNumber } from "libphonenumber-js/min";
 import { z } from "zod";
 
-// Canonical contract shared by form extraction, delivery, and notification
-// rendering. Presentation and Privacy copy still need deliberate review when a
-// field changes.
+// Canonical contract shared by form validation, the safe action, delivery, and
+// notification rendering. Presentation and Privacy copy still need deliberate
+// review when a field changes.
 
 export const INQUIRY_TYPES = [
   "Product question",
@@ -16,8 +17,10 @@ export const NAME_MAX_LENGTH = 100;
 export const EMAIL_MAX_LENGTH = 254;
 export const COURSE_MAX_LENGTH = 150;
 export const TEE_SHEET_MAX_LENGTH = 100;
-export const PHONE_MAX_LENGTH = 30;
+export const MESSAGE_MIN_LENGTH = 10;
 export const MESSAGE_MAX_LENGTH = 2000;
+
+export const HONEYPOT_FIELD = "website" as const;
 
 export const contactFormSchema = z.object({
   courseOrCompany: z
@@ -38,7 +41,10 @@ export const contactFormSchema = z.object({
   message: z
     .string()
     .trim()
-    .min(1, "Enter a message.")
+    .min(
+      MESSAGE_MIN_LENGTH,
+      `Enter at least ${MESSAGE_MIN_LENGTH} characters so we have enough context to help.`
+    )
     .max(
       MESSAGE_MAX_LENGTH,
       `Message must be ${MESSAGE_MAX_LENGTH} characters or fewer.`
@@ -51,10 +57,13 @@ export const contactFormSchema = z.object({
       NAME_MAX_LENGTH,
       `Name must be ${NAME_MAX_LENGTH} characters or fewer.`
     ),
+  // Blank stays optional; otherwise require a real E.164 number from PhoneInput.
   phone: z
     .string()
     .trim()
-    .max(PHONE_MAX_LENGTH, "Enter a shorter phone number.")
+    .refine((value) => value === "" || isValidPhoneNumber(value), {
+      message: "Enter a valid phone number.",
+    })
     .optional(),
   teeSheetProvider: z
     .string()
@@ -66,38 +75,23 @@ export const contactFormSchema = z.object({
     .optional(),
 });
 
+/** Client form values: inquiry fields + honeypot. */
+export const contactClientSchema = contactFormSchema.extend({
+  [HONEYPOT_FIELD]: z.string().optional(),
+});
+
+/** Server action input: client values + idempotency key. */
+export const contactActionSchema = contactClientSchema.extend({
+  operationId: z.uuid(),
+});
+
+export const contactActionResultSchema = z.object({
+  submissionId: z.uuid(),
+});
+
 export const CONTACT_FIELD_NAMES = contactFormSchema.keyof().options;
 
-export const CONTACT_OPERATION_ID_FIELD = "contactOperationId";
-export const contactOperationIdSchema = z.uuid();
-
 export type ContactInquiry = z.output<typeof contactFormSchema>;
-
+export type ContactClientValues = z.input<typeof contactClientSchema>;
+export type ContactActionInput = z.input<typeof contactActionSchema>;
 export type ContactFieldName = keyof ContactInquiry;
-
-export type ContactFieldErrors = Partial<Record<ContactFieldName, string[]>>;
-
-// Raw values echoed back to the submitting client so a failed submission does
-// not wipe the form. They are never logged or sent anywhere else.
-export type ContactFormDraft = Partial<Record<ContactFieldName, string>>;
-
-export type ContactFormState =
-  | {
-      status: "idle";
-      // Kept after Activity hide clears validation/delivery errors so drafts
-      // survive without remounting the uncontrolled fields empty.
-      values?: ContactFormDraft;
-    }
-  | { status: "success"; submissionId: string }
-  | {
-      status: "invalid";
-      fieldErrors: ContactFieldErrors;
-      values: ContactFormDraft;
-    }
-  | {
-      status: "failed";
-      operationId: string;
-      values: ContactFormDraft;
-    };
-
-export const CONTACT_FORM_IDLE_STATE: ContactFormState = { status: "idle" };

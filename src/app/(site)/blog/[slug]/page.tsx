@@ -57,7 +57,7 @@ const crossArmClass = "absolute bg-muted-foreground";
 const RuleCross = () => (
   <span
     aria-hidden="true"
-    className="pointer-events-none relative size-[18px] shrink-0"
+    className="pointer-events-none relative size-4.5 shrink-0"
   >
     <span className={`${crossArmClass} top-1/2 h-px w-full -translate-y-1/2`} />
     <span
@@ -128,7 +128,7 @@ const BlogPost = async ({
         <div className="relative mt-6 flex items-center sm:mt-10 md:mt-12">
           <span
             aria-hidden="true"
-            className="absolute inset-x-[10px] top-1/2 h-px -translate-y-1/2 bg-border"
+            className="absolute inset-x-2.5 top-1/2 h-px -translate-y-1/2 bg-border"
           />
           <RuleCross />
           <p className="relative ml-3 hidden items-center gap-3 sm:flex">

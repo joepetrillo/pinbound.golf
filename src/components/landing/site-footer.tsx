@@ -43,7 +43,7 @@ const Logo = () => (
 
 export const SiteFooter = () => (
   <footer className="@container w-full border-t bg-background" id="site-footer">
-    <div className="px-6 pt-14 pb-6">
+    <div className="px-4 pt-14 pb-6 md:px-6">
       <div className="mx-auto flex max-w-6xl flex-col gap-12 @3xl:flex-row @3xl:items-start @3xl:justify-between">
         <div className="max-w-sm">
           <Logo />

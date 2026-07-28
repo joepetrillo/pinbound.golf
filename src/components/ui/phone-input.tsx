@@ -146,16 +146,16 @@ const CountrySelect = ({
           popupClassName
         )}
       >
-        <ComboboxInput placeholder="Search country" showTrigger={false} />
+        <ComboboxInput
+          placeholder="Search country"
+          showTrigger={false}
+          showClear={true}
+        />
         <ComboboxSeparator />
         <ComboboxEmpty className="px-4 py-2.5 text-sm">
           No country found.
         </ComboboxEmpty>
-        {/*
-          Native list scroll (no ScrollArea). Hide the scrollbar so the thumb
-          cannot sit on top of item hover backgrounds; wheel/trackpad still work.
-        */}
-        <ComboboxList className="max-h-60 scrollbar-none overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden">
+        <ComboboxList className="scroll-fade overflow-y-auto overscroll-contain">
           {(country: Country) => (
             <ComboboxItem
               className="flex items-center gap-2"
@@ -163,7 +163,9 @@ const CountrySelect = ({
               value={country}
             >
               <FlagComponent country={country} countryName="" />
-              <span className="flex-1 text-sm">{countryLabel(country)}</span>
+              <span className="flex-1 text-sm text-balance">
+                {countryLabel(country)}
+              </span>
               <span className="text-sm text-muted-foreground tabular-nums">
                 +{getCountryCallingCode(country)}
               </span>

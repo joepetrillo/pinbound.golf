@@ -36,3 +36,9 @@ Oxlint + Oxfmt's linter will catch most issues automatically. Focus your attenti
 Most formatting and common issues are automatically fixed by Oxlint + Oxfmt. Run `bun x ultracite fix` before committing to ensure compliance.
 
 <!-- END:ultracite-code-standards -->
+
+## Data Access Layer
+
+- Keep Server Actions and Route Handlers thin: validate untrusted input, then delegate data reads and mutations to `src/data/`.
+- Treat `src/data/` as the DAL. Mark its modules with `import "server-only"`; keep database/provider SDKs, secret-backed clients, and authorization close to the data source.
+- Return minimal, serializable DTOs. Keep route-specific UI/actions colocated in `src/app/`, and put client-safe shared contracts outside the server-only DAL.

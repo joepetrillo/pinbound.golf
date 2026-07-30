@@ -5,7 +5,7 @@ export const ReadingTime = ({ label }: { label: string }) => (
     {label}
     <RiArrowRightLine
       aria-hidden="true"
-      className="size-3.5 transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"
+      className="size-3.5 motion-safe:transition-transform motion-safe:duration-150 motion-safe:ease-[cubic-bezier(0.19,1,0.22,1)] motion-safe:group-hover:translate-x-1 motion-safe:group-focus-visible:translate-x-1 motion-safe:group-focus-visible:duration-0"
     />
   </span>
 );

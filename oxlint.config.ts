@@ -13,5 +13,8 @@ export default defineConfig({
   ],
   rules: {
     "eslint/func-style": "off",
+    // `<>{children}</>` is how a pass-through boundary component is written —
+    // it keeps server-rendered children off the client. See LandingMotion.
+    "react/jsx-no-useless-fragment": ["error", { allowExpressions: true }],
   },
 });

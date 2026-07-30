@@ -8,7 +8,10 @@ import { cn } from "@/lib/utils";
 // Closing CTA band — the last thing a full-page scroller sees.
 export const FinalCta = () => (
   <Section className="border-t">
-    <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+    <div
+      className="mx-auto flex max-w-2xl flex-col items-center text-center"
+      data-reveal
+    >
       <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
         Ready to stop missing calls?
       </h2>

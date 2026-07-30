@@ -28,7 +28,7 @@ const DESKTOP_HEADER_MEDIA_QUERY = "(min-width: 768px)";
 const Logo = ({ onClick }: { onClick?: () => void }) => (
   <Link
     aria-label="Homepage"
-    className="relative top-px inline-flex items-center gap-2.5 hover:opacity-90"
+    className="relative top-px inline-flex items-center gap-2.5 transition-opacity duration-150 ease-[ease] hover:opacity-80"
     href={MARKETING_HOME_HREF}
     onClick={onClick}
   >

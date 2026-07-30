@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { PostCardList } from "@/components/blog/post-card-list";
 import { ReadingTime } from "@/components/blog/reading-time";
 import { Section } from "@/components/section";
 import { formatBlogDate, getBlogPosts, getReadingTime } from "@/lib/blog";
@@ -27,7 +28,7 @@ const BlogPage = () => {
 
       {featuredPost ? (
         <Link
-          className="group mt-14 block scroll-mt-14 rounded-4xl border bg-muted/50 transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2"
+          className="group mt-14 block scroll-mt-14 rounded-4xl border bg-muted/50 transition-colors ease-[ease] hover:bg-muted focus-visible:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:duration-0"
           href={featuredPost.url}
         >
           <article className="flex flex-col gap-6 p-8 md:gap-8 md:p-12">
@@ -56,34 +57,7 @@ const BlogPage = () => {
         </p>
       )}
 
-      {remainingPosts.length > 0 && (
-        <ul className="mt-6 grid gap-px overflow-hidden rounded-4xl border bg-border bg-clip-padding md:grid-cols-2">
-          {remainingPosts.map((post) => (
-            <li className="bg-background odd:last:md:col-span-2" key={post.url}>
-              <Link
-                className="group flex h-full scroll-mt-14 flex-col gap-4 p-8 transition-colors hover:bg-muted/50 focus-visible:rounded-4xl focus-visible:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 md:p-10"
-                href={post.url}
-              >
-                <time
-                  className="text-xs font-medium tracking-[0.12em] text-muted-foreground uppercase"
-                  dateTime={post.data.publishedAt}
-                >
-                  {formatBlogDate(post.data.publishedAt)}
-                </time>
-                <h2 className="text-2xl font-medium tracking-tight text-balance md:text-3xl">
-                  {post.data.title}
-                </h2>
-                <p className="leading-relaxed text-pretty text-muted-foreground">
-                  {post.data.description}
-                </p>
-                <div className="mt-auto pt-4">
-                  <ReadingTime label={getReadingTime(post)} />
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <PostCardList headingLevel="h2" posts={remainingPosts} />
     </Section>
   );
 };

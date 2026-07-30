@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 import { Section } from "@/components/section";
 import {
   Card,
@@ -34,17 +36,25 @@ const controlPoints = [
 
 export const PolicyFidelity = () => (
   <Section id="control">
-    <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
-      Your rules. Your control.
-    </h2>
-    <p className="mt-4 max-w-prose leading-relaxed text-balance text-muted-foreground">
-      Pinbound works from your policies, shows its work, and only handles the
-      calls and tee-sheet actions you authorize.
-    </p>
+    <div data-reveal>
+      <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
+        Your rules. Your control.
+      </h2>
+      <p className="mt-4 max-w-prose leading-relaxed text-balance text-muted-foreground">
+        Pinbound works from your policies, shows its work, and only handles the
+        calls and tee-sheet actions you authorize.
+      </p>
+    </div>
 
-    <div className="mt-10 grid gap-4 md:grid-cols-3">
+    {/* Arrival motion: data-reveal-group animates the children in sequence and
+        --i is each child's place in it. Contract lives in src/app/motion.css. */}
+    <div className="mt-10 grid gap-4 md:grid-cols-3" data-reveal-group>
       {controlPoints.map((point, index) => (
-        <Card className="h-full" key={point.id}>
+        <Card
+          className="h-full"
+          key={point.id}
+          style={{ "--i": index } as CSSProperties}
+        >
           <CardHeader>
             <p className="text-xs font-medium text-muted-foreground tabular-nums">
               {String(index + 1).padStart(2, "0")}

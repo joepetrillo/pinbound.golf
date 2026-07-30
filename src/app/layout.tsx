@@ -46,7 +46,7 @@ const RootLayout = ({
   <html
     lang="en"
     className={cn(
-      "scroll-smooth",
+      "motion-safe:scroll-smooth",
       "antialiased",
       "font-sans",
       "bg-background",

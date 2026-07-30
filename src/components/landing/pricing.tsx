@@ -35,16 +35,21 @@ const pilotTerms = [
 
 export const Pricing = () => (
   <Section id="pricing">
-    <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
-      Pricing that follows your call volume
-    </h2>
-    <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-      Start with every available launch capability free for 30 days after
-      activation, then continue with a monthly workspace subscription sized to
-      your calls.
-    </p>
+    <div data-reveal>
+      <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
+        Pricing that follows your call volume
+      </h2>
+      <p className="mt-4 max-w-prose text-balance text-muted-foreground">
+        Start with every available launch capability free for 30 days after
+        activation, then continue with a monthly workspace subscription sized to
+        your calls.
+      </p>
+    </div>
 
-    <div className="mt-10 grid divide-y overflow-hidden rounded-4xl border lg:grid-cols-2 lg:divide-x lg:divide-y-0">
+    <div
+      className="mt-10 grid divide-y overflow-hidden rounded-4xl border lg:grid-cols-2 lg:divide-x lg:divide-y-0"
+      data-reveal
+    >
       <PricingEstimator />
 
       <div className="bg-muted/50 p-8 md:p-10">
@@ -58,16 +63,22 @@ export const Pricing = () => (
 
         <dl className="mt-6 divide-y">
           {pilotTerms.map((term, index) => (
-            <div className="flex gap-4 py-4 first:pt-0 last:pb-0" key={term.id}>
-              <span className="pt-0.5 text-xs font-medium text-muted-foreground tabular-nums">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <dt className="font-medium text-foreground">{term.title}</dt>
-                <dd className="mt-1 text-sm text-pretty text-muted-foreground">
-                  {term.description}
-                </dd>
-              </div>
+            <div
+              className="grid grid-cols-[1.25rem_1fr] gap-x-4 py-4 first:pt-0 last:pb-0"
+              key={term.id}
+            >
+              <dt className="col-span-2 grid grid-cols-[1.25rem_1fr] gap-x-4 font-medium text-foreground">
+                <span
+                  aria-hidden="true"
+                  className="pt-0.5 text-xs text-muted-foreground tabular-nums"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span>{term.title}</span>
+              </dt>
+              <dd className="col-start-2 mt-1 text-sm text-pretty text-muted-foreground">
+                {term.description}
+              </dd>
             </div>
           ))}
         </dl>

@@ -1,5 +1,6 @@
 import { RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 import {
   ClubCaddieLogo,
@@ -79,7 +80,7 @@ const platforms: TeeSheetPlatform[] = [
 
 export const TeeSheetIntegration = () => (
   <Section id="integrations">
-    <div className="max-w-2xl">
+    <div className="max-w-2xl" data-reveal>
       <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
         Wired into your tee sheet
       </h2>
@@ -89,11 +90,16 @@ export const TeeSheetIntegration = () => (
       </p>
     </div>
 
-    <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {platforms.map((platform) => (
+    {/* --i is each child's place in the stagger; see src/app/motion.css. */}
+    <div
+      className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+      data-reveal-group
+    >
+      {platforms.map((platform, index) => (
         <div
           className="relative flex h-36 flex-col items-center justify-center gap-3 rounded-4xl bg-muted/50 px-6 transition-colors"
           key={platform.id}
+          style={{ "--i": index } as CSSProperties}
         >
           <platform.logo
             className={cn("w-auto max-w-full", platform.logoClassName)}
@@ -110,7 +116,10 @@ export const TeeSheetIntegration = () => (
       ))}
     </div>
 
-    <Card className="relative col-span-2 mt-8 md:grid md:grid-cols-[1fr_auto] md:items-center">
+    <Card
+      className="relative col-span-2 mt-8 md:grid md:grid-cols-[1fr_auto] md:items-center"
+      data-reveal
+    >
       <CardHeader className="relative">
         <CardTitle>
           <h3 className="text-xl font-medium tracking-tight text-balance">

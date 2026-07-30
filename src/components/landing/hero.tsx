@@ -2,7 +2,14 @@
 
 import { RiResetLeftLine } from "@remixicon/react";
 import Link from "next/link";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import type { CSSProperties } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import { Section } from "@/components/section";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -315,17 +322,39 @@ const TranscriptCard = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [activeId, setActiveId] = useState(CONVERSATIONS[0]?.id);
   const [restartNonce, setRestartNonce] = useState(0);
+  // The crossfade below belongs to *changing* conversation. On the very first
+  // one there is nothing to cross from, and firing it anyway fades the card in
+  // a second time underneath its own entrance.
+  const [hasChangedConversation, setHasChangedConversation] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const conversation =
     CONVERSATIONS.find(({ id }) => id === activeId) ?? CONVERSATIONS[0];
+
+  const changeConversation = (nextId: string) => {
+    setActiveId(nextId);
+    setHasChangedConversation(true);
+  };
 
   const advanceToNext = () => {
     setActiveId((currentId) => {
       const index = CONVERSATIONS.findIndex(({ id }) => id === currentId);
       return CONVERSATIONS[(index + 1) % CONVERSATIONS.length]?.id;
     });
+    setHasChangedConversation(true);
   };
+
+  // Activity preserves this card across a navigation, but the transcript is a
+  // looping demo: someone coming back should meet it at the top rather than
+  // mid-conversation. Resetting to constants keeps the cleanup idempotent, so
+  // Strict Mode's extra hide/show cycle lands in the same place as one.
+  useLayoutEffect(
+    () => () => {
+      setActiveId(CONVERSATIONS[0]?.id);
+      setHasChangedConversation(false);
+    },
+    []
+  );
 
   useEffect(() => {
     const element = cardRef.current;
@@ -354,11 +383,12 @@ const TranscriptCard = () => {
   return (
     <div
       className="flex h-96 min-w-0 flex-col rounded-4xl border bg-muted/50 p-2 shadow-sm min-[372px]:p-4"
+      data-anim="hero-card"
       ref={cardRef}
     >
       <div className="mb-4 flex items-center justify-between gap-2">
         <Tabs
-          onValueChange={(value) => setActiveId(String(value))}
+          onValueChange={(value) => changeConversation(String(value))}
           value={conversation.id}
         >
           <TabsList className="h-8">
@@ -389,7 +419,7 @@ const TranscriptCard = () => {
       <div
         className={cn(
           "flex min-h-0 flex-1 flex-col",
-          prefersReducedMotion
+          prefersReducedMotion || !hasChangedConversation
             ? null
             : "animate-in duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] fade-in"
         )}
@@ -406,20 +436,48 @@ const TranscriptCard = () => {
   );
 };
 
+// Two fixed lines at every width, each sweeping up behind its own mask. The
+// break is authored, not wrapped, so the size below has to guarantee it fits.
+const HEADLINE_LINES = ["The pro shop assistant", "that never clocks out"];
+
 export const Hero = () => (
   <Section className="pt-14 md:pt-20">
     <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
-      <div>
-        <h1 className="text-5xl font-medium tracking-tight text-balance md:text-6xl">
-          The pro shop assistant that never clocks out
+      {/* A container, so the headline can size itself off this column rather
+          than the viewport: at lg the copy drops to 55% of the grid while the
+          viewport keeps growing, and a vw-based size overflows right there. */}
+      <div className="@container">
+        {/* 10.2 is the measured advance width of the longer line — 9.997em at
+            this weight and tracking — plus ~2% slack. Dividing the column by it
+            gives the largest size that still fits on one line, capped at the
+            3.75rem the design uses once the container stops growing. */}
+        <h1
+          className="text-[clamp(1.5rem,calc(100cqi/10.2),3.75rem)] leading-[1.1] font-medium tracking-tight"
+          data-anim="hero-title"
+        >
+          {HEADLINE_LINES.map((line, index) => (
+            <span
+              data-anim="hero-mask"
+              key={line}
+              style={{ "--i": index } as CSSProperties}
+            >
+              <span data-anim="hero-line">{line}</span>
+            </span>
+          ))}
         </h1>
-        <p className="mt-6 max-w-prose text-lg text-pretty text-muted-foreground">
+        <p
+          className="mt-6 max-w-prose text-lg text-pretty text-muted-foreground"
+          data-anim="hero-body"
+        >
           Pinbound is an AI phone agent that answers calls 24/7, books tee times
           directly into your tee sheet, and handles routine questions according
           to your course’s policies. Every caller gets the help they need, while
           your staff stays present with the golfers right in front of them.
         </p>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
+        <div
+          className="mt-8 flex flex-wrap items-center gap-3"
+          data-anim="hero-actions"
+        >
           <a className={cn(buttonVariants({ size: "lg" }))} href={CTA_HREF}>
             {CTA_LABEL}
           </a>

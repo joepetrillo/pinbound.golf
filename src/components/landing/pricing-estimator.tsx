@@ -63,14 +63,18 @@ export const PricingEstimator = () => {
 
       <div className="mt-10">
         <div className="flex items-end justify-between gap-4">
-          <label className="text-sm font-medium" htmlFor="monthly-call-volume">
+          {/* Not a <label>: Slider is Base UI's Root, which renders a div, so
+              htmlFor would point at a non-labelable element and name nothing.
+              aria-labelledby on the Slider is what actually associates them. */}
+          <span className="text-sm font-medium" id="monthly-call-volume-label">
             Average calls per month
-          </label>
+          </span>
           <span className="text-xl font-medium tabular-nums">
             {numberFormatter.format(monthlyCalls)}
           </span>
         </div>
         <Slider
+          aria-labelledby="monthly-call-volume-label"
           className="mt-5"
           format={{ maximumFractionDigits: 0 }}
           id="monthly-call-volume"

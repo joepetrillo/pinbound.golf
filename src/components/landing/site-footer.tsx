@@ -31,7 +31,10 @@ const indexLinks: readonly FooterLink[] = [
 ];
 
 const Logo = () => (
-  <Link className="inline-flex items-center gap-2.5 hover:opacity-90" href="/">
+  <Link
+    className="inline-flex items-center gap-2.5 transition-opacity duration-150 ease-[ease] hover:opacity-80"
+    href="/"
+  >
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-3.5" />
     </span>

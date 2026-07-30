@@ -56,11 +56,14 @@ const faqItems = [
 export const Faq = () => (
   <Section id="faq">
     <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-12">
-      <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
+      <h2
+        className="text-3xl font-medium tracking-tight text-balance md:text-4xl"
+        data-reveal
+      >
         Fair questions, straight answers
       </h2>
 
-      <Accordion>
+      <Accordion data-reveal>
         {faqItems.map((item) => (
           <AccordionItem key={item.id} value={item.id}>
             <AccordionTrigger className="text-base">

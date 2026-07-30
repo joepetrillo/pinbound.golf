@@ -1,4 +1,5 @@
 import { RiPhoneLine } from "@remixicon/react";
+import type { CSSProperties } from "react";
 
 import { Section } from "@/components/section";
 
@@ -29,7 +30,7 @@ export const Problem = () => (
   <Section id="product">
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
       {/* Text second on mobile, right on desktop */}
-      <div className="order-1 space-y-4 lg:order-2">
+      <div className="order-1 space-y-4 lg:order-2" data-reveal>
         <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
           The counter always wins. That&apos;s the problem.
         </h2>
@@ -43,14 +44,22 @@ export const Problem = () => (
 
       {/* Notification stack — deliberately not a product card */}
       <div className="order-2 lg:order-1">
-        <p className="mb-4 text-xs font-medium text-muted-foreground">
+        <p
+          className="mb-4 text-xs font-medium text-muted-foreground"
+          data-reveal
+        >
           What a Saturday looks like
         </p>
-        <ul className="flex flex-col gap-3 mask-[linear-gradient(to_bottom,black_60%,transparent)]">
-          {missedCalls.map((call) => (
+        {/* --i is each child's place in the stagger; see src/app/motion.css. */}
+        <ul
+          className="flex flex-col gap-3 mask-[linear-gradient(to_bottom,black_60%,transparent)]"
+          data-reveal-group
+        >
+          {missedCalls.map((call, index) => (
             <li
               className="flex items-center gap-3 rounded-2xl border bg-background/80 px-4 py-3 shadow-sm backdrop-blur"
               key={call.id}
+              style={{ "--i": index } as CSSProperties}
             >
               <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-red-500/10">
                 <RiPhoneLine

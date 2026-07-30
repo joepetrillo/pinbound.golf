@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 import { Section } from "@/components/section";
 import {
@@ -338,22 +338,37 @@ const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
 export const Demo = () => {
   const [micStatus, setMicStatus] = useState<MicStatus>("idle");
 
+  // Stop listening when the route is hidden. LiveWaveform already releases the
+  // track in its own cleanup, but this status would survive the navigation, and
+  // returning to the page would reacquire the microphone without being asked.
+  useLayoutEffect(
+    () => () => {
+      setMicStatus("idle");
+    },
+    []
+  );
+
   const handleToggle = () => {
     setMicStatus((status) => (status === "listening" ? "idle" : "listening"));
   };
 
   return (
     <Section id="demo">
-      <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
-        Hear it yourself
-      </h2>
-      <p className="mt-4 max-w-prose text-balance text-muted-foreground">
-        Explore the voice interface or play illustrative sample recordings of
-        common pro-shop scenarios. The course, callers, policies, and tee times
-        in these demos are fictional.
-      </p>
+      <div data-reveal>
+        <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
+          Hear it yourself
+        </h2>
+        <p className="mt-4 max-w-prose text-balance text-muted-foreground">
+          Explore the voice interface or play illustrative sample recordings of
+          common pro-shop scenarios. The course, callers, policies, and tee
+          times in these demos are fictional.
+        </p>
+      </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[2fr_3fr] lg:items-start">
+      <div
+        className="mt-10 grid gap-6 lg:grid-cols-[2fr_3fr] lg:items-start"
+        data-reveal
+      >
         <div className="flex items-center justify-center rounded-4xl border bg-muted/50 p-8 md:p-10 lg:sticky lg:top-24">
           <TalkWidget
             micStatus={micStatus}

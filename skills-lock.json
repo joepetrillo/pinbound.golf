@@ -25,6 +25,12 @@
       "skillPath": "skills/next-dev-loop/SKILL.md",
       "computedHash": "1fb1b47ed7186737df086aa198f86961f72691539f1c4507f60bbedf60a128be"
     },
+    "nextjs-app-architecture": {
+      "source": "aurorascharff/skills",
+      "sourceType": "github",
+      "skillPath": "skills/nextjs-app-architecture/SKILL.md",
+      "computedHash": "55f3a6c02712a162d60b45a44ecd02269cfee5386450aaeb9a89d7d3eb52ad96"
+    },
     "safe-action-advanced": {
       "source": "next-safe-action/skills",
       "sourceType": "github",

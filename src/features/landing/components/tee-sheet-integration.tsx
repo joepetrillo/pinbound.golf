@@ -2,14 +2,6 @@ import { RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 
-import {
-  ClubCaddieLogo,
-  ClubProphetLogo,
-  ForeUpLogo,
-  GolfNowLogo,
-  LightspeedGolfLogo,
-  TeeSnapLogo,
-} from "@/components/landing/tee-sheet-logos";
 import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -20,6 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  ClubCaddieLogo,
+  ClubProphetLogo,
+  ForeUpLogo,
+  GolfNowLogo,
+  LightspeedGolfLogo,
+  TeeSnapLogo,
+} from "@/features/landing/components/tee-sheet-logos";
 import { CONTACT_HREF, CONTACT_LABEL, CTA_HREF, CTA_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 

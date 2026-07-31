@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { ContactForm } from "@/app/(site)/contact/contact-form";
 import { Section } from "@/components/section";
+import { ContactForm } from "@/features/contact/components/contact-form";
 
 export const metadata: Metadata = {
   description:

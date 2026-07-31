@@ -1,5 +1,5 @@
-import { SiteFooter } from "@/components/landing/site-footer";
-import { SiteHeader } from "@/components/landing/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 
 const SiteLayout = ({ children }: { children: React.ReactNode }) => (
   <>

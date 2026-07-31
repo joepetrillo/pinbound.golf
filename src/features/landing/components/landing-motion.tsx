@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { useLandingMotion } from "@/hooks/use-landing-motion";
+import { useLandingMotion } from "@/features/landing/hooks/use-landing-motion";
 
 /**
  * Client boundary for the landing page's arrival motion, and nothing else. It

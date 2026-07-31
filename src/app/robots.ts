@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { isProductionComingSoon } from "@/env/server";
+import { isProductionComingSoon } from "@/env.config";
 import { SITE_URL } from "@/lib/site";
 
 const robots = (): MetadataRoute.Robots => {

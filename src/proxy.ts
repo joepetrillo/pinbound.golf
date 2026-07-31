@@ -2,7 +2,7 @@ import { authkit, handleAuthkitProxy } from "@workos-inc/authkit-nextjs";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { isProductionComingSoon, workOSIsConfigured } from "@/env/server";
+import { isProductionComingSoon, workOSIsConfigured } from "@/env.config";
 
 const COMING_SOON_PATH = "/coming-soon";
 const DASHBOARD_PATH = "/dashboard";

@@ -1,7 +1,7 @@
 import { RiArrowRightLine, RiFlagLine } from "@remixicon/react";
 import Link from "next/link";
 
-import { CurrentYear } from "@/components/landing/current-year";
+import { CurrentYear } from "@/components/current-year";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import {

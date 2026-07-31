@@ -3,13 +3,13 @@
 import { checkBotId } from "botid/server";
 import { returnServerError } from "next-safe-action";
 
+import { deliverContactInquiry } from "@/features/contact/contact-delivery";
 import {
   contactActionResultSchema,
   contactActionSchema,
   contactFormSchema,
   HONEYPOT_FIELD,
-} from "@/app/(site)/contact/schema";
-import { deliverContactInquiry } from "@/data/contact";
+} from "@/features/contact/contact-schema";
 import { actionClient } from "@/lib/safe-action";
 
 const DELIVERY_FAILED_MESSAGE =
@@ -18,7 +18,6 @@ const DELIVERY_FAILED_MESSAGE =
 // Public contact form; intentionally unauthenticated. Abuse is limited by
 // validation, the honeypot, BotID, the fixed acknowledgement, and the WAF
 // rate limit.
-// oxlint-disable-next-line react-doctor/server-auth-actions
 export const submitContactInquiry = actionClient
   .inputSchema(contactActionSchema)
   .outputSchema(contactActionResultSchema)

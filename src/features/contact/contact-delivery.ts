@@ -1,10 +1,10 @@
 import "server-only";
 import { createElement } from "react";
 
-import type { ContactInquiry } from "@/app/(site)/contact/schema";
 import { getResend } from "@/data/resend";
 import { ContactAcknowledgementEmail } from "@/emails/contact-acknowledgement";
 import { ContactNotificationEmail } from "@/emails/contact-notification";
+import type { ContactInquiry } from "@/features/contact/contact-schema";
 import { CONTACT_EMAIL, SITE_NAME } from "@/lib/site";
 
 export type ContactDeliveryResult =

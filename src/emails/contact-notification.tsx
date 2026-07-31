@@ -10,7 +10,7 @@ import {
   Text,
 } from "@react-email/components";
 
-import type { ContactInquiry } from "@/app/(site)/contact/schema";
+import type { ContactInquiry } from "@/features/contact/contact-schema";
 
 // Internal notification for a contact-form submission. Every value is rendered
 // through JSX text nodes so user-supplied content is always escaped.

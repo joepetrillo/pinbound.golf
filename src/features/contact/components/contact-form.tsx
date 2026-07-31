@@ -9,23 +9,6 @@ import type { FormEvent, ReactNode } from "react";
 import { Controller } from "react-hook-form";
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 
-import { submitContactInquiry } from "@/app/(site)/contact/actions";
-import {
-  CONTACT_FIELD_NAMES,
-  contactActionSchema,
-  COURSE_MAX_LENGTH,
-  EMAIL_MAX_LENGTH,
-  HONEYPOT_FIELD,
-  INQUIRY_TYPES,
-  MESSAGE_MAX_LENGTH,
-  MESSAGE_MIN_LENGTH,
-  NAME_MAX_LENGTH,
-  TEE_SHEET_MAX_LENGTH,
-} from "@/app/(site)/contact/schema";
-import type {
-  ContactActionInput,
-  ContactFieldName,
-} from "@/app/(site)/contact/schema";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -47,6 +30,23 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { submitContactInquiry } from "@/features/contact/contact-actions";
+import {
+  CONTACT_FIELD_NAMES,
+  contactActionSchema,
+  COURSE_MAX_LENGTH,
+  EMAIL_MAX_LENGTH,
+  HONEYPOT_FIELD,
+  INQUIRY_TYPES,
+  MESSAGE_MAX_LENGTH,
+  MESSAGE_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TEE_SHEET_MAX_LENGTH,
+} from "@/features/contact/contact-schema";
+import type {
+  ContactActionInput,
+  ContactFieldName,
+} from "@/features/contact/contact-schema";
 import { CONTACT_EMAIL, MARKETING_HOME_HREF } from "@/lib/site";
 import { cn } from "@/lib/utils";
 

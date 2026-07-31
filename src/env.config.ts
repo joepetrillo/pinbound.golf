@@ -1,7 +1,7 @@
 import { defineEnv } from "envin";
 import { z } from "zod";
 
-export default defineEnv({
+const env = defineEnv({
   client: {
     NEXT_PUBLIC_WORKOS_REDIRECT_URI: z.url().optional(),
   },
@@ -25,3 +25,14 @@ export default defineEnv({
     WORKOS_COOKIE_PASSWORD: z.string().min(32).optional(),
   },
 });
+
+export const isProductionComingSoon = (): boolean =>
+  env.VERCEL_ENV === "production" && env.COMING_SOON_MODE;
+
+export const workOSIsConfigured = (): boolean =>
+  env.NEXT_PUBLIC_WORKOS_REDIRECT_URI !== undefined &&
+  env.WORKOS_API_KEY !== undefined &&
+  env.WORKOS_CLIENT_ID !== undefined &&
+  env.WORKOS_COOKIE_PASSWORD !== undefined;
+
+export default env;

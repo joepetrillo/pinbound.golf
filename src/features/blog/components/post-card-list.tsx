@@ -1,15 +1,14 @@
 import Link from "next/link";
 
-import { ReadingTime } from "@/components/blog/reading-time";
-import { formatBlogDate, getReadingTime } from "@/lib/blog";
-import type { BlogPost } from "@/lib/blog";
+import { ReadingTime } from "@/features/blog/components/reading-time";
+import type { BlogPostSummary } from "@/features/blog/types/blog";
 
 interface PostCardListProps {
   // The index renders these under the page <h1>; related posts sit under the
   // "Keep reading" <h2>, so each call site picks the level that keeps the
   // document outline correct.
   headingLevel: "h2" | "h3";
-  posts: BlogPost[];
+  posts: BlogPostSummary[];
 }
 
 export const PostCardList = ({
@@ -30,18 +29,18 @@ export const PostCardList = ({
           >
             <time
               className="text-xs font-medium tracking-[0.12em] text-muted-foreground uppercase"
-              dateTime={post.data.publishedAt}
+              dateTime={post.publishedAt}
             >
-              {formatBlogDate(post.data.publishedAt)}
+              {post.formattedDate}
             </time>
             <Heading className="text-2xl font-medium tracking-tight text-balance md:text-3xl">
-              {post.data.title}
+              {post.title}
             </Heading>
             <p className="leading-relaxed text-pretty text-muted-foreground">
-              {post.data.description}
+              {post.description}
             </p>
             <div className="mt-auto pt-4">
-              <ReadingTime label={getReadingTime(post)} />
+              <ReadingTime label={post.readingTime} />
             </div>
           </Link>
         </li>

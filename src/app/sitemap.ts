@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { isProductionComingSoon } from "@/env/server";
-import { getBlogPosts } from "@/lib/blog";
+import { isProductionComingSoon } from "@/env.config";
+import { getBlogPostSummaries } from "@/features/blog/blog-queries";
 import { SITE_URL } from "@/lib/site";
 
 const staticRoutes = ["", "/blog", "/contact", "/privacy", "/terms"] as const;
@@ -15,10 +15,12 @@ const sitemap = (): MetadataRoute.Sitemap => {
     url: `${SITE_URL}${route}`,
   }));
 
-  const blogEntries: MetadataRoute.Sitemap = getBlogPosts().map((post) => ({
-    lastModified: post.data.publishedAt,
-    url: `${SITE_URL}${post.url}`,
-  }));
+  const blogEntries: MetadataRoute.Sitemap = getBlogPostSummaries().map(
+    (summary) => ({
+      lastModified: summary.publishedAt,
+      url: `${SITE_URL}${summary.url}`,
+    })
+  );
 
   return [...staticEntries, ...blogEntries];
 };

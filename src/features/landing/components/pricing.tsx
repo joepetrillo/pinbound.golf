@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { PricingEstimator } from "@/components/landing/pricing-estimator";
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
+import { PricingEstimator } from "@/features/landing/components/pricing-estimator";
 import { CONTACT_HREF, CONTACT_LABEL, CTA_HREF, CTA_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 

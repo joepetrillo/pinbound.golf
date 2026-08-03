@@ -33,12 +33,7 @@ type OrbProps = {
   className?: string;
 };
 
-/**
- * Soft-nav remounts can create the R3F Canvas before the parent has a non-zero
- * layout, or reuse a torn-down WebGL path. Wait for a real size, then mount a
- * fresh Canvas keyed per activation so Chromium doesn't paint its broken-canvas
- * glyph (the pixelated sad face).
- */
+/** Wait for layout, then key a fresh Canvas so soft-nav remounts cannot reuse torn-down WebGL state. */
 export function Orb({
   colors = ["#CADCFC", "#A0B9D1"],
   colorsRef,
@@ -341,7 +336,7 @@ varying vec2 vUv;
 
 const float PI = 3.14159265358979323846;
 
-// Draw a single oval with soft edges and calculate its gradient color
+// Draw one soft-edged oval and return its gradient color.
 bool drawOval(vec2 polarUv, vec2 polarCenter, float a, float b, bool reverseGradient, float softness, out vec4 color) {
     vec2 p = polarUv - polarCenter;
     float oval = (p.x * p.x) / (a * a) + (p.y * p.y) / (b * b);
@@ -350,7 +345,6 @@ bool drawOval(vec2 polarUv, vec2 polarCenter, float a, float b, bool reverseGrad
 
     if (edge > 0.0) {
         float gradient = reverseGradient ? (1.0 - (p.x / a + 1.0) / 2.0) : ((p.x / a + 1.0) / 2.0);
-        // Flatten gradient toward middle value for more uniform appearance
         gradient = mix(0.5, gradient, 0.1);
         color = vec4(vec3(gradient), 0.85 * edge);
         return true;
@@ -358,7 +352,7 @@ bool drawOval(vec2 polarUv, vec2 polarCenter, float a, float b, bool reverseGrad
     return false;
 }
 
-// Map grayscale value to a 4-color ramp (color1, color2, color3, color4)
+// Map grayscale to a four-color ramp.
 vec3 colorRamp(float grayscale, vec3 color1, vec3 color2, vec3 color3, vec3 color4) {
     if (grayscale < 0.33) {
         return mix(color1, color2, grayscale * 3.0);
@@ -373,7 +367,6 @@ vec2 hash2(vec2 p) {
     return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);
 }
 
-// 2D noise for the ring
 float noise2D(vec2 p) {
     vec2 i = floor(p);
     vec2 f = fract(p);
@@ -431,36 +424,27 @@ float flow(vec3 decomposed, float time) {
 }
 
 void main() {
-    // Normalize vUv to be centered around (0.0, 0.0)
     vec2 uv = vUv * 2.0 - 1.0;
 
-    // Convert uv to polar coordinates
     float radius = length(uv);
     float theta = atan(uv.y, uv.x);
-    if (theta < 0.0) theta += 2.0 * PI; // Normalize theta to [0, 2*PI]
+    if (theta < 0.0) theta += 2.0 * PI;
 
     // Decomposed angle is used for sampling noise textures without seams:
     // float noise = mix(sample(decomposed.x), sample(decomposed.y), decomposed.z);
     vec3 decomposed = vec3(
-        // angle in the range [0, 1]
         theta / (2.0 * PI),
-        // angle offset by 180 degrees in the range [1, 2]
         mod(theta / (2.0 * PI) + 0.5, 1.0) + 1.0,
-        // mixing factor between two noises
         abs(theta / PI - 1.0)
     );
 
-    // Add noise to the angle for a flow-like distortion (reduced for flatter look)
     float noise = flow(decomposed, radius * 0.03 - uAnimation * 0.2) - 0.5;
     theta += noise * mix(0.08, 0.25, uOutputVolume);
 
-    // Initialize the base color to white
     vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
 
-    // Original parameters for the ovals in polar coordinates
     float originalCenters[7] = float[7](0.0, 0.5 * PI, 1.0 * PI, 1.5 * PI, 2.0 * PI, 2.5 * PI, 3.0 * PI);
 
-    // Parameters for the animated centers in polar coordinates
     float centers[7];
     for (int i = 0; i < 7; i++) {
         centers[i] = originalCenters[i] + 0.5 * sin(uTime / 20.0 + uOffsets[i]);
@@ -469,14 +453,12 @@ void main() {
     float a, b;
     vec4 ovalColor;
 
-    // Check if the pixel is inside any of the ovals
     for (int i = 0; i < 7; i++) {
         float noise = noise2D(vec2(centers[i] + uTime * 0.05, 0.5));
-        a = 0.5 + noise * 0.3; // Increased for more coverage
-        b = noise * mix(3.5, 2.5, uInputVolume); // Increased height for fuller appearance
-        bool reverseGradient = (i % 2 == 1); // Reverse gradient for every second oval
+        a = 0.5 + noise * 0.3;
+        b = noise * mix(3.5, 2.5, uInputVolume);
+        bool reverseGradient = (i % 2 == 1);
 
-        // Calculate the distance in polar coordinates
         float distTheta = min(
             abs(theta - centers[i]),
             min(
@@ -486,47 +468,38 @@ void main() {
         );
         float distRadius = radius;
 
-        float softness = 0.6; // Increased softness for flatter, less pronounced edges
+        float softness = 0.6;
 
-        // Check if the pixel is inside the oval in polar coordinates
         if (drawOval(vec2(distTheta, distRadius), vec2(0.0, 0.0), a, b, reverseGradient, softness, ovalColor)) {
-            // Blend the oval color with the existing color
             color.rgb = mix(color.rgb, ovalColor.rgb, ovalColor.a);
-            color.a = max(color.a, ovalColor.a); // Max alpha
+            color.a = max(color.a, ovalColor.a);
         }
     }
     
-    // Calculate both noisy rings
     float ringRadius1 = sharpRing(decomposed, uTime * 0.1);
     float ringRadius2 = smoothRing(decomposed, uTime * 0.1);
     
-    // Adjust rings based on input volume (reduced for flatter appearance)
     float inputRadius1 = radius + uInputVolume * 0.2;
     float inputRadius2 = radius + uInputVolume * 0.15;
     float opacity1 = mix(0.2, 0.6, uInputVolume);
     float opacity2 = mix(0.15, 0.45, uInputVolume);
 
-    // Blend both rings
     float ringAlpha1 = (inputRadius2 >= ringRadius1) ? opacity1 : 0.0;
     float ringAlpha2 = smoothstep(ringRadius2 - 0.05, ringRadius2 + 0.05, inputRadius1) * opacity2;
     
     float totalRingAlpha = max(ringAlpha1, ringAlpha2);
     
-    // Apply screen blend mode for combined rings
-    vec3 ringColor = vec3(1.0); // White ring color
+    vec3 ringColor = vec3(1.0);
     color.rgb = 1.0 - (1.0 - color.rgb) * (1.0 - ringColor * totalRingAlpha);
 
-    // Define colours to ramp against greyscale (could increase the amount of colours in the ramp)
-    vec3 color1 = vec3(0.0, 0.0, 0.0); // Black
-    vec3 color2 = uColor1; // Darker Color
-    vec3 color3 = uColor2; // Lighter Color
-    vec3 color4 = vec3(1.0, 1.0, 1.0); // White
+    vec3 color1 = vec3(0.0, 0.0, 0.0);
+    vec3 color2 = uColor1;
+    vec3 color3 = uColor2;
+    vec3 color4 = vec3(1.0, 1.0, 1.0);
 
-    // Convert grayscale color to the color ramp
     float luminance = mix(color.r, 1.0 - color.r, uInverted);
-    color.rgb = colorRamp(luminance, color1, color2, color3, color4); // Apply the color ramp
+    color.rgb = colorRamp(luminance, color1, color2, color3, color4);
 
-    // Apply fade-in opacity
     color.a *= uOpacity;
 
     gl_FragColor = color;

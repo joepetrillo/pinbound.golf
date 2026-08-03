@@ -8,11 +8,9 @@ import {
 } from "@/features/blog/blog-queries";
 import { BlogPost } from "@/features/blog/components/blog-post";
 
-// No static shell for this route, and so no Suspense boundary or skeleton.
-// `generateStaticParams` prerenders every slug from local MDX at build time, so
-// the whole page is static HTML — there is no dynamic hole to stream into and a
-// skeleton would never be shown. Opting out is the documented choice when a
-// route's content is fully known ahead of time.
+// Published slugs are prerendered from local MDX. Unlisted slugs only resolve
+// far enough to reach notFound(), so blocking is intentional and a loading
+// skeleton would misrepresent the only possible outcome.
 export const instant = false;
 
 export const generateStaticParams = (): { slug: string }[] =>

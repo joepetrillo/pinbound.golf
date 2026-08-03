@@ -9,10 +9,8 @@ export const metadata: Metadata = {
   title: "Blog — Pinbound",
 };
 
-// No static shell for this route, and so no Suspense boundary or skeleton. The
-// index reads local MDX through a cached query, so the page is static HTML end
-// to end — there is no dynamic hole to stream into and a skeleton would never
-// be shown.
+// Local MDX is fixed for the deployment, so this route is static HTML with no
+// request-time content that warrants a loading skeleton.
 export const instant = false;
 
 const BlogPage = () => (

@@ -46,8 +46,7 @@ export const PolicyFidelity = () => (
       </p>
     </div>
 
-    {/* Arrival motion: data-reveal-group animates the children in sequence and
-        --i is each child's place in it. Contract lives in src/app/motion.css. */}
+    {/* --i sets each child's place in the reveal-group stagger. */}
     <div className="mt-10 grid gap-4 md:grid-cols-3" data-reveal-group>
       {controlPoints.map((point, index) => (
         <Card

@@ -14,6 +14,7 @@
   },
   "enabledPlugins": {
     "resend@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "workos@claude-plugins-official": true
   }
 }

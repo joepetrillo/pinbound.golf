@@ -1,65 +1,47 @@
-import { authkit, handleAuthkitProxy } from "@workos-inc/authkit-nextjs";
+import { authkit, handleAuthkitHeaders } from "@workos-inc/authkit-nextjs";
+import type { Route } from "next";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { isProductionComingSoon, workOSIsConfigured } from "@/env.config";
+import { isProductionComingSoon } from "@/env.config";
+import { DASHBOARD_HREF } from "@/lib/site";
 
-const COMING_SOON_PATH = "/coming-soon";
-const DASHBOARD_PATH = "/dashboard";
-const AUTH_PATH = "/auth";
-const MARKETING_HOME_PATH = "/home";
+const COMING_SOON_PATH = "/coming-soon" satisfies Route;
 
-export const proxy = async (request: NextRequest) => {
+const proxy = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
-  if (isProductionComingSoon()) {
-    if (pathname !== COMING_SOON_PATH) {
-      return NextResponse.rewrite(new URL(COMING_SOON_PATH, request.url));
-    }
-
-    return NextResponse.next();
-  }
-
-  if (pathname === AUTH_PATH || pathname.startsWith(`${AUTH_PATH}/`)) {
-    return workOSIsConfigured()
-      ? NextResponse.next()
-      : NextResponse.redirect(new URL(MARKETING_HOME_PATH, request.url));
-  }
-
-  const isDashboard =
-    pathname === DASHBOARD_PATH || pathname.startsWith(`${DASHBOARD_PATH}/`);
-  const isRootDocumentRequest =
-    pathname === "/" && (request.method === "GET" || request.method === "HEAD");
-
-  if (!(isDashboard || isRootDocumentRequest)) {
-    return NextResponse.next();
-  }
-
-  if (!workOSIsConfigured()) {
-    return isDashboard
-      ? NextResponse.redirect(new URL(MARKETING_HOME_PATH, request.url))
-      : NextResponse.next();
+  // Pre-launch wall. Gates the whole site, so it runs before any session work.
+  if (isProductionComingSoon() && pathname !== COMING_SOON_PATH) {
+    return NextResponse.rewrite(new URL(COMING_SOON_PATH, request.url));
   }
 
   const { authorizationUrl, headers, session } = await authkit(request);
 
-  if (isDashboard && !session.user && authorizationUrl) {
-    return handleAuthkitProxy(request, headers, {
+  // Signed-in visitors get the app at "/". "/home" stays marketing for everyone.
+  if (pathname === "/" && session.user) {
+    return handleAuthkitHeaders(request, headers, { redirect: DASHBOARD_HREF });
+  }
+
+  // Signed-out visitors are sent to AuthKit and returned here afterwards.
+  if (
+    pathname.startsWith(DASHBOARD_HREF) &&
+    !session.user &&
+    authorizationUrl
+  ) {
+    return handleAuthkitHeaders(request, headers, {
       redirect: authorizationUrl,
     });
   }
 
-  if (isRootDocumentRequest && session.user) {
-    return handleAuthkitProxy(request, headers, {
-      redirect: DASHBOARD_PATH,
-    });
-  }
-
-  return handleAuthkitProxy(request, headers);
+  return handleAuthkitHeaders(request, headers);
 };
+
+export default proxy;
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|opengraph-image|.*\\.(?:gif|ico|jpe?g|m4a|png|svg|webp)$).*)",
+    // Exclude Next/Vercel internals, BotID's rewrite namespace, and public assets.
+    "/((?!_next(?:/|$)|__nextjs_|_vercel(?:/|$)|149e9513-01fa-4fb0-aad4-566afd725d1b(?:/|$)|audio(?:/|$)|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$|opengraph-image$).*)",
   ],
 };

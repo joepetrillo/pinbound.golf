@@ -1,9 +1,9 @@
 import { getSignUpUrl } from "@workos-inc/authkit-nextjs";
-import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
-export const handleSignUp = async () => {
-  const signUpUrl = await getSignUpUrl();
-  return redirect(signUpUrl);
-};
+import { DASHBOARD_HREF } from "@/lib/site";
 
-export const GET = handleSignUp;
+const redirectToSignUp = async () =>
+  NextResponse.redirect(await getSignUpUrl({ returnTo: DASHBOARD_HREF }));
+
+export { redirectToSignUp as GET };

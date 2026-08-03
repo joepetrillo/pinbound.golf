@@ -5,6 +5,7 @@ import path from "node:path";
 import { blogPosts } from "collections/server";
 import { loader } from "fumadocs-core/source";
 import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
+import type { Route } from "next";
 
 import type { BlogPostSummary } from "@/features/blog/types/blog";
 
@@ -42,7 +43,7 @@ const toSummary = (page: BlogPage): BlogPostSummary => ({
   readingTime: readReadingTime(page.path),
   slug: page.slugs[0],
   title: page.data.title,
-  url: page.url,
+  url: page.url as Route,
 });
 
 /**

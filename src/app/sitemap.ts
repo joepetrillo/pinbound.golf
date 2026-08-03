@@ -1,10 +1,16 @@
-import type { MetadataRoute } from "next";
+import type { MetadataRoute, Route } from "next";
 
 import { isProductionComingSoon } from "@/env.config";
 import { getBlogPostSummaries } from "@/features/blog/blog-queries";
 import { SITE_URL } from "@/lib/site";
 
-const staticRoutes = ["", "/blog", "/contact", "/privacy", "/terms"] as const;
+const staticRoutes = [
+  "/",
+  "/blog",
+  "/contact",
+  "/privacy",
+  "/terms",
+] as const satisfies readonly Route[];
 
 const sitemap = (): MetadataRoute.Sitemap => {
   if (isProductionComingSoon()) {

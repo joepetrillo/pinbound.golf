@@ -1,4 +1,5 @@
 import type { MDXComponents } from "mdx/types";
+import type { Route } from "next";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 
@@ -19,7 +20,7 @@ const isInternalHref = (href: string): boolean =>
 const MarkdownLink = ({ children, href, ...props }: ComponentProps<"a">) => {
   if (href && isInternalHref(href)) {
     return (
-      <Link href={href} {...props}>
+      <Link href={href as Route} {...props}>
         {children}
       </Link>
     );

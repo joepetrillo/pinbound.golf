@@ -7,9 +7,6 @@
     "shadcn": {
       "command": "bunx",
       "args": ["shadcn@latest", "mcp"]
-    },
-    "workos": {
-      "url": "https://mcp.workos.com/mcp"
     }
   }
 }

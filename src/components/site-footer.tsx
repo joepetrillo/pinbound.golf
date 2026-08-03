@@ -1,4 +1,5 @@
 import { RiArrowRightLine, RiFlagLine } from "@remixicon/react";
+import type { Route } from "next";
 import Link from "next/link";
 
 import { CurrentYear } from "@/components/current-year";
@@ -14,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface FooterLink {
-  href: string;
+  href: Route;
   label: string;
 }
 

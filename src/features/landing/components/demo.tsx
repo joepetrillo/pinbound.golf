@@ -50,7 +50,7 @@ interface SampleCall {
   transcript: string;
 }
 
-// Peaks are precomputed from the recordings in public/audio
+// Peaks are precomputed from the recordings in public/audio.
 const sampleCalls: SampleCall[] = [
   {
     caption: "Booking a tee time",
@@ -338,9 +338,7 @@ const TalkWidget = ({ micStatus, onMicError, onToggle }: TalkWidgetProps) => {
 export const Demo = () => {
   const [micStatus, setMicStatus] = useState<MicStatus>("idle");
 
-  // Stop listening when the route is hidden. LiveWaveform already releases the
-  // track in its own cleanup, but this status would survive the navigation, and
-  // returning to the page would reacquire the microphone without being asked.
+  // Reset preserved Activity state so returning never reacquires the microphone.
   useLayoutEffect(
     () => () => {
       setMicStatus("idle");

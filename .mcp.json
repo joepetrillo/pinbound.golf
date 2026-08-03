@@ -7,10 +7,6 @@
     "shadcn": {
       "command": "bunx",
       "args": ["shadcn@latest", "mcp"]
-    },
-    "workos": {
-      "type": "http",
-      "url": "https://mcp.workos.com/mcp"
     }
   }
 }

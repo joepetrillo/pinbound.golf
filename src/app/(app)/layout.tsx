@@ -1,4 +1,4 @@
-const AppLayout = ({ children }: { children: React.ReactNode }) => (
+const AppLayout = ({ children }: LayoutProps<"/">) => (
   <main className="flex-1" id="main">
     {children}
   </main>

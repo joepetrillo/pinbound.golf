@@ -27,7 +27,6 @@ const FeaturedPost = ({ post }: { post: BlogPostSummary }) => (
   </Link>
 );
 
-/** The newest post, plus every older post as a card grid beneath it. */
 export const BlogIndex = () => {
   const [featuredPost, ...remainingPosts] = getBlogPostSummaries();
 

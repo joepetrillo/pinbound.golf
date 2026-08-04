@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
 import { RiCheckLine, RiErrorWarningLine } from "@remixicon/react";
 import Link from "next/link";
-import { useId, useRef } from "react";
+import { useId, useLayoutEffect, useRef } from "react";
 import type { FormEvent, ReactNode } from "react";
 import { Controller } from "react-hook-form";
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
@@ -465,16 +465,36 @@ const ContactFormFields = ({
 export const ContactForm = () => {
   const id = useId();
   const attemptRef = useRef<ContactAttempt | null>(null);
+  const shouldResetOnHideRef = useRef(false);
 
-  const { form, action } = useHookFormAction(
+  const { form, action, resetFormAndAction } = useHookFormAction(
     submitContactInquiry,
     zodResolver(contactActionSchema),
     {
+      actionProps: {
+        onSuccess: () => {
+          shouldResetOnHideRef.current = true;
+        },
+      },
       formProps: {
         defaultValues: CONTACT_FORM_DEFAULTS,
         mode: "onSubmit",
       },
     }
+  );
+
+  // Next.js Activity preserves this route during soft navigation. Keep drafts,
+  // but clear a completed submission when its success screen is hidden so a
+  // later visit starts with a fresh form.
+  useLayoutEffect(
+    () => () => {
+      if (shouldResetOnHideRef.current) {
+        shouldResetOnHideRef.current = false;
+        attemptRef.current = null;
+        resetFormAndAction();
+      }
+    },
+    [resetFormAndAction]
   );
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {

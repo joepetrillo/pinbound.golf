@@ -1,4 +1,4 @@
-import { authkit, handleAuthkitHeaders } from "@workos-inc/authkit-nextjs";
+import { authkit, handleAuthkitProxy } from "@workos-inc/authkit-nextjs";
 import type { Route } from "next";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -20,7 +20,7 @@ const proxy = async (request: NextRequest) => {
 
   // Signed-in visitors get the app at "/". "/home" stays marketing for everyone.
   if (pathname === "/" && session.user) {
-    return handleAuthkitHeaders(request, headers, { redirect: DASHBOARD_HREF });
+    return handleAuthkitProxy(request, headers, { redirect: DASHBOARD_HREF });
   }
 
   // Signed-out visitors are sent to AuthKit and returned here afterwards.
@@ -29,12 +29,12 @@ const proxy = async (request: NextRequest) => {
     !session.user &&
     authorizationUrl
   ) {
-    return handleAuthkitHeaders(request, headers, {
+    return handleAuthkitProxy(request, headers, {
       redirect: authorizationUrl,
     });
   }
 
-  return handleAuthkitHeaders(request, headers);
+  return handleAuthkitProxy(request, headers);
 };
 
 export default proxy;

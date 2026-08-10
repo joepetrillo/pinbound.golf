@@ -11,25 +11,25 @@
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-adoption/SKILL.md",
-      "computedHash": "3b755e6f21774dcd3fbf54736ed480c53d1c66e108c7a3f5e621f72ceee43ef8"
+      "computedHash": "48828a610ff29005390597d6baca6e92016efabe19733144fb3d0e7c7bbb9327"
     },
     "next-cache-components-optimizer": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-optimizer/SKILL.md",
-      "computedHash": "73a5b28068403eba3842313515c0b3830a435695e060135afbb61e57dda4fc72"
+      "computedHash": "925bfb94017293b94586bc8deb92fd18de8664352c56ab0bee8c5b2e9135fc74"
     },
     "next-dev-loop": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-dev-loop/SKILL.md",
-      "computedHash": "1fb1b47ed7186737df086aa198f86961f72691539f1c4507f60bbedf60a128be"
+      "computedHash": "5b567d2e521056db6b8b37c46c6b2b9c72de5192c0daeb351c966d61e0702630"
     },
     "nextjs-app-architecture": {
       "source": "aurorascharff/skills",
       "sourceType": "github",
       "skillPath": "skills/nextjs-app-architecture/SKILL.md",
-      "computedHash": "6cc707499c74caab7e2825365232b7556937641d3eb9b6e0bce765c3ae3637c1"
+      "computedHash": "9bbc04dc53c445b12ccb7faca920bca931fc058b016f8abb1e21b19cc6da2362"
     },
     "safe-action-advanced": {
       "source": "next-safe-action/skills",

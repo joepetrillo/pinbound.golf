@@ -8,6 +8,7 @@ const env = defineEnv({
   clientPrefix: "NEXT_PUBLIC_",
   envStrict: {
     COMING_SOON_MODE: process.env.COMING_SOON_MODE,
+    DATABASE_URL: process.env.DATABASE_URL,
     NEXT_PUBLIC_WORKOS_REDIRECT_URI:
       process.env.NEXT_PUBLIC_WORKOS_REDIRECT_URI,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
@@ -18,6 +19,7 @@ const env = defineEnv({
   },
   server: {
     COMING_SOON_MODE: z.stringbool().default(false),
+    DATABASE_URL: z.url().startsWith("postgresql://"),
     RESEND_API_KEY: z.string().startsWith("re_"),
     VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
     WORKOS_API_KEY: z.string().startsWith("sk_"),

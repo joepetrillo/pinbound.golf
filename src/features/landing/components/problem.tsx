@@ -29,7 +29,6 @@ const missedCalls = [
 export const Problem = () => (
   <Section id="product">
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-      {/* Text second on mobile, right on desktop */}
       <div className="order-1 space-y-4 lg:order-2" data-reveal>
         <h2 className="text-3xl font-medium tracking-tight text-balance md:text-4xl">
           The counter always wins. That&apos;s the problem.
@@ -42,7 +41,6 @@ export const Problem = () => (
         </p>
       </div>
 
-      {/* Notification stack — deliberately not a product card */}
       <div className="order-2 lg:order-1">
         <p
           className="mb-4 text-xs font-medium text-muted-foreground"

@@ -5,7 +5,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { CTA_HREF, CTA_LABEL, DEMO_HREF, DEMO_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-// Closing CTA band — the last thing a full-page scroller sees.
 export const FinalCta = () => (
   <Section className="border-t">
     <div

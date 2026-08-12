@@ -15,18 +15,16 @@ export const AccountSummary = async () => {
         Welcome back
         {user.firstName ? `, ${user.firstName}` : ""}.
       </p>
-      {user.email ? (
-        <p className="mt-2 text-sm text-pretty text-muted-foreground">
-          {user.email}
-        </p>
-      ) : null}
+      <p className="mt-2 text-sm text-pretty text-muted-foreground">
+        {user.email}
+      </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Link className={buttonVariants()} href={MARKETING_HOME_HREF}>
-          View site
+          Go back home
         </Link>
         <form action={signOutAction}>
-          <Button type="submit" variant="outline">
+          <Button type="submit" variant="outline" className="cursor-pointer">
             Sign out
           </Button>
         </form>

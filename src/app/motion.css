@@ -1,32 +1,8 @@
-/* ============================================================================
-   Landing-page arrival motion
-   ----------------------------------------------------------------------------
-   How /home arrives: the hero settles on load, then each section arrives once
-   as it scrolls into view. Only transform and opacity move, so every step stays
-   on the compositor.
-
-   The contract, applied as data attributes on the sections themselves:
-
-     [data-anim="hero-title"]     the h1 — its lines reveal behind masks
-       [data-anim="hero-mask"]      one per line, carries --i
-         [data-anim="hero-line"]      the line that sweeps up
-     [data-anim="hero-body"]      lead paragraph
-     [data-anim="hero-actions"]   the CTA row
-     [data-anim="hero-card"]      the transcript card — one entrance for the
-                                  whole card, content already inside it
-     [data-reveal]                a block that arrives as a single entrance
-     [data-reveal-group]          a container whose children arrive in sequence,
-                                  each carrying --i
-
-   These two are written by useLandingMotion, the only script involved:
-
-     [data-inview]                this section has been scrolled to — begin
-     [data-arrival-seen]          on <html>, not here: this visitor has already
-                                  watched the arrival, so none of it replays
-
-   Hidden pre-states are gated on (scripting: enabled) so the page is never
-   blank if the observer cannot run.
-   ========================================================================= */
+/* Landing arrival contract:
+   - data-anim identifies hero elements.
+   - data-reveal and data-reveal-group identify below-fold entrances; --i staggers.
+   - useLandingMotion sets data-inview and the document-level data-arrival-seen.
+   Hidden states require scripting so content remains visible without JavaScript. */
 
 :root {
   /* Strong ease-out. Named curves are too weak to read as deliberate. */
@@ -70,46 +46,30 @@
 
 /* ── The hero, on load ───────────────────────────────────────────────────── */
 
-/* The headline is two authored lines at every width, so the mask and the sweep
-   are unconditional. That is worth keeping: `animation-name` is part of the
-   computed style, so a media query that swapped the headline's animation
-   between bands would cancel one and start the other at frame 0 every time a
-   resize crossed the breakpoint — the entrance would replay mid-drag. */
+/* Keep one authored two-line animation across widths so resizing cannot replay it. */
 
-/* Contains the masks' margins. Without a formatting context here the last
-   mask's negative bottom margin collapses out through the h1 instead of
-   cancelling its padding, leaving the heading a descender taller than its
-   text. */
+/* Prevent the final mask's negative margin from collapsing through the h1. */
 [data-anim="hero-title"] {
   display: flow-root;
 }
 
 [data-anim="hero-mask"] {
   display: block;
-  /* Room for descenders so the mask never shaves a 'p'. The negative margin
-     cancels the padding, so the h1's height is unchanged. */
+  /* Reserve descenders without changing the h1 height. */
   padding-bottom: 0.14em;
   margin-bottom: -0.14em;
-  /* Clip the sweep on the block axis only. `clip` is the one overflow value
-     that may pair with `visible`, so a headline that ever outgrew its column
-     would spill in plain sight instead of being silently cut in half. */
+  /* Clip the sweep vertically while leaving horizontal overflow visible. */
   overflow-x: visible;
   overflow-y: clip;
 }
 
 [data-anim="hero-line"] {
   display: block;
-  /* The h1's size is derived from this line's own advance width, so it always
-     fits: holding it on one line keeps the authored break from moving. */
+  /* Preserve the authored line break used by the container-based font size. */
   white-space: nowrap;
 }
 
-/* Everything below is scoped to a document that has not played the arrival yet.
-   The flag goes on <html> because that element outlives every route: Cache
-   Components keeps only three routes alive, so a fourth visit evicts /home and
-   rebuilds it from scratch, and any mark left on the page's own DOM would be
-   thrown out with it. Layout stays outside the gate — only the motion is
-   spent. */
+/* The html flag survives route preservation and eviction; only motion is spent. */
 
 html:not([data-arrival-seen]) {
   [data-anim="hero-line"] {
@@ -129,8 +89,7 @@ html:not([data-arrival-seen]) {
     animation-delay: 420ms;
   }
 
-  /* Starts early but travels furthest and lands last, so it is still settling
-     as the copy finishes and the two halves read as one entrance. */
+  /* The card starts early and lands last to finish with the copy. */
   [data-anim="hero-card"] {
     animation: arrive-card 900ms var(--ease-arrive-heavy) backwards;
     animation-delay: 160ms;
@@ -156,10 +115,7 @@ html:not([data-arrival-seen]) {
   }
 }
 
-/* ── Reduced motion ──────────────────────────────────────────────────────────
-   Gentler, not zero. The arrivals still explain that something new appeared,
-   but they fade in place instead of travelling. Deliberately unlayered, to
-   match the pattern already in globals.css. */
+/* ── Reduced motion: preserve arrival context with a short stationary fade ── */
 
 @media (prefers-reduced-motion: reduce) {
   html:not([data-arrival-seen])

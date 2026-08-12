@@ -8,7 +8,6 @@ interface FullPageMessageProps {
   title: string;
 }
 
-// Centered full-viewport message used by the root not-found and error pages.
 export const FullPageMessage = ({
   description,
   title,

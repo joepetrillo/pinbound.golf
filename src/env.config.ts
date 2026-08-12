@@ -3,7 +3,7 @@ import { z } from "zod";
 
 const env = defineEnv({
   client: {
-    NEXT_PUBLIC_WORKOS_REDIRECT_URI: z.url().optional(),
+    NEXT_PUBLIC_WORKOS_REDIRECT_URI: z.url(),
   },
   clientPrefix: "NEXT_PUBLIC_",
   envStrict: {
@@ -20,19 +20,13 @@ const env = defineEnv({
     COMING_SOON_MODE: z.stringbool().default(false),
     RESEND_API_KEY: z.string().startsWith("re_"),
     VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
-    WORKOS_API_KEY: z.string().startsWith("sk_").optional(),
-    WORKOS_CLIENT_ID: z.string().startsWith("client_").optional(),
-    WORKOS_COOKIE_PASSWORD: z.string().min(32).optional(),
+    WORKOS_API_KEY: z.string().startsWith("sk_"),
+    WORKOS_CLIENT_ID: z.string().startsWith("client_"),
+    WORKOS_COOKIE_PASSWORD: z.string().min(32),
   },
 });
 
 export const isProductionComingSoon = (): boolean =>
   env.VERCEL_ENV === "production" && env.COMING_SOON_MODE;
-
-export const workOSIsConfigured = (): boolean =>
-  env.NEXT_PUBLIC_WORKOS_REDIRECT_URI !== undefined &&
-  env.WORKOS_API_KEY !== undefined &&
-  env.WORKOS_CLIENT_ID !== undefined &&
-  env.WORKOS_COOKIE_PASSWORD !== undefined;
 
 export default env;

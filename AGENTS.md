@@ -20,7 +20,7 @@ This project uses **Ultracite**, a zero-config preset that enforces strict code 
 - **Check for issues**: `bun x ultracite check`
 - **Diagnose setup**: `bun x ultracite doctor`
 
-Oxlint + Oxfmt (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable. Rules are enforced mechanically via `oxlint.config.ts` (extends `ultracite/oxlint/{core,js-plugins,next,react}`) — don't restate them here, just run the commands above.
+Oxlint + Oxfmt (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable. Rules are enforced mechanically via `oxlint.config.ts`.
 
 ## When Oxlint + Oxfmt Can't Help
 
@@ -37,56 +37,64 @@ Most formatting and common issues are automatically fixed by Oxlint + Oxfmt. Run
 
 <!-- END:ultracite-code-standards -->
 
-## App Architecture
+<!-- BEGIN:app-architecture-info -->
 
-Feature-sliced React Server Components. The `nextjs-app-architecture` skill has the full rules and rationale; this section is the short form.
+# Overall App Architecture
 
-### Layout
+This app uses feature-sliced React Server Components. Use the `nextjs-app-architecture` skill for the general workflow and this section for project-specific rules and exceptions. For framework mechanics, the installed, version-matched guides in `node_modules/next/dist/docs/` are the final source of truth.
+
+## Project structure
 
 ```
-src/app/          Pages, layouts, route handlers — composition only
-src/features/     Domain folders (blog, contact, landing, user)
-src/components/   UI primitives (ui/) and app-shell singletons (site-header, site-footer)
-src/data/         Shared provider clients (Resend) — secret-backed, server-only
-src/lib/          Non-domain helpers (site constants, cn, safe-action client)
+src/app/          Route composition, metadata, and route handlers
+src/features/     User-facing domains: blog, contact, landing, user
+src/components/   UI primitives and app-shell singletons
+src/data/         Shared, secret-backed provider clients
+src/lib/          Non-domain helpers and cohesive infrastructure
 ```
 
-A feature folder is named for a domain noun and its files carry that prefix:
+A feature is a domain noun. Sub-concepts stay in the parent feature, and feature-level files carry the domain prefix:
 
 ```
 src/features/<domain>/
-  <domain>-queries.ts     import "server-only"  — reads
-  <domain>-actions.ts     "use server"          — mutations
-  <domain>-schema.ts                            — validation contract, client-safe
-  components/                                   — server + client components, each with its skeleton
-  types/                                        — types shared by several files in the feature
-  hooks/                                        — feature-local client hooks
+  <domain>-queries.ts   # server-only reads
+  <domain>-actions.ts   # server actions
+  <domain>-schema.ts    # client-safe validation contracts
+  components/
+  hooks/
+  types/
 ```
 
-Sub-concepts fold into the parent feature rather than getting their own folder.
+## Route composition
 
-### Pages compose, they never fetch
+- Page and layout components compose static chrome, feature components, `<Suspense>`, and error boundaries. They do not contain domain reads, mutations, or route-specific component definitions.
+- Framework exports such as `generateStaticParams` and `generateMetadata` may call feature queries. The page component itself must not fetch data.
+- Type routes with generated `PageProps<"/route">`, `LayoutProps<"/route">`, and `RouteContext<"/route">` helpers.
+- Resolve route props at the page boundary. Feature components receive plain values such as `slug`, `id`, or parsed filters, never `params` or `searchParams`.
+- For a route that streams, keep the page synchronous and resolve route promises with `.then()` inside a page-owned `<Suspense>` boundary. The feature owns its skeleton, defined at the end of the same file. Add boundaries and skeletons only for reads that can actually suspend.
+- Keep Server Components as parents and isolate hooks, event handlers, and browser APIs in the smallest practical Client Component leaves.
+- Wrap fallible suspending sections in `SectionErrorBoundary` so one failed read does not take down the route.
 
-- `page.tsx` / `layout.tsx` hold static chrome, `<Suspense>` boundaries, and error boundaries. No queries, no route-specific components defined inline.
-- Feature components receive plain values (`slug`, `id`, parsed filters) or already-fetched records — never `params` / `searchParams`.
-- **A route with no dynamic hole needs no boundary and no skeleton.** When content is fully known at build time — local MDX with every slug prerendered by `generateStaticParams` — a skeleton would never render, and the route should declare `export const instant = false`. See `app/(site)/blog/[slug]/page.tsx`. Add a boundary because a read actually streams at request time, not reflexively.
-- **A route that does stream** keeps its page synchronous and resolves route props with `params.then()` / `searchParams.then()` instead of `await params`, so the chrome commits into the static shell while only the data-dependent section suspends. This only pays off with a `<Suspense>` boundary to suspend into — with no boundary, the promise suspends past the chrome anyway and `.then()` buys nothing over `await`. No route needs this today; both blog routes are `instant = false` and `/dashboard` takes no params.
-- The page owns the `<Suspense>` boundary; the feature exports the skeleton. Skeletons live in the same file as their component, defined at the end.
-- Skeletons match the real component's *classes*, not its tags. `Skeleton` renders a `<div>`, so anywhere the real markup uses `<p>`/`<span>` to wrap what becomes a placeholder, the skeleton uses `<div>` — otherwise it is invalid HTML and hydration breaks.
-- Wrap fallible suspending sections in `SectionErrorBoundary` (`src/components/section-error-boundary.tsx`, built on `catchError`) so one failed read doesn't take down the route.
+## Blog exception
 
-### Data access
+- `/blog` and `/blog/[slug]` intentionally export `instant = false`. Do not add a loading boundary or skeleton solely to make them instant.
+- Blog content is local MDX fixed for the deployment. Generated slugs render statically; an unlisted slug blocks only long enough to reach the dedicated `notFound()` state.
+- `dynamicParams` is unavailable when Cache Components is enabled. Do not add it as a way to control unknown blog slugs.
 
-- Keep Server Actions and Route Handlers thin: validate untrusted input, then delegate to the feature's query/delivery module.
-- Mark every read/write module `import "server-only"`; keep provider SDKs, secret-backed clients, and authorization close to the data source. Shared provider clients stay in `src/data/`.
-- Return minimal, **serializable** DTOs. This is enforced, not stylistic: `use cache` cannot serialize functions or class instances, so anything that crosses a cache boundary must be plain data. See `BlogPostSummary` — the fumadocs page object can't be cached because its MDX body is a component.
-- Client-safe contracts (Zod schemas, DTO types) live outside the server-only modules so the client can import them.
+## Data access
 
-### Cache Components
+- Query, delivery, and provider modules that touch server data or secrets use `import "server-only"`. Server Action modules use the `"use server"` directive.
+- Keep Server Actions and Route Handlers thin: authenticate or authorize, validate untrusted input, then delegate to feature-owned query or delivery code.
+- Keep provider SDKs, secret-backed clients, and authorization close to the data source. Shared provider clients live in `src/data/`.
+- Return minimal serializable DTOs across cache, action, and Server-to-Client Component boundaries. Client-safe schemas and DTO types remain outside server-only modules.
+
+## Cache Components
 
 `cacheComponents: true` and `partialPrefetching: true` are on.
 
-- Cache reusable reads with `"use cache"` + `cacheTag()` + `cacheLife()` when the data can change independently of a deploy (a database, a remote API). Don't leave such a read dynamic just because `<Suspense>` makes the build pass.
-- **Don't cache build-time content.** Data baked into the deployment — MDX in `content/`, anything read from the repo — is already fixed for the life of the build, and every route reading it is prerendered. `use cache` there buys nothing and *costs* a revalidate window: pages that can only change on deploy get regenerated on a timer to produce identical output. Keep those reads plain and synchronous; the build output should show `revalidate=False`. See `blog-queries.ts`.
-- Leave a read dynamic only when it genuinely must be per-request (session/cookie reads), and say why in a comment — see `getSignedInUser`.
+- Cache reusable database or remote API reads with `"use cache"`, `cacheTag()`, and `cacheLife()` when their data can change independently of a deployment.
+- Do not cache build-time content such as local MDX. It changes only with a deployment, so a revalidation window adds work without adding freshness.
+- Leave a read dynamic only when it genuinely must be evaluated per request, such as the session-backed `getSignedInUser`, and document why near the read.
 - Invalidate by tag: `updateTag()` in server actions, `revalidateTag(tag, "max")` in route handlers. `refresh()` is only for dynamic reads with no tag.
+
+<!-- END:app-architecture-info -->

@@ -2,7 +2,8 @@
 
 import { RiCloseLine, RiFlagLine, RiMenuLine } from "@remixicon/react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -16,8 +17,6 @@ import {
 import {
   CONTACT_HREF,
   CONTACT_LABEL,
-  CTA_HREF,
-  CTA_LABEL,
   MARKETING_HOME_HREF,
   NAV_LINKS,
 } from "@/lib/site";
@@ -61,8 +60,15 @@ const DesktopNav = () => (
   </nav>
 );
 
-export const SiteHeader = () => {
+export const SiteHeader = ({
+  accountControl,
+}: {
+  accountControl: ReactNode;
+}) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  // Bumped on Activity hide so the drawer remounts closed — setOpen(false)
+  // alone still plays the exit animation when the tree becomes visible again.
+  const [drawerEpoch, setDrawerEpoch] = useState(0);
   const menuCloseRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -80,6 +86,16 @@ export const SiteHeader = () => {
       desktopMediaQuery.removeEventListener("change", closeMenuOnDesktop);
     };
   }, []);
+
+  // Soft navigations hide this header via Activity. Remount closed so
+  // returning never restores an open drawer mid-exit animation.
+  useLayoutEffect(
+    () => () => {
+      setMenuOpen(false);
+      setDrawerEpoch((epoch) => epoch + 1);
+    },
+    []
+  );
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -105,12 +121,16 @@ export const SiteHeader = () => {
             >
               {CONTACT_LABEL}
             </Link>
-            <a className={cn(buttonVariants({ size: "sm" }))} href={CTA_HREF}>
-              {CTA_LABEL}
-            </a>
           </div>
 
-          <Drawer onOpenChange={setMenuOpen} open={menuOpen} showSwipeHandle>
+          <div className="hidden md:block">{accountControl}</div>
+
+          <Drawer
+            key={drawerEpoch}
+            onOpenChange={setMenuOpen}
+            open={menuOpen}
+            showSwipeHandle
+          >
             <DrawerTrigger
               className="md:hidden"
               render={
@@ -178,13 +198,7 @@ export const SiteHeader = () => {
                     >
                       {CONTACT_LABEL}
                     </Link>
-                    <a
-                      className={cn(buttonVariants({ className: "w-full" }))}
-                      href={CTA_HREF}
-                      onClick={closeMenu}
-                    >
-                      {CTA_LABEL}
-                    </a>
+                    {accountControl}
                   </div>
                 </nav>
 

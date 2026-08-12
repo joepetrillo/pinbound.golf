@@ -811,7 +811,6 @@ export const LiveMicrophoneWaveform = ({
   const dragStartOffsetRef = useRef<number>(0);
   const playbackStartTimeRef = useRef<number>(0);
 
-  // Audio recording and playback refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioBufferRef = useRef<AudioBuffer | null>(null);
@@ -859,7 +858,6 @@ export const LiveMicrophoneWaveform = ({
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
-      // Process recorded audio when stopping
       if (enableAudioPlayback && audioChunksRef.current.length > 0) {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: "audio/webm",

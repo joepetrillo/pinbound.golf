@@ -1,5 +1,9 @@
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import {
+  AuthKitProvider,
+  Impersonation,
+} from "@workos-inc/authkit-nextjs/components";
 import { ThemeProvider } from "@wrksz/themes/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -38,11 +42,7 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => (
+const RootLayout = ({ children }: LayoutProps<"/">) => (
   <html
     lang="en"
     className={cn(
@@ -58,15 +58,19 @@ const RootLayout = ({
     suppressHydrationWarning
   >
     <body>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        disableTransitionOnChange
-        enableColorScheme={true}
-        enableSystem
-      >
-        <div className="isolate flex min-h-dvh flex-col">{children}</div>
-      </ThemeProvider>
+      {/* No initialAuth: awaiting withAuth here would make every route dynamic. */}
+      <AuthKitProvider>
+        <Impersonation />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableColorScheme={true}
+          enableSystem
+        >
+          <div className="isolate flex min-h-dvh flex-col">{children}</div>
+        </ThemeProvider>
+      </AuthKitProvider>
       <Analytics />
       <SpeedInsights />
     </body>

@@ -1,9 +1,8 @@
 import { isValidPhoneNumber } from "libphonenumber-js/min";
 import { z } from "zod";
 
-// Canonical contract shared by form validation, the safe action, delivery, and
-// notification rendering. Presentation and Privacy copy still need deliberate
-// review when a field changes.
+// Shared by validation, delivery, and notification rendering. Field changes
+// also require a review of the form presentation and Privacy copy.
 
 export const INQUIRY_TYPES = [
   "Product question",

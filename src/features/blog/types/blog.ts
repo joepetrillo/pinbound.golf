@@ -1,9 +1,6 @@
-/**
- * Serializable view of a published post. The fumadocs page object carries the
- * compiled MDX body as a component function, which cannot cross a `use cache`
- * boundary — cached reads return this DTO instead, and only the `[slug]` route
- * reaches for the uncached page to render the body.
- */
+import type { Route } from "next";
+
+/** Serializable metadata used by blog lists, route metadata, and the sitemap. */
 export interface BlogPostSummary {
   description: string;
   /** Long-form display date, e.g. "March 4, 2026". */
@@ -13,5 +10,5 @@ export interface BlogPostSummary {
   readingTime: string;
   slug: string;
   title: string;
-  url: string;
+  url: Route;
 }

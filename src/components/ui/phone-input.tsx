@@ -1,7 +1,15 @@
 "use client";
 
 import { RiGlobalLine } from "@remixicon/react";
-import { createContext, useContext, useMemo, type ComponentProps } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentProps,
+} from "react";
 import PhoneNumberInput, {
   getCountryCallingCode,
   type Country,
@@ -98,6 +106,8 @@ const CountrySelect = ({
   onChange,
 }: CountrySelectProps) => {
   const { popupClassName } = useContext(PhoneInputContext);
+  const countryListRef = useRef<HTMLDivElement>(null);
+  const [isCountryListOpen, setIsCountryListOpen] = useState(false);
 
   const countries = countryList.flatMap((entry) =>
     entry.value ? [entry.value] : []
@@ -112,15 +122,41 @@ const CountrySelect = ({
   const countryLabel = (country: Country) =>
     labelByCountry.get(country) ?? country;
 
+  useEffect(() => {
+    if (!isCountryListOpen) {
+      return;
+    }
+
+    const animationFrame = requestAnimationFrame(() => {
+      const countryListElement = countryListRef.current;
+      const selectedCountryElement =
+        countryListElement?.querySelector<HTMLElement>("[data-selected]");
+
+      if (!(countryListElement && selectedCountryElement)) {
+        return;
+      }
+
+      countryListElement.scrollTop =
+        selectedCountryElement.offsetTop -
+        (countryListElement.clientHeight -
+          selectedCountryElement.offsetHeight) /
+          2;
+    });
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isCountryListOpen, selectedCountry]);
+
   return (
     <Combobox
       itemToStringLabel={countryLabel}
       items={countries}
+      onOpenChange={setIsCountryListOpen}
       onValueChange={(country: Country | null) => {
         if (country) {
           onChange(country);
         }
       }}
+      open={isCountryListOpen}
       value={selectedCountry || null}
     >
       <InputGroupAddon
@@ -155,7 +191,10 @@ const CountrySelect = ({
         <ComboboxEmpty className="px-4 py-2.5 text-sm">
           No country found.
         </ComboboxEmpty>
-        <ComboboxList className="scroll-fade overflow-y-auto overscroll-contain">
+        <ComboboxList
+          className="relative scroll-fade overflow-y-auto overscroll-contain"
+          ref={countryListRef}
+        >
           {(country: Country) => (
             <ComboboxItem
               className="flex items-center gap-2"

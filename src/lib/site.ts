@@ -5,8 +5,8 @@ export const SITE_NAME = "Pinbound";
 export const SITE_URL = "https://pinbound.golf";
 export const MARKETING_HOME_HREF = "/home" satisfies Route;
 
-// App home after sign-in.
-export const DASHBOARD_HREF = "/dashboard" satisfies Route;
+export const APP_HREF = "/app" satisfies Route;
+export const DASHBOARD_HREF = "/app/dashboard" satisfies Route;
 
 export const SITE_DESCRIPTION =
   "Pinbound answers your pro shop's phone, books tee times against your tee sheet, and follows your booking policies. Callers can always reach a person.";

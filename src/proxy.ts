@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { isProductionComingSoon } from "@/env.config";
-import { DASHBOARD_HREF } from "@/lib/site";
+import { APP_HREF, DASHBOARD_HREF } from "@/lib/site";
 
 const COMING_SOON_PATH = "/coming-soon" satisfies Route;
 
@@ -25,7 +25,7 @@ const proxy = async (request: NextRequest) => {
 
   // Signed-out visitors are sent to AuthKit and returned here afterwards.
   if (
-    pathname.startsWith(DASHBOARD_HREF) &&
+    (pathname === APP_HREF || pathname.startsWith(`${APP_HREF}/`)) &&
     !session.user &&
     authorizationUrl
   ) {
@@ -41,7 +41,8 @@ export default proxy;
 
 export const config = {
   matcher: [
-    // Exclude Next/Vercel internals, BotID's rewrite namespace, and public assets.
+    // Proxy runs before next.config rewrites, so BotID's fixed internal
+    // namespace must bypass AuthKit and the coming-soon rewrite.
     "/((?!_next(?:/|$)|__nextjs_|_vercel(?:/|$)|149e9513-01fa-4fb0-aad4-566afd725d1b(?:/|$)|audio(?:/|$)|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$|opengraph-image$).*)",
   ],
 };

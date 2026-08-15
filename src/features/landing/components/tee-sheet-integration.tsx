@@ -1,6 +1,5 @@
 import { RiArrowRightLine } from "@remixicon/react";
 import Link from "next/link";
-import type { CSSProperties } from "react";
 
 import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +19,7 @@ import {
   LightspeedGolfLogo,
   TeeSnapLogo,
 } from "@/features/landing/components/tee-sheet-logos";
+import { staggerStyle } from "@/features/landing/landing-stagger-style";
 import { CONTACT_HREF, CONTACT_LABEL, CTA_HREF, CTA_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -99,7 +99,7 @@ export const TeeSheetIntegration = () => (
         <div
           className="relative flex h-36 flex-col items-center justify-center gap-3 rounded-4xl bg-muted/50 px-6 transition-colors"
           key={platform.id}
-          style={{ "--i": index } as CSSProperties}
+          style={staggerStyle(index)}
         >
           <platform.logo
             className={cn("w-auto max-w-full", platform.logoClassName)}

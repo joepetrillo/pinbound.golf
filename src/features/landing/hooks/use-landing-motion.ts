@@ -6,6 +6,7 @@ const REVEAL_SELECTOR =
   "[data-reveal]:not([data-inview]), [data-reveal-group]:not([data-inview])";
 const ENTRANCE_PREFIX = "arrive";
 const SEEN_ATTRIBUTE = "data-arrival-seen";
+const INVIEW_ATTRIBUTE = "data-inview";
 
 // Reveal just before the section enters the viewport.
 const OBSERVER_OPTIONS: IntersectionObserverInit = {
@@ -44,20 +45,18 @@ export const useLandingMotion = () => {
         ? new IntersectionObserver((entries) => {
             for (const entry of entries) {
               if (entry.isIntersecting) {
-                (entry.target as HTMLElement).dataset.inview = "";
+                entry.target.setAttribute(INVIEW_ATTRIBUTE, "");
                 observer?.unobserve(entry.target);
               }
             }
           }, OBSERVER_OPTIONS)
         : null;
 
-    for (const target of document.querySelectorAll<HTMLElement>(
-      REVEAL_SELECTOR
-    )) {
+    for (const target of document.querySelectorAll(REVEAL_SELECTOR)) {
       if (observer) {
         observer.observe(target);
       } else {
-        target.dataset.inview = "";
+        target.setAttribute(INVIEW_ATTRIBUTE, "");
       }
     }
 

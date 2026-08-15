@@ -1,9 +1,9 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
 
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
 import { HeroTranscript } from "@/features/landing/components/hero-transcript";
+import { staggerStyle } from "@/features/landing/landing-stagger-style";
 import { CTA_HREF, CTA_LABEL, DEMO_HREF, DEMO_LABEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -19,11 +19,7 @@ export const Hero = () => (
           data-anim="hero-title"
         >
           {HEADLINE_LINES.map((line, index) => (
-            <span
-              data-anim="hero-mask"
-              key={line}
-              style={{ "--i": index } as CSSProperties}
-            >
+            <span data-anim="hero-mask" key={line} style={staggerStyle(index)}>
               <span data-anim="hero-line">{line}</span>
             </span>
           ))}

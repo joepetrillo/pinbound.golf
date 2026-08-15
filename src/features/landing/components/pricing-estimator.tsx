@@ -29,7 +29,7 @@ export const PricingEstimator = () => {
   const estimatedPrice = getEstimatedPrice(monthlyCalls);
 
   const handleVolumeChange = (value: number | readonly number[]) => {
-    const nextMonthlyCalls = typeof value === "number" ? value : value[0];
+    const nextMonthlyCalls = Array.isArray(value) ? value[0] : value;
 
     if (nextMonthlyCalls !== undefined) {
       setMonthlyCalls(nextMonthlyCalls);

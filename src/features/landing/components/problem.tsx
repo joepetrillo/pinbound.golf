@@ -1,7 +1,7 @@
 import { RiPhoneLine } from "@remixicon/react";
-import type { CSSProperties } from "react";
 
 import { Section } from "@/components/section";
+import { staggerStyle } from "@/features/landing/landing-stagger-style";
 
 const missedCalls = [
   {
@@ -57,7 +57,7 @@ export const Problem = () => (
             <li
               className="flex items-center gap-3 rounded-2xl border bg-background/80 px-4 py-3 shadow-sm backdrop-blur"
               key={call.id}
-              style={{ "--i": index } as CSSProperties}
+              style={staggerStyle(index)}
             >
               <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-red-500/10">
                 <RiPhoneLine

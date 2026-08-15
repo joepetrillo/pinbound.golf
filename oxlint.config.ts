@@ -1,9 +1,15 @@
 import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
 import core from "ultracite/oxlint/core";
 import jsPlugins from "ultracite/oxlint/js-plugins";
 import next from "ultracite/oxlint/next";
 import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
 import react from "ultracite/oxlint/react";
+import { z } from "zod";
+
+const namedJsPluginSchema = z.object({
+  name: z.string(),
+});
 
 const selectedJsPluginNames = new Set(["github", "sonarjs", "react-doctor"]);
 const selectedJsPluginRulePrefixes = new Set([
@@ -14,9 +20,10 @@ const selectedJsPluginRulePrefixes = new Set([
 
 const selectedJsPlugins = {
   ...jsPlugins,
-  jsPlugins: jsPlugins.jsPlugins?.filter((plugin) =>
-    selectedJsPluginNames.has(typeof plugin === "string" ? plugin : plugin.name)
-  ),
+  jsPlugins: jsPlugins.jsPlugins?.filter((plugin) => {
+    const named = namedJsPluginSchema.safeParse(plugin);
+    return named.success && selectedJsPluginNames.has(named.data.name);
+  }),
   overrides: jsPlugins.overrides?.map((override) => ({
     ...override,
     rules: Object.fromEntries(
@@ -33,7 +40,7 @@ const selectedJsPlugins = {
 };
 
 export default defineConfig({
-  extends: [core, next, nextJsPlugins, react, selectedJsPlugins],
+  extends: [antiSlop, core, next, nextJsPlugins, react, selectedJsPlugins],
   ignorePatterns: [
     ...(core.ignorePatterns || []),
     ".agents/**/*",

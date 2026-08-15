@@ -27,7 +27,7 @@ export const submitContactInquiry = actionClient
 
     // Visually hidden honeypot. A filled value means an automated submission:
     // report success without delivering anything.
-    if (typeof honeypot === "string" && honeypot.trim().length > 0) {
+    if (honeypot?.trim()) {
       return { submissionId: operationId };
     }
 

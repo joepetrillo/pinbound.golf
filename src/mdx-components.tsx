@@ -19,6 +19,7 @@ const isInternalHref = (href: string): boolean =>
 
 const MarkdownLink = ({ children, href, ...props }: ComponentProps<"a">) => {
   if (href && isInternalHref(href)) {
+    // SAFETY: isInternalHref already limited href to in-app `/` and `#` targets.
     return (
       <Link href={href as Route} {...props}>
         {children}

@@ -1,5 +1,3 @@
-import type { CSSProperties } from "react";
-
 import { Section } from "@/components/section";
 import {
   Card,
@@ -8,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { staggerStyle } from "@/features/landing/landing-stagger-style";
 
 const controlPoints = [
   {
@@ -49,11 +48,7 @@ export const PolicyFidelity = () => (
     {/* --i sets each child's place in the reveal-group stagger. */}
     <div className="mt-10 grid gap-4 md:grid-cols-3" data-reveal-group>
       {controlPoints.map((point, index) => (
-        <Card
-          className="h-full"
-          key={point.id}
-          style={{ "--i": index } as CSSProperties}
-        >
+        <Card className="h-full" key={point.id} style={staggerStyle(index)}>
           <CardHeader>
             <p className="text-xs font-medium text-muted-foreground tabular-nums">
               {String(index + 1).padStart(2, "0")}

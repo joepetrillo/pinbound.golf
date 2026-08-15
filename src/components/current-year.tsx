@@ -3,13 +3,15 @@
 import { useId } from "react";
 
 // The inline script handles hard loads; client rendering handles soft loads.
-// The window guard keeps the unstable date read out of server prerendering.
+// The DOM membership check keeps the unstable date read out of server prerendering.
 export const CurrentYear = () => {
   const id = useId();
+  const isDomAvailable = "window" in globalThis;
+
   return (
     <>
       <time id={id} suppressHydrationWarning>
-        {typeof window === "undefined" ? null : new Date().getFullYear()}
+        {isDomAvailable ? new Date().getFullYear() : null}
       </time>
       <script
         // oxlint-disable-next-line react/no-danger -- static script, no user input
@@ -17,7 +19,7 @@ export const CurrentYear = () => {
           __html: `{var n=document.getElementById("${id}");if(n)n.textContent=new Date().getFullYear()}`,
         }}
         suppressHydrationWarning
-        type={typeof window === "undefined" ? "text/javascript" : "text/plain"}
+        type={isDomAvailable ? "text/plain" : "text/javascript"}
       />
     </>
   );

@@ -43,6 +43,8 @@ const toSummary = (page: BlogPage): BlogPostSummary => ({
   readingTime: readReadingTime(page.path),
   slug: page.slugs[0],
   title: page.data.title,
+  // SAFETY: fumadocs builds `page.url` from loader `baseUrl: "/blog"` plus the
+  // post slug, which is the `/blog/[slug]` App Router route.
   url: page.url as Route,
 });
 

@@ -7,7 +7,12 @@ import Link from "next/link";
 import { useId, useLayoutEffect, useRef } from "react";
 import type { FormEvent, ReactNode } from "react";
 import { Controller } from "react-hook-form";
-import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
+import type {
+  Control,
+  DefaultValues,
+  FieldErrors,
+  UseFormRegister,
+} from "react-hook-form";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -59,7 +64,7 @@ const payloadFingerprintOf = (values: ContactActionInput): string =>
   JSON.stringify(
     CONTACT_FIELD_NAMES.map((field) => {
       const value = values[field];
-      return [field, typeof value === "string" ? value.trim() : null];
+      return [field, value === undefined ? null : value.trim()];
     })
   );
 
@@ -67,10 +72,9 @@ const payloadFingerprintOf = (values: ContactActionInput): string =>
 // real idempotency key is stamped in onSubmit before executeAsync.
 const OPERATION_ID_PLACEHOLDER = "00000000-0000-4000-8000-000000000000";
 
-const CONTACT_FORM_DEFAULTS: ContactActionInput = {
+const CONTACT_FORM_DEFAULTS: DefaultValues<ContactActionInput> = {
   courseOrCompany: "",
   email: "",
-  inquiryType: undefined as unknown as ContactActionInput["inquiryType"],
   message: "",
   name: "",
   operationId: OPERATION_ID_PLACEHOLDER,

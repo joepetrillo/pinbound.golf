@@ -6,20 +6,16 @@ import next from "ultracite/oxlint/next";
 import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
 import react from "ultracite/oxlint/react";
 
+const jsPlugins = selectJsPlugins(["github", "sonarjs", "react-doctor"]);
+
 export default defineConfig({
-  extends: [
-    antiSlop,
-    core,
-    next,
-    nextJsPlugins,
-    react,
-    selectJsPlugins(["github", "sonarjs", "react-doctor"]),
-  ],
+  extends: [antiSlop, core, next, nextJsPlugins, react, jsPlugins],
   ignorePatterns: [
     ...(core.ignorePatterns || []),
     ".agents/**/*",
     "src/components/ui/**/*",
   ],
+  jsPlugins: jsPlugins.jsPlugins,
   rules: {
     // `<>{children}</>` is how a pass-through boundary component is written —
     // it keeps server-rendered children off the client. See LandingMotion.

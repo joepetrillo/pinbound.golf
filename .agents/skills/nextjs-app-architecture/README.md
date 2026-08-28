@@ -23,7 +23,7 @@ Before using the skill on a project, follow the [Next.js AI Coding Agents guide]
 
 ## What it covers
 
-- **Feature folders** — when to create one, when to merge a sub-concept into a parent, file naming.
+- **Feature folders** — domain ownership, cross-domain product experiences, merging sub-concepts into a parent, and file naming.
 - **Queries** — `import 'server-only'`, plain async reads by default, selective React `cache()` only for proven same-request dedup, and `'use cache'` + `cacheTag` + `cacheLife` for Cache Components.
 - **Actions** — `'use server'`, input validation, tag invalidation under Cache Components, calling from client components.
 - **Components** — async server components that receive IDs/parsed values, sibling skeletons, single-use helpers, the client boundary, the `use()` + promise-prop pattern, live data via polling.
@@ -51,7 +51,7 @@ The `SKILL.md` overview is always loaded; references split into two zones so the
 
 ## Background reading
 
-- [Component Architecture for React Server Components](https://aurorascharff.no/posts/component-architecture-for-react-server-components/)
+- [Component Architeture for React Server Components](https://aurorascharff.no/posts/component-architecture-for-react-server-components/)
 - [Server and Client Component Composition in Practice](https://aurorascharff.no/posts/server-client-component-composition-in-practice/)
 - [Building Design Components with Action Props using Async React](https://aurorascharff.no/posts/building-design-components-with-action-props-using-async-react/)
 - [Error Handling in Next.js with catchError](https://aurorascharff.no/posts/error-handling-in-nextjs-with-catch-error/)

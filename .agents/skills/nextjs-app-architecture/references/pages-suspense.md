@@ -78,6 +78,10 @@ Use `Promise.all([params, searchParams])` when both are needed. Avoid nested `.t
 - Export [`generateStaticParams`](https://preview.nextjs.org/docs/app/api-reference/functions/generate-static-params) from a `[slug]` page/layout to pre-build a known set of slugs; with `cacheComponents` + `'use cache'` they land in the static shell. It does **not** change the page signature — `params` is still a Promise, still consumed with `params.then()`.
 - A query that can't find its resource calls [`notFound()`](https://preview.nextjs.org/docs/app/api-reference/functions/not-found), which bubbles to the nearest [`not-found.tsx`](https://preview.nextjs.org/docs/app/api-reference/file-conventions/not-found). Don't try/catch it — use [`unstable_rethrow`](https://preview.nextjs.org/docs/app/api-reference/functions/unstable_rethrow) if you must catch nearby.
 
+## Prefer a page boundary over `loading.tsx`
+
+Put the boundary in the page next to the `params.then()` / `searchParams.then()` it covers, rather than adding a route-segment `loading.tsx`. A page boundary keeps the fallback beside the JSX it stands in for, lets sibling sections share one boundary or split into several, and can be wrapped in `<ViewTransition>` so the reveal animates. A `loading.tsx` renders outside the page's own tree, so a transition wrapper inside the page cannot animate the swap out of it, and one fallback has to cover the whole route.
+
 ## The page owns the Suspense boundary
 
 The feature exports the async component **and** its skeleton. The page imports both and places the boundary. Don't pre-wrap inside the feature — that hides the boundary and prevents grouping siblings.
@@ -259,11 +263,11 @@ Fixes:
 
 To audit CLS, use React DevTools' Suspense panel to pin each boundary in its loading state and check vertical positions.
 
-## Runtime prefetch for high-value routes
+## Optimizing prefetching for high-value routes
 
 With `cacheComponents` + [`partialPrefetching`](https://preview.nextjs.org/docs/app/api-reference/config/next-config-js/partialPrefetching) enabled, a visible `<Link>` prefetches the destination's shared [App Shell](https://preview.nextjs.org/docs/app/glossary#app-shell) — enough to commit navigation instantly, with link-specific content streaming after. The default (`'auto'`) already does this; don't write `prefetch = 'auto'`.
 
-Use `<Link prefetch={true}>` on high-value links to also resolve the destination's per-link runtime data (`params`, `searchParams`, the full URL) before the click. Each such link can wake the server for a runtime prerender, so reserve it for routes users predictably visit next. See [runtime prefetching](https://preview.nextjs.org/docs/app/guides/runtime-prefetching).
+Use `<Link prefetch={true}>` on high-value links to also resolve the destination's per-link data (`params`, `searchParams`, the full URL) at prefetch time. Each such link can wake the server for a prerender, so reserve it for routes users predictably visit next. See [Optimizing prefetching](https://preview.nextjs.org/docs/app/guides/optimizing-prefetching).
 
 Can't enable `partialPrefetching` app-wide yet? Opt in per route with `export const prefetch = 'partial'` on the destination, then drop the per-route exports once the global flag is on — see [Adopting Partial Prefetching](https://preview.nextjs.org/docs/app/guides/adopting-partial-prefetching) for the incremental path and [prefetch config](https://preview.nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/prefetch) for the options. To validate navigation feels instant, see the [`instant` config](https://preview.nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant) and [Instant Navigation guide](https://preview.nextjs.org/docs/app/guides/instant-navigation).
 

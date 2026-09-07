@@ -5,6 +5,7 @@
 // Base UI button and Remix Icon set.
 
 import { RiPauseFill, RiPlayFill } from "@remixicon/react";
+import { cn } from "cn";
 import {
   type ComponentProps,
   createContext,
@@ -21,7 +22,6 @@ import {
 } from "react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 const HAVE_FUTURE_DATA = 3;
 const NETWORK_LOADING = 2;

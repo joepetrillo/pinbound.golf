@@ -1,7 +1,7 @@
+import { cn } from "cn";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 const BlogPostNotFound = () => (
   <section className="flex min-h-[60dvh] flex-col items-center justify-center gap-8 px-6 text-center">

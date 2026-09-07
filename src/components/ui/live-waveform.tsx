@@ -1,8 +1,7 @@
 "use client";
 
+import { cn } from "cn";
 import { useEffect, useEffectEvent, useRef, type HTMLAttributes } from "react";
-
-import { cn } from "@/lib/utils";
 
 export type LiveWaveformProps = HTMLAttributes<HTMLDivElement> & {
   active?: boolean;

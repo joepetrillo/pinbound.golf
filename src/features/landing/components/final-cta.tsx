@@ -1,9 +1,9 @@
+import { cn } from "cn";
 import Link from "next/link";
 
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
 import { CTA_HREF, CTA_LABEL, DEMO_HREF, DEMO_LABEL } from "@/lib/site";
-import { cn } from "@/lib/utils";
 
 export const FinalCta = () => (
   <Section className="border-t">

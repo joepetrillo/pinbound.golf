@@ -1,6 +1,7 @@
 "use client";
 
 import { RiResetLeftLine } from "@remixicon/react";
+import { cn } from "cn";
 import {
   useEffect,
   useLayoutEffect,
@@ -19,7 +20,6 @@ import {
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 const WORD_INTERVAL_MS = 225;
 const LINE_PAUSE_MS = 500;

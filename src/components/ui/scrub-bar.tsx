@@ -4,6 +4,7 @@
 // registry dependency is replaced with a plain width-driven fill so the
 // component stays primitive-free.
 
+import { cn } from "cn";
 import {
   createContext,
   type HTMLAttributes,
@@ -12,8 +13,6 @@ import {
   useContext,
   useRef,
 } from "react";
-
-import { cn } from "@/lib/utils";
 
 const SECONDS_PER_MINUTE = 60;
 const PERCENT = 100;

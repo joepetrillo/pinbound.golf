@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
 import { RiCheckLine, RiErrorWarningLine } from "@remixicon/react";
+import { cn } from "cn";
 import Link from "next/link";
 import { useId, useLayoutEffect, useRef } from "react";
 import type { FormEvent, ReactNode } from "react";
@@ -53,7 +54,6 @@ import type {
   ContactFieldName,
 } from "@/features/contact/contact-schema";
 import { CONTACT_EMAIL, MARKETING_HOME_HREF } from "@/lib/site";
-import { cn } from "@/lib/utils";
 
 interface ContactAttempt {
   operationId: string;

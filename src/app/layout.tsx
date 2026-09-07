@@ -1,13 +1,12 @@
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@wrksz/themes/next";
+import { cn } from "cn";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { SITE_NAME, SITE_URL } from "@/lib/site";
-
 import "./globals.css";
-import { cn } from "@/lib/utils";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 

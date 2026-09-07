@@ -1,7 +1,7 @@
+import { cn } from "cn";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 interface FullPageMessageProps {
   description: string;

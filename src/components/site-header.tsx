@@ -1,6 +1,7 @@
 "use client";
 
 import { RiCloseLine, RiFlagLine, RiMenuLine } from "@remixicon/react";
+import { cn } from "cn";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -20,7 +21,6 @@ import {
   MARKETING_HOME_HREF,
   NAV_LINKS,
 } from "@/lib/site";
-import { cn } from "@/lib/utils";
 
 const DESKTOP_HEADER_MEDIA_QUERY = "(min-width: 768px)";
 

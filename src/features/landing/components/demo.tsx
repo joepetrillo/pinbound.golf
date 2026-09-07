@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import dynamic from "next/dynamic";
 import { useLayoutEffect, useRef, useState } from "react";
 
@@ -20,7 +21,6 @@ import {
 } from "@/components/ui/scrub-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AudioScrubber, Waveform } from "@/components/ui/waveform";
-import { cn } from "@/lib/utils";
 
 // The orb pulls in three.js — load it lazily on the client only.
 const Orb = dynamic(

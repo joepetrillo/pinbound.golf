@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -18,7 +19,6 @@ import {
 } from "@/features/blog/blog-queries";
 import { PostCardList } from "@/features/blog/components/post-card-list";
 import { CTA_HREF, CTA_LABEL, DEMO_HREF } from "@/lib/site";
-import { cn } from "@/lib/utils";
 import { getMDXComponents } from "@/mdx-components";
 
 const MetaBadge = ({ children }: { children: ReactNode }) => (

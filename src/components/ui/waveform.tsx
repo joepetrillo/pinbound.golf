@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import {
   useCallback,
   useEffect,
@@ -8,8 +9,6 @@ import {
   useState,
   type HTMLAttributes,
 } from "react";
-
-import { cn } from "@/lib/utils";
 
 // Bump a counter whenever the root element's theme attributes change so the
 // canvas effects re-run and re-resolve CSS variables (canvases don't repaint

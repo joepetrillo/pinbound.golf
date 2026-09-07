@@ -1,6 +1,7 @@
 "use client";
 
 import { RiGlobalLine } from "@remixicon/react";
+import { cn } from "cn";
 import {
   createContext,
   useContext,
@@ -33,7 +34,6 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { cn } from "@/lib/utils";
 
 type PhoneInputSize = "sm" | "default" | "lg";
 

@@ -1,4 +1,5 @@
 import { RiArrowRightLine, RiFlagLine } from "@remixicon/react";
+import { cn } from "cn";
 import type { Route } from "next";
 import Link from "next/link";
 
@@ -12,7 +13,6 @@ import {
   SITE_NAME,
   SITE_TAGLINE,
 } from "@/lib/site";
-import { cn } from "@/lib/utils";
 
 interface FooterLink {
   href: Route;

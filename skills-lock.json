@@ -5,37 +5,37 @@
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
       "skillPath": "skills/agent-browser/SKILL.md",
-      "computedHash": "a674b7d81066e3cc471a7512ddb4ae724418cbfefa75cbb050b0dc430e4d57a0"
+      "computedHash": "80161e6836b3b40f4e83730a290deb40ac14d877d38c97ad5f6d71be37ce74c3"
     },
     "next-cache-components-adoption": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-adoption/SKILL.md",
-      "computedHash": "b6eddcf230b2a4d12929a234b53a3d91aceebeb3b5ad3588e42eae4f10abe6c5"
+      "computedHash": "00bb30ef1b6cdb3946213fa613d3b5a366c13ea243e91b814b61034a9154c0f4"
     },
     "next-cache-components-optimizer": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-optimizer/SKILL.md",
-      "computedHash": "58eb0a6ec29604f460861f6a9daf5d9b370f575958144e860f79f97885e69ede"
+      "computedHash": "60f603cd578249e5bfc6e192032b20bf7e74764554bdd319fdc543be0b563052"
     },
     "next-dev-loop": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-dev-loop/SKILL.md",
-      "computedHash": "fcfd05ce87d9edafda2e454f3f998bc45cb96fa2a3b695a4c3c144a9a13e7c39"
+      "computedHash": "d604c9440a736b08836fe782e8c0bf6a596d00c4e20e3e245e4a4394efbf74f4"
     },
     "nextjs-app-architecture": {
       "source": "aurorascharff/nextjs-app-architecture-skill",
       "sourceType": "github",
       "skillPath": "SKILL.md",
-      "computedHash": "94f700fb57aef401e135ddbb0d13a2986d6416820ee4e1b2bf1fd8e17fae0d66"
+      "computedHash": "3c21c151bd98ecd3cb5405f855ed8fdf6ef4b65656abee7c0b9362a4952f3ada"
     },
     "safe-action-advanced": {
       "source": "next-safe-action/skills",
       "sourceType": "github",
       "skillPath": "skills/safe-action-advanced/SKILL.md",
-      "computedHash": "1f06e451524dcb8f3e239ba6921ce57fcee03949620a07d28d74751ddaabfa88"
+      "computedHash": "88c58ff2f817ec02d717f621bfbcac7ff3d637da993eb8db496d3d87f308377e"
     },
     "safe-action-better-auth": {
       "source": "next-safe-action/skills",
@@ -47,19 +47,19 @@
       "source": "next-safe-action/skills",
       "sourceType": "github",
       "skillPath": "skills/safe-action-client/SKILL.md",
-      "computedHash": "261de908cb23dfd8c81bee7d5e1fcbf3acbc1cf47ddec7b63f0c352051abd510"
+      "computedHash": "ab738268f853a8e050d8fd995ad86c4fb6c4e7efd5308a6bcfebbf47d91aeeb6"
     },
     "safe-action-forms": {
       "source": "next-safe-action/skills",
       "sourceType": "github",
       "skillPath": "skills/safe-action-forms/SKILL.md",
-      "computedHash": "5fc284fff83c74ecef99dd33c7cb5e8c242e093205f95f27c734e2555654f97d"
+      "computedHash": "8d4436e7b02954fa7d407f9032c1d08232f909abbf81316c9b2ba79771fde194"
     },
     "safe-action-hooks": {
       "source": "next-safe-action/skills",
       "sourceType": "github",
       "skillPath": "skills/safe-action-hooks/SKILL.md",
-      "computedHash": "eeb4f746b4ba32429e90639d57717f6b8f483a9bbcfcecf78533ef6fd0a2ee9a"
+      "computedHash": "1875ac6f612307c716ba3f55ef71932288c06aa8566f14f35ebad1d19ee9f124"
     },
     "safe-action-middleware": {
       "source": "next-safe-action/skills",
@@ -71,7 +71,7 @@
       "source": "next-safe-action/skills",
       "sourceType": "github",
       "skillPath": "skills/safe-action-tanstack-query/SKILL.md",
-      "computedHash": "e2e9518205cf70b4ae64d1c55daa3c8e236b11443bd2f88f0bff56d48708d9eb"
+      "computedHash": "cb219adc5c778856a675e920d793e289c1360d2d0513718329e103a23f5fae04"
     },
     "safe-action-testing": {
       "source": "next-safe-action/skills",
@@ -89,7 +89,7 @@
       "source": "shadcn/ui",
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
-      "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10"
+      "computedHash": "f615de216e085a84e31593ad0fa9062232adc40cd87b7c7ab2b8e49abf6500be"
     },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",

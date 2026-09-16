@@ -17,5 +17,13 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
-  "tailwindCSS.classFunctions": ["clsx", "cn", "cva", "cx", "tw"]
+  "tailwindCSS.classFunctions": [
+    "clsx",
+    "cva",
+    "tw",
+    "twMerge",
+    "cn",
+    "twJoin",
+    "tv"
+  ]
 }

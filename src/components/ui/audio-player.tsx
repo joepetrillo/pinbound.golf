@@ -273,13 +273,18 @@ export function AudioPlayerProvider<TData = unknown>({
 
 export const AudioPlayerTime = ({
   className,
+  size = "default",
   ...otherProps
-}: HTMLProps<HTMLSpanElement>) => {
+}: Omit<HTMLProps<HTMLSpanElement>, "size"> & { size?: "default" | "sm" }) => {
   const time = useAudioPlayerTime();
   return (
     <span
       {...otherProps}
-      className={cn("text-sm text-muted-foreground tabular-nums", className)}
+      className={cn(
+        "text-muted-foreground tabular-nums",
+        size === "sm" ? "text-xs" : "text-sm",
+        className
+      )}
     >
       {formatTime(time)}
     </span>
@@ -289,8 +294,12 @@ export const AudioPlayerTime = ({
 export const AudioPlayerDuration = ({
   className,
   fallbackDuration,
+  size = "default",
   ...otherProps
-}: HTMLProps<HTMLSpanElement> & { fallbackDuration?: number }) => {
+}: Omit<HTMLProps<HTMLSpanElement>, "size"> & {
+  fallbackDuration?: number;
+  size?: "default" | "sm";
+}) => {
   const player = useAudioPlayer();
   const duration =
     player.duration !== undefined && !Number.isNaN(player.duration)
@@ -299,7 +308,11 @@ export const AudioPlayerDuration = ({
   return (
     <span
       {...otherProps}
-      className={cn("text-sm text-muted-foreground tabular-nums", className)}
+      className={cn(
+        "text-muted-foreground tabular-nums",
+        size === "sm" ? "text-xs" : "text-sm",
+        className
+      )}
     >
       {duration === undefined ? "--:--" : formatTime(duration)}
     </span>

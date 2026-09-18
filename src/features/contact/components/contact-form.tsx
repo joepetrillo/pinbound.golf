@@ -116,10 +116,7 @@ const ContactFormStatus = ({
 }) => {
   if (serverError) {
     return (
-      <Alert
-        variant="destructive"
-        className="border-destructive/25 bg-destructive/5"
-      >
+      <Alert variant="destructive-soft">
         <RiErrorWarningLine />
         <AlertTitle>Your message could not be sent</AlertTitle>
         <AlertDescription>
@@ -132,10 +129,7 @@ const ContactFormStatus = ({
 
   if (hasFieldErrors) {
     return (
-      <Alert
-        variant="destructive"
-        className="border-destructive/25 bg-destructive/5"
-      >
+      <Alert variant="destructive-soft">
         <RiErrorWarningLine />
         <AlertTitle>
           Please fix the highlighted fields and try again.
@@ -148,7 +142,7 @@ const ContactFormStatus = ({
 };
 
 const ContactFormActions = ({ pending }: { pending: boolean }) => (
-  <Field className="flex-wrap gap-4" orientation="horizontal">
+  <Field className="flex-wrap" orientation="horizontal" spacing="relaxed">
     <Button
       aria-busy={pending || undefined}
       disabled={pending}

@@ -20,7 +20,6 @@ import {
   LightspeedGolfLogo,
   TeeSnapLogo,
 } from "@/features/landing/components/tee-sheet-logos";
-import { staggerStyle } from "@/features/landing/landing-stagger-style";
 import { CONTACT_HREF, CONTACT_LABEL, CTA_HREF, CTA_LABEL } from "@/lib/site";
 
 interface TeeSheetPlatform {
@@ -99,7 +98,7 @@ export const TeeSheetIntegration = () => (
         <div
           className="relative flex h-36 flex-col items-center justify-center gap-3 rounded-4xl bg-muted/50 px-6 transition-colors"
           key={platform.id}
-          style={staggerStyle(index)}
+          style={{ "--i": index }}
         >
           <platform.logo
             className={cn("w-auto max-w-full", platform.logoClassName)}
@@ -126,12 +125,12 @@ export const TeeSheetIntegration = () => (
             Don&apos;t see your tee sheet?
           </h3>
         </CardTitle>
-        <CardDescription className="max-w-xl leading-relaxed text-balance">
+        <CardDescription className="max-w-xl" variant="prose">
           Tell us what your shop runs. New adapters are prioritized by course
           demand, with vendor-specific capabilities kept clear.
         </CardDescription>
       </CardHeader>
-      <CardFooter className="relative flex-wrap gap-2 md:pl-0">
+      <CardFooter className="relative flex-wrap" layout="inline-actions">
         <Link
           className={cn(
             buttonVariants({

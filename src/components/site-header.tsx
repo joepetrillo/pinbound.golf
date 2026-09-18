@@ -27,14 +27,14 @@ const DESKTOP_HEADER_MEDIA_QUERY = "(min-width: 768px)";
 const Logo = ({ onClick }: { onClick?: () => void }) => (
   <Link
     aria-label="Homepage"
-    className="relative top-px inline-flex items-center gap-2.5 transition-opacity duration-150 ease-[ease] hover:opacity-80"
+    className="relative top-px inline-flex items-center gap-2.5 transition-opacity duration-150 ease-standard hover:opacity-80"
     href={MARKETING_HOME_HREF}
     onClick={onClick}
   >
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-3.5" />
     </span>
-    <span className="text-sm font-semibold tracking-[0.12em] text-foreground uppercase">
+    <span className="text-sm font-semibold tracking-brand text-foreground uppercase">
       pinbound
     </span>
   </Link>
@@ -145,9 +145,9 @@ export const SiteHeader = ({
             </DrawerTrigger>
 
             <DrawerContent
-              className="max-h-[85dvh] rounded-t-4xl"
+              className="max-h-[85dvh]"
               initialFocus={menuCloseRef}
-              overlayClassName="supports-backdrop-filter:backdrop-blur-md"
+              backdrop="blurred"
             >
               <div className="flex max-h-[85dvh] flex-col px-4 pb-6 md:px-6">
                 <div className="flex shrink-0 items-center justify-between py-4">

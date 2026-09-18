@@ -18,7 +18,8 @@ export const SiteHeaderAccount = () => {
     return (
       <Skeleton
         aria-hidden="true"
-        className="h-9 w-full rounded-4xl md:h-8 md:w-24"
+        className="h-9 w-full md:h-8 md:w-24"
+        variant="button"
       />
     );
   }

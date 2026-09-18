@@ -7,7 +7,10 @@ import {
   Html,
   Preview,
   Text,
+  Tailwind,
 } from "@react-email/components";
+
+import { emailTheme } from "@/emails/email-theme";
 
 // Fixed acknowledgement sent to the visitor. It intentionally contains no
 // visitor-supplied content so the form can never be used as an email relay,
@@ -18,61 +21,34 @@ export interface ContactAcknowledgementEmailProps {
   submissionId: string;
 }
 
-const bodyStyle = {
-  backgroundColor: "#f6f6f4",
-  fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-} as const;
-
-const containerStyle = {
-  backgroundColor: "#ffffff",
-  borderRadius: "12px",
-  margin: "24px auto",
-  maxWidth: "560px",
-  padding: "32px",
-} as const;
-
-const textStyle = {
-  color: "#1c1c1a",
-  fontSize: "15px",
-  lineHeight: "1.6",
-  margin: "0 0 16px",
-} as const;
-
-const metaStyle = {
-  color: "#6b6b66",
-  fontSize: "12px",
-  lineHeight: "1.6",
-  margin: "0",
-} as const;
-
 export const ContactAcknowledgementEmail = ({
   contactEmail,
   submissionId,
 }: ContactAcknowledgementEmailProps) => (
   <Html lang="en">
-    <Head />
-    <Preview>We received your message and will follow up by email.</Preview>
-    <Body style={bodyStyle}>
-      <Container style={containerStyle}>
-        <Heading
-          as="h1"
-          style={{ color: "#1c1c1a", fontSize: "18px", margin: "0 0 16px" }}
-        >
-          We received your message
-        </Heading>
-        <Text style={textStyle}>
-          Thanks for contacting Pinbound. Your message reached our team, and we
-          read every inquiry. We will follow up by email as soon as we can.
-        </Text>
-        <Text style={textStyle}>
-          If you want to add anything in the meantime, reply to this email or
-          write to {contactEmail}.
-        </Text>
-        <Hr />
-        <Text style={metaStyle}>Reference: {submissionId}</Text>
-      </Container>
-    </Body>
+    <Tailwind config={emailTheme}>
+      <Head />
+      <Preview>We received your message and will follow up by email.</Preview>
+      <Body className="bg-background font-sans">
+        <Container className="mx-auto my-6 max-w-xl rounded-xl bg-card p-8">
+          <Heading as="h1" className="m-0 mb-4 text-lg text-foreground">
+            We received your message
+          </Heading>
+          <Text className="m-0 mb-4 text-sm leading-relaxed text-foreground">
+            Thanks for contacting Pinbound. Your message reached our team, and
+            we read every inquiry. We will follow up by email as soon as we can.
+          </Text>
+          <Text className="m-0 mb-4 text-sm leading-relaxed text-foreground">
+            If you want to add anything in the meantime, reply to this email or
+            write to {contactEmail}.
+          </Text>
+          <Hr />
+          <Text className="m-0 text-xs leading-relaxed text-muted-foreground">
+            Reference: {submissionId}
+          </Text>
+        </Container>
+      </Body>
+    </Tailwind>
   </Html>
 );
 

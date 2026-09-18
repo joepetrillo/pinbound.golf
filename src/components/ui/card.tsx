@@ -32,21 +32,37 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+function CardTitle({
+  className,
+  size = "default",
+  ...props
+}: React.ComponentProps<"div"> & { size?: "default" | "lg" | "xl" }) {
   return (
     <div
       data-slot="card-title"
-      className={cn("font-heading text-base font-medium", className)}
+      className={cn(
+        "font-heading font-medium",
+        { default: "text-base", lg: "text-lg", xl: "text-xl" }[size],
+        className
+      )}
       {...props}
     />
   );
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+function CardDescription({
+  className,
+  variant = "default",
+  ...props
+}: React.ComponentProps<"div"> & { variant?: "default" | "prose" }) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn(
+        "text-sm text-muted-foreground",
+        variant === "prose" && "leading-relaxed text-balance",
+        className
+      )}
       {...props}
     />
   );
@@ -75,12 +91,20 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+function CardFooter({
+  className,
+  layout = "default",
+  ...props
+}: React.ComponentProps<"div"> & {
+  layout?: "default" | "actions" | "inline-actions";
+}) {
   return (
     <div
       data-slot="card-footer"
       className={cn(
         "flex items-center rounded-b-4xl px-(--card-spacing) [.border-t]:pt-(--card-spacing)",
+        layout !== "default" && "gap-2",
+        layout === "inline-actions" && "md:pl-0",
         className
       )}
       {...props}

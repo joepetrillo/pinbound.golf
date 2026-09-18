@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Section } from "@/components/section";
 import { buttonVariants } from "@/components/ui/button";
 import { HeroTranscript } from "@/features/landing/components/hero-transcript";
-import { staggerStyle } from "@/features/landing/landing-stagger-style";
 import { CTA_HREF, CTA_LABEL, DEMO_HREF, DEMO_LABEL } from "@/lib/site";
 
 const HEADLINE_LINES = ["The pro shop assistant", "that never clocks out"];
@@ -15,11 +14,11 @@ export const Hero = () => (
       <div className="@container">
         {/* 10.2 is the measured width of the longer authored line plus slack. */}
         <h1
-          className="text-[clamp(1.5rem,calc(100cqi/10.2),3.75rem)] leading-[1.1] font-medium tracking-tight"
+          className="text-(length:--text-hero) leading-(--text-hero--line-height) font-medium tracking-tight"
           data-anim="hero-title"
         >
           {HEADLINE_LINES.map((line, index) => (
-            <span data-anim="hero-mask" key={line} style={staggerStyle(index)}>
+            <span data-anim="hero-mask" key={line} style={{ "--i": index }}>
               <span data-anim="hero-line">{line}</span>
             </span>
           ))}

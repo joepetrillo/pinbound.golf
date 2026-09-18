@@ -29,7 +29,7 @@ const Orb = dynamic(
     return mod.Orb;
   },
   {
-    loading: () => <Skeleton className="size-full rounded-full" />,
+    loading: () => <Skeleton variant="pill" className="size-full" />,
     ssr: false,
   }
 );
@@ -205,9 +205,9 @@ const SampleCallScrubber = ({
         </ScrubBarTrack>
       </ScrubBarContainer>
       <div className="flex items-center justify-between">
-        <AudioPlayerTime className="text-xs" />
+        <AudioPlayerTime size="sm" />
         <AudioPlayerDuration
-          className="text-xs"
+          size="sm"
           fallbackDuration={call.durationSeconds}
         />
       </div>
@@ -229,7 +229,7 @@ const SampleCallRow = ({ call }: SampleCallRowProps) => {
     >
       <AudioPlayerButton
         aria-label={`${active && player.isPlaying ? "Pause" : "Play"} sample call: ${call.caption}`}
-        className="mt-0.5 shrink-0 rounded-full"
+        className="mt-0.5 shrink-0"
         item={{ id: call.id, src: call.src }}
         size="icon-sm"
         variant={active ? "default" : "secondary"}
@@ -257,7 +257,8 @@ const SampleCallRow = ({ call }: SampleCallRowProps) => {
             <Waveform
               barGap={1}
               barWidth={2}
-              className="hidden h-10 w-full opacity-40 sm:block"
+              className="hidden h-10 w-full sm:block"
+              variant="muted"
               data={call.peaks}
               height={ROW_WAVEFORM_HEIGHT}
             />

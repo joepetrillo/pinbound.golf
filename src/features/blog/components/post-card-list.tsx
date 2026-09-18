@@ -24,11 +24,11 @@ export const PostCardList = ({
       {posts.map((post) => (
         <li className="bg-background odd:last:md:col-span-2" key={post.url}>
           <Link
-            className="group flex h-full scroll-mt-14 flex-col gap-4 p-8 transition-colors ease-[ease] hover:bg-muted/50 focus-visible:rounded-4xl focus-visible:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:duration-0 md:p-10"
+            className="group flex h-full scroll-mt-14 flex-col gap-4 p-8 transition-colors ease-standard hover:bg-muted/50 focus-visible:rounded-4xl focus-visible:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:duration-0 md:p-10"
             href={post.url}
           >
             <time
-              className="text-xs font-medium tracking-[0.12em] text-muted-foreground uppercase"
+              className="text-xs font-medium tracking-brand text-muted-foreground uppercase"
               dateTime={post.publishedAt}
             >
               {post.formattedDate}

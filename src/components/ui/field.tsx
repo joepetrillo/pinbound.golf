@@ -72,14 +72,20 @@ const fieldVariants = cva(
 function Field({
   className,
   orientation = "vertical",
+  spacing = "default",
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof fieldVariants> & { spacing?: "default" | "relaxed" }) {
   return (
     <div
       role="group"
       data-slot="field"
       data-orientation={orientation}
-      className={cn(fieldVariants({ orientation }), className)}
+      className={cn(
+        fieldVariants({ orientation }),
+        spacing === "relaxed" && "gap-4",
+        className
+      )}
       {...props}
     />
   );

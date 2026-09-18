@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { staggerStyle } from "@/features/landing/landing-stagger-style";
 
 const controlPoints = [
   {
@@ -48,12 +47,12 @@ export const PolicyFidelity = () => (
     {/* --i sets each child's place in the reveal-group stagger. */}
     <div className="mt-10 grid gap-4 md:grid-cols-3" data-reveal-group>
       {controlPoints.map((point, index) => (
-        <Card className="h-full" key={point.id} style={staggerStyle(index)}>
+        <Card className="h-full" key={point.id} style={{ "--i": index }}>
           <CardHeader>
             <p className="text-xs font-medium text-muted-foreground tabular-nums">
               {String(index + 1).padStart(2, "0")}
             </p>
-            <CardTitle className="mt-3 text-lg">
+            <CardTitle className="mt-3" size="lg">
               <h3 className="text-balance">{point.title}</h3>
             </CardTitle>
           </CardHeader>

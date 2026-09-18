@@ -66,9 +66,7 @@ export const Faq = () => (
       <Accordion data-reveal>
         {faqItems.map((item) => (
           <AccordionItem key={item.id} value={item.id}>
-            <AccordionTrigger className="text-base">
-              {item.question}
-            </AccordionTrigger>
+            <AccordionTrigger size="lg">{item.question}</AccordionTrigger>
             <AccordionContent>
               <p className="text-pretty text-muted-foreground">{item.answer}</p>
             </AccordionContent>

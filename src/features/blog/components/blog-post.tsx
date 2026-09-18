@@ -22,7 +22,7 @@ import { CTA_HREF, CTA_LABEL, DEMO_HREF } from "@/lib/site";
 import { getMDXComponents } from "@/mdx-components";
 
 const MetaBadge = ({ children }: { children: ReactNode }) => (
-  <Badge className="h-8 bg-background px-4 text-sm" variant="outline">
+  <Badge size="lg" variant="surface">
     {children}
   </Badge>
 );
@@ -44,15 +44,13 @@ const RuleCross = () => (
 const ArticleNextStep = () => (
   <Card>
     <CardHeader>
-      <CardTitle className="text-xl">
-        Hear the operating model in action
-      </CardTitle>
-      <CardDescription className="leading-relaxed text-balance">
+      <CardTitle size="xl">Hear the operating model in action</CardTitle>
+      <CardDescription variant="prose">
         Listen to sample calls for bookings, policy questions, weather, and
         human handoff.
       </CardDescription>
     </CardHeader>
-    <CardFooter className="flex-wrap gap-2">
+    <CardFooter className="flex-wrap" layout="actions">
       <Link
         className={cn(buttonVariants({ variant: "outline" }))}
         href={DEMO_HREF}

@@ -33,13 +33,13 @@ const indexLinks: readonly FooterLink[] = [
 
 const Logo = () => (
   <Link
-    className="inline-flex items-center gap-2.5 transition-opacity duration-150 ease-[ease] hover:opacity-80"
+    className="inline-flex items-center gap-2.5 transition-opacity duration-150 ease-standard hover:opacity-80"
     href="/"
   >
     <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
       <RiFlagLine aria-hidden className="size-3.5" />
     </span>
-    <span className="text-sm font-semibold tracking-[0.12em] text-foreground uppercase">
+    <span className="text-sm font-semibold tracking-brand text-foreground uppercase">
       pinbound
     </span>
   </Link>
@@ -57,7 +57,7 @@ export const SiteFooter = () => (
           <a
             className={cn(
               buttonVariants({
-                className: "mt-6 text-xs tracking-[0.12em] uppercase",
+                className: "mt-6 text-xs tracking-brand uppercase",
                 variant: "outline",
               })
             )}
@@ -76,7 +76,7 @@ export const SiteFooter = () => (
                   className={cn(
                     buttonVariants({
                       className:
-                        "text-xs tracking-[0.12em] text-muted-foreground uppercase",
+                        "text-xs tracking-brand text-muted-foreground uppercase",
                       size: "sm",
                       variant: "outline",
                     })

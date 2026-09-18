@@ -268,7 +268,10 @@ const ConversationTranscript = ({
           className="pointer-events-none scrollbar-gutter-auto overflow-y-hidden"
           tabIndex={-1}
         >
-          <MessageScrollerContent className="min-h-full justify-end gap-3">
+          <MessageScrollerContent
+            className="min-h-full justify-end"
+            density="compact"
+          >
             {visibleLines.map((line) => {
               const isAgent = line.speaker === "agent";
               const isActive = line.id === lines[lineIndex]?.id;
@@ -382,11 +385,7 @@ export const HeroTranscript = () => {
         >
           <TabsList className="h-8">
             {CONVERSATIONS.map(({ id, label }) => (
-              <TabsTrigger
-                className="px-0.5 text-xs min-[372px]:px-2.5"
-                key={id}
-                value={id}
-              >
+              <TabsTrigger size="compact" key={id} value={id}>
                 {label}
               </TabsTrigger>
             ))}
@@ -410,7 +409,7 @@ export const HeroTranscript = () => {
           "flex min-h-0 flex-1 flex-col",
           prefersReducedMotion || !hasChangedConversation
             ? null
-            : "animate-in duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] fade-in"
+            : "animate-in duration-1000 ease-transcript fade-in"
         )}
         key={conversation.id}
       >

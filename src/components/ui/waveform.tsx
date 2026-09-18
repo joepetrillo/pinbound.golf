@@ -32,6 +32,7 @@ function useThemeVersion() {
 
 export type WaveformProps = HTMLAttributes<HTMLDivElement> & {
   data?: number[];
+  variant?: "default" | "muted";
   barWidth?: number;
   barHeight?: number;
   barGap?: number;
@@ -46,6 +47,7 @@ export type WaveformProps = HTMLAttributes<HTMLDivElement> & {
 
 export const Waveform = ({
   data = [],
+  variant = "default",
   barWidth = 4,
   barHeight: baseBarHeight = 4,
   barGap = 2,
@@ -171,7 +173,7 @@ export const Waveform = ({
 
   return (
     <div
-      className={cn("relative", className)}
+      className={cn("relative", variant === "muted" && "opacity-40", className)}
       ref={containerRef}
       style={{ height: heightStyle }}
       {...props}

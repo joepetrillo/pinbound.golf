@@ -1,7 +1,6 @@
 import { RiPhoneLine } from "@remixicon/react";
 
 import { Section } from "@/components/section";
-import { staggerStyle } from "@/features/landing/landing-stagger-style";
 
 const missedCalls = [
   {
@@ -49,20 +48,17 @@ export const Problem = () => (
           What a Saturday looks like
         </p>
         {/* --i is each child's place in the stagger; see src/app/motion.css. */}
-        <ul
-          className="flex flex-col gap-3 mask-[linear-gradient(to_bottom,black_60%,transparent)]"
-          data-reveal-group
-        >
+        <ul className="flex flex-col gap-3 mask-b-from-60%" data-reveal-group>
           {missedCalls.map((call, index) => (
             <li
               className="flex items-center gap-3 rounded-2xl border bg-background/80 px-4 py-3 shadow-sm backdrop-blur"
               key={call.id}
-              style={staggerStyle(index)}
+              style={{ "--i": index }}
             >
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-red-500/10">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-destructive/10">
                 <RiPhoneLine
                   aria-hidden="true"
-                  className="size-4 text-red-500/80"
+                  className="size-4 text-destructive/80"
                 />
               </div>
               <div className="min-w-0 flex-1">

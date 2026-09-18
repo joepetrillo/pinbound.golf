@@ -100,9 +100,11 @@ function DrawerContent({
   className,
   children,
   overlayClassName,
+  backdrop = "default",
   ...props
 }: DrawerPrimitive.Popup.Props & {
   overlayClassName?: string;
+  backdrop?: "default" | "blurred";
 }) {
   const { hasSnapPoints, modal, showSwipeHandle, swipeDirection } = useDrawer();
   const swipeAxis =
@@ -112,7 +114,11 @@ function DrawerContent({
     <DrawerPortal data-slot="drawer-portal">
       {modal === true && (
         <DrawerOverlay
-          className={overlayClassName}
+          className={cn(
+            backdrop === "blurred" &&
+              "supports-backdrop-filter:backdrop-blur-md",
+            overlayClassName
+          )}
           data-snap-points={hasSnapPoints ? "" : undefined}
         />
       )}

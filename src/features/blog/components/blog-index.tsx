@@ -7,11 +7,11 @@ import type { BlogPostSummary } from "@/features/blog/types/blog";
 
 const FeaturedPost = ({ post }: { post: BlogPostSummary }) => (
   <Link
-    className="group mt-14 block scroll-mt-14 rounded-4xl border bg-muted/50 transition-colors ease-[ease] hover:bg-muted focus-visible:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:duration-0"
+    className="group mt-14 block scroll-mt-14 rounded-4xl border bg-muted/50 transition-colors ease-standard hover:bg-muted focus-visible:bg-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:duration-0"
     href={post.url}
   >
     <article className="flex flex-col gap-6 p-8 md:gap-8 md:p-12">
-      <p className="flex items-center gap-3 text-xs font-medium tracking-[0.12em] text-muted-foreground uppercase">
+      <p className="flex items-center gap-3 text-xs font-medium tracking-brand text-muted-foreground uppercase">
         <span aria-hidden="true" className="size-4 rounded-full bg-primary" />
         <span className="sr-only">New post,</span>
         <time dateTime={post.publishedAt}>{post.formattedDate}</time>

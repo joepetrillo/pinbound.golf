@@ -122,12 +122,17 @@ const CountrySelect = ({
   const countryLabel = (country: Country) =>
     labelByCountry.get(country) ?? country;
 
+  const countrySearchLabel = (country: Country) =>
+    `${countryLabel(country)} +${getCountryCallingCode(country)}`;
+
   useEffect(() => {
     if (!isCountryListOpen) {
       return;
     }
 
-    const animationFrame = requestAnimationFrame(() => {
+    let innerAnimationFrame = 0;
+
+    const centerSelectedCountry = () => {
       const countryListElement = countryListRef.current;
       const selectedCountryElement =
         countryListElement?.querySelector<HTMLElement>("[data-selected]");
@@ -136,19 +141,32 @@ const CountrySelect = ({
         return;
       }
 
-      countryListElement.scrollTop =
-        selectedCountryElement.offsetTop -
-        (countryListElement.clientHeight -
-          selectedCountryElement.offsetHeight) /
-          2;
+      const listRect = countryListElement.getBoundingClientRect();
+      const itemRect = selectedCountryElement.getBoundingClientRect();
+
+      if (listRect.height === 0) {
+        return;
+      }
+
+      countryListElement.scrollTop +=
+        itemRect.top +
+        itemRect.height / 2 -
+        (listRect.top + listRect.height / 2);
+    };
+
+    const outerAnimationFrame = requestAnimationFrame(() => {
+      innerAnimationFrame = requestAnimationFrame(centerSelectedCountry);
     });
 
-    return () => cancelAnimationFrame(animationFrame);
+    return () => {
+      cancelAnimationFrame(outerAnimationFrame);
+      cancelAnimationFrame(innerAnimationFrame);
+    };
   }, [isCountryListOpen, selectedCountry]);
 
   return (
     <Combobox
-      itemToStringLabel={countryLabel}
+      itemToStringLabel={countrySearchLabel}
       items={countries}
       onOpenChange={setIsCountryListOpen}
       onValueChange={(country: Country | null) => {
@@ -178,23 +196,20 @@ const CountrySelect = ({
       <ComboboxContent
         align="start"
         className={cn(
-          "w-72 min-w-72 *:data-[slot=input-group]:bg-transparent",
+          "w-72 min-w-0 max-sm:w-(--available-width)",
           popupClassName
         )}
       >
         <ComboboxInput
           placeholder="Search country"
-          showTrigger={false}
           showClear={true}
+          showTrigger={false}
         />
         <ComboboxSeparator />
-        <ComboboxEmpty className="px-4 py-2.5 text-sm">
+        <ComboboxEmpty className="min-h-32 items-center px-4 py-6">
           No country found.
         </ComboboxEmpty>
-        <ComboboxList
-          className="relative scroll-fade overflow-y-auto overscroll-contain"
-          ref={countryListRef}
-        >
+        <ComboboxList ref={countryListRef}>
           {(country: Country) => (
             <ComboboxItem
               className="flex items-center gap-2"

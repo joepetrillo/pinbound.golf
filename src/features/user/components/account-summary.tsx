@@ -35,11 +35,11 @@ export const AccountSummary = async () => {
 
 export const AccountSummarySkeleton = () => (
   <div aria-hidden="true" className="mt-4">
-    <Skeleton className="h-6 w-64 max-w-full rounded-full" />
-    <Skeleton className="mt-2 h-5 w-48 max-w-full rounded-full" />
+    <Skeleton variant="pill" className="h-6 w-64 max-w-full" />
+    <Skeleton variant="pill" className="mt-2 h-5 w-48 max-w-full" />
     <div className="mt-8 flex flex-wrap gap-3">
-      <Skeleton className="h-9 w-28 rounded-lg" />
-      <Skeleton className="h-9 w-24 rounded-lg" />
+      <Skeleton variant="field" className="h-9 w-28" />
+      <Skeleton variant="field" className="h-9 w-24" />
     </div>
   </div>
 );

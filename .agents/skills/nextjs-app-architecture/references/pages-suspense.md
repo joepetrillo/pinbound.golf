@@ -110,6 +110,10 @@ export function PostDetailSkeleton() { ... }
 
 If a page uses a transition wrapper (e.g. `<ViewTransition>`), place it in the page next to the `<Suspense>` boundary. Feature components render content and skeletons, not transition wrappers.
 
+A transition wrapper morphs the fallback into the content. That only looks right when the skeleton's box equals the content's box — a skeleton that is shorter or narrower shows up as a scaled ghost over the incoming content. Headings and labels that are the same in both states belong **outside** the boundary, otherwise they cross-fade with themselves and flicker. Sibling boundaries that resolve at different moments each start their own transition; that is fine as long as every skeleton is exact.
+
+Give every transition-wrapped boundary a host DOM element (`div`, `section`, `main`) immediately outside it in the page. When a page's root is the wrapper itself, the content-side `<ViewTransition>` becomes the topmost entering subtree on a warm, prefetched navigation and its enter animation runs even though no fallback was ever shown. The host suppresses that while leaving the fallback-to-content reveal intact. Measure it: count `document.startViewTransition` calls on a prefetched navigation; a warm step change should produce zero.
+
 ## Stable shell, suspending body
 
 Before designing a fallback, identify what is stable and what is data-dependent.
@@ -133,6 +137,15 @@ Do not render `<FeaturePanel>` in both `fallback` and final content. That duplic
 Use the app's real domain noun at implementation time (`PostPanel`, `MessageList`, `GroupEditor`, `EventDetails`, etc.); the neutral names here describe the reusable shape, not a component to copy literally.
 
 When the top data section has unknown final height and pushes the sections below, either reserve that height in the stable wrapper or group the affected sections in one boundary. Do not create two independent crossfades if the first one changes the second one's starting position.
+
+## One route, several variants
+
+A dynamic route that renders different UI per param value (a `[step]` wizard, a `[view]` toggle) has one prerendered shell for all variants, so its top-level fallback cannot know which variant is coming. Don't shape that fallback like one of the variants, and don't resolve the variant inside the fallback with pathname hooks or params promises behind nested `Suspense`. Use two levels:
+
+1. The route boundary's fallback is a neutral splash: the variant's frame (card, board) with the animated brand mark centered, `role="status"` and an `aria-label`.
+2. Inside `params.then(...)`, once the variant is known, a plain `<Suspense fallback={<VariantSkeleton ... />}>` wraps the data component with the exact skeleton for that variant.
+
+On a hard load the splash shows for a frame or two, then the exact skeleton. On a client navigation the shell is in the router cache and the variant skeleton renders straight away, or the content does when it was prefetched. Splitting the wizard into one route per step to get per-route shells is not worth it: several near-identical pages, and the shared layout still owns the chrome.
 
 ## Audit smells
 
@@ -209,6 +222,7 @@ The same applies to feature-level skeleton aliases. If a variant only passes pro
 7. **Inner Suspense content stays out of the outer skeleton.** Each boundary owns its own.
 8. **Never `fallback={null}` for visible UI.** If a boundary covers UI, give it a real shaped fallback, or group it with a sibling boundary that already has the correct fallback.
 9. **If the top section's final height is unknown, group the following sections** in the same boundary so they reveal together and don't jump underneath.
+10. **Optional sections that may render nothing** (a "your next item" card, a promo slot) sit above other content only if the empty state reserves the same height as the filled state and the skeleton. Otherwise put the section last, or group what follows into its boundary.
 
 ## Error boundaries
 
@@ -228,7 +242,7 @@ Pair component-level boundaries with route-segment [`error.tsx`](https://preview
 
 ## Layout-level Suspense
 
-Layouts compose feature components the same way pages do. Use `<Suspense>` for slots that fetch data (auth badge, sidebar):
+Layouts compose feature components the same way pages do. Use `<Suspense>` for slots that fetch data (auth badge, sidebar). App-shell slots are the one place the layout, or the shell component it renders (a header, a sidebar), owns the boundary instead of the page — the slot repeats on every route, so its boundary belongs with the shell:
 
 ```tsx
 export default function RootLayout({ children }: LayoutProps<'/'>) {
@@ -257,11 +271,13 @@ Layout shift happens when:
 
 Fixes:
 
-- Match skeleton height to the typical real content height.
+- Match skeleton height to the real content height — measure both in the browser rather than eyeballing; a 4px difference still jumps.
 - Move headings **outside** boundaries when their position depends on data above them.
 - For unknown-height top sections, group everything below in one boundary so siblings stream together.
 
 To audit CLS, use React DevTools' Suspense panel to pin each boundary in its loading state and check vertical positions.
+
+Pending indicators are part of CLS too. A spinner inserted into a button widens it and an `auto` grid column moves everything beside it; give such buttons a fixed width that fits the spinner. A chip or badge that appears with data (a count, a countdown) gets a pill-shaped skeleton of the same height.
 
 ## Optimizing prefetching for high-value routes
 
@@ -270,6 +286,14 @@ With `cacheComponents` + [`partialPrefetching`](https://preview.nextjs.org/docs/
 Use `<Link prefetch={true}>` on high-value links to also resolve the destination's per-link data (`params`, `searchParams`, the full URL) at prefetch time. Each such link can wake the server for a prerender, so reserve it for routes users predictably visit next. See [Optimizing prefetching](https://preview.nextjs.org/docs/app/guides/optimizing-prefetching).
 
 Can't enable `partialPrefetching` app-wide yet? Opt in per route with `export const prefetch = 'partial'` on the destination, then drop the per-route exports once the global flag is on — see [Adopting Partial Prefetching](https://preview.nextjs.org/docs/app/guides/adopting-partial-prefetching) for the incremental path and [prefetch config](https://preview.nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/prefetch) for the options. To check that navigation actually feels instant, see [Validating instant navigation](#validating-instant-navigation).
+
+### Keep a live layer out of the prefetch without blocking it
+
+A `prefetch={true}` prerender advances through everything cached and stops at the first uncached read. One live read (presence, live availability) therefore turns the whole destination back into its fallback. Split it: render the section from cached, URL-keyed data, and read the live layer in a sibling that first `await`s [`unstable_navigation()`](https://preview.nextjs.org/docs/app/guides/optimizing-prefetching) from `next/cache` and then calls a `'use cache: private'` function. Content below the gate is skipped by prefetches but still counts as cacheable, and it runs and streams in on the actual navigation. `await connection()` or `io()` would instead mark the subtree dynamic and drop it from the App Shell too.
+
+Hand the gated value to the client as a promise and `use()` it inside a small `<Suspense>` whose fallback is the same UI without the live layer (items in their cached state, then marked with the live status), so its arrival changes state, not layout. `unstable_navigation()` cannot be called inside a cache scope; keep it in the uncached wrapper, with the cache directive on the function below it.
+
+Two things defeat this prefetch. A server `redirect()` to a canonical URL inside the destination (for example to stamp derived data into the search params) is not followed by the prefetch and re-renders the whole tree on navigation, so write derived URL state from the links the user clicks instead. And chrome that must survive the navigation, such as a progress indicator, belongs in the layout and reads only the URL (`useParams` / `useSearchParams` under its own `Suspense`), never data that would make it re-suspend.
 
 ## Validating instant navigation
 

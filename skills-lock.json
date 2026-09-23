@@ -23,13 +23,13 @@
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-dev-loop/SKILL.md",
-      "computedHash": "d604c9440a736b08836fe782e8c0bf6a596d00c4e20e3e245e4a4394efbf74f4"
+      "computedHash": "e76687a3348c55045964390be844925baf481d4751a39ea20b299c12ca5fba28"
     },
     "nextjs-app-architecture": {
       "source": "aurorascharff/nextjs-app-architecture-skill",
       "sourceType": "github",
       "skillPath": "SKILL.md",
-      "computedHash": "3c21c151bd98ecd3cb5405f855ed8fdf6ef4b65656abee7c0b9362a4952f3ada"
+      "computedHash": "4e23fdc78aaa08d806eb3aee36d7a7cf3a465ba73592b0294410b62f0bcf6eac"
     },
     "safe-action-advanced": {
       "source": "next-safe-action/skills",
